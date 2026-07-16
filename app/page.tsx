@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import PageShell from "@/components/PageShell";
 import {
@@ -94,15 +95,15 @@ export default function HomePage() {
             <div className="home-hero-copy">
               <h1 className="home-hero-title">
                 <span>The universe</span>
-                <span>where you</span>
-                <span className="home-gradient">play,</span>
-                <span><span className="home-gradient">create</span> &amp;</span>
-                <span><span className="home-gradient">connect</span>.</span>
+                <span>where everyone</span>
+                <span>can <span className="home-gradient">discover,</span></span>
+                <span><span className="home-gradient">belong</span> &amp;</span>
+                <span className="home-gradient">build.</span>
               </h1>
 
               <p className="home-hero-lead">
                 ESB Games is the next-generation gaming platform, many worlds, one community, infinite possibilities.
-                Whether you play, build, or just hang out, you belong here.
+                Whether you come to discover new experiences, find your people, or build your own, you belong here.
               </p>
 
               <div className="home-hero-action-row">
@@ -123,16 +124,30 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="home-hero-stats" aria-label="Platform statistics">
-                <div><strong>20K+</strong><span>GAMES</span></div>
-                <div><strong>1M+</strong><span>CREATORS</span></div>
-                <div><strong>150+</strong><span>COUNTRIES</span></div>
-              </div>
             </div>
 
-            <div className="home-hero-visual" aria-label="ESB Games activity visualisation">
+            <div className="home-hero-visual" aria-label="ESB Games product preview">
               <div className="home-aurora"/>
               <div className="home-visual-line"/>
+
+              <div className="home-device-scene">
+                <div className="home-device-frame">
+                  <div className="home-device-bezel">
+                    <div className="home-device-camera"/>
+                    <div className="home-device-screen">
+                      <Image
+                        src="/hero-discover-preview.png"
+                        alt="Preview of the ESB Games discover experience"
+                        fill
+                        sizes="(max-width: 960px) 92vw, 620px"
+                        className="home-device-image"
+                        priority
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div className="home-floating-card home-live-card">
                 <span className="home-floating-icon home-floating-icon-cyan"><BoltIcon size={21}/></span>
                 <span><small>LIVE NOW</small><strong>12.4M playing</strong></span>
