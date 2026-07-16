@@ -124,41 +124,50 @@ export default function HomePage() {
                 </div>
               </div>
 
+              <div className="home-hero-stats" aria-label="Platform statistics">
+                <div><strong>20K+</strong><span>GAMES</span></div>
+                <div><strong>1M+</strong><span>CREATORS</span></div>
+                <div><strong>150+</strong><span>COUNTRIES</span></div>
+              </div>
+
             </div>
 
             <div className="home-hero-visual" aria-label="ESB Games product preview">
               <div className="home-aurora"/>
-              <div className="home-visual-line"/>
 
               <div className="home-device-scene">
-                <div className="home-device-frame">
-                  <div className="home-device-bezel">
-                    <div className="home-device-camera"/>
-                    <div className="home-device-screen">
+                <div className="home-laptop-frame">
+                  <div className="home-laptop-screen-shell">
+                    <div className="home-laptop-camera"/>
+                    <div className="home-laptop-display">
+                      <Image
+                        src="/hero-studio-preview.png"
+                        alt="Preview of the ESB Studio creator tools"
+                        fill
+                        sizes="(max-width: 960px) 88vw, 560px"
+                        className="home-device-image"
+                        priority
+                      />
+                    </div>
+                  </div>
+                  <div className="home-laptop-base"/>
+                </div>
+
+                <div className="home-tablet-frame">
+                  <div className="home-tablet-bezel">
+                    <div className="home-tablet-camera"/>
+                    <div className="home-tablet-screen">
                       <Image
                         src="/hero-discover-preview.png"
                         alt="Preview of the ESB Games discover experience"
                         fill
-                        sizes="(max-width: 960px) 92vw, 620px"
+                        sizes="(max-width: 960px) 78vw, 340px"
                         className="home-device-image"
                         priority
                       />
                     </div>
                   </div>
                 </div>
-              </div>
-
-              <div className="home-floating-card home-live-card">
-                <span className="home-floating-icon home-floating-icon-cyan"><BoltIcon size={21}/></span>
-                <span><small>LIVE NOW</small><strong>12.4M playing</strong></span>
-              </div>
-              <div className="home-floating-card home-tournament-card">
-                <span className="home-floating-icon home-floating-icon-purple">🏆</span>
-                <span><small>TOURNAMENT</small><strong>$250K Prize</strong></span>
-              </div>
-              <div className="home-floating-card home-streaming-card">
-                <span className="home-live-dot"/>
-                <strong>STREAMING · 1.2K<br/>WATCHING</strong>
               </div>
             </div>
           </div>
