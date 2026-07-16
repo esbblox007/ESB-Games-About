@@ -1,0 +1,3 @@
+This complete repository includes the redesigned Creator Hub, Careers and Support pages, smaller footer social icons, a persistent language selector and the uncropped homepage iPad screenshot.
+
+No package-lock.json, node_modules or .next build output is included.

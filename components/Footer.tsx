@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Logo from "./Logo";
+import LanguageSelector from "./LanguageSelector";
 
 function YouTubeIcon() {
   return (
@@ -73,7 +74,7 @@ export default function Footer() {
       <div className="home-footer-bottom">
         <span>© {new Date().getFullYear()} ESB Games Ltd. All rights reserved. Crafted with <b>♥</b> for players.</span>
         <nav aria-label="Legal links"><a href="#terms">Terms</a><a href="#privacy">Privacy</a><a href="#standards">Community Standards</a><a href="#cookies">Cookies</a><a href="#accessibility">Accessibility</a></nav>
-        <button type="button">🌐 English (US)⌄</button>
+        <LanguageSelector />
       </div>
     </footer>
   );

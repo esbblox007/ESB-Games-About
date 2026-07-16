@@ -163,7 +163,7 @@ export default function HomePage() {
                         alt="Preview of the ESB Games discover experience"
                         fill
                         sizes="(max-width: 960px) 78vw, 340px"
-                        className="home-device-image"
+                        className="home-device-image home-tablet-image"
                         priority
                       />
                     </div>

@@ -1,27 +1,59 @@
 import type { Metadata } from "next";
 import PageShell from "@/components/PageShell";
 import SupportClient from "@/components/SupportClient";
+import SupportFAQ from "@/components/SupportFAQ";
 
-export const metadata: Metadata = { title: "Support" };
+export const metadata: Metadata = {
+  title: "Support",
+  description: "Browse ESB Games help resources, submit a support ticket or track an existing request.",
+};
 
 export default function SupportPage() {
   return (
     <PageShell>
-      <section className="hero hero-no-grid support-hero">
-        <div className="hero-inner">
-          <span className="eyebrow">Support</span>
-          <h1 className="page-title">How can we <span className="gradient-text">help?</span></h1>
-          <p className="hero-lead" style={{marginInline:"auto"}}>Browse help articles, submit a request or track an existing ticket.</p>
-          <div className="trust-row"><span>◷ Target response under 4h</span><span>◉ Safety reports prioritised</span><span>◎ Global support vision</span></div>
+      <section className="support-page-hero">
+        <div className="support-page-container">
+          <span className="eyebrow">ESB Games Support</span>
+          <h1>How can we <span className="gradient-text">help?</span></h1>
+          <p>Real support for players, parents and creators. Browse help options, submit a ticket or track an existing request.</p>
+          <div className="support-page-trust"><span>◷ Response targets by priority</span><span>● Safety reports prioritised</span><span>◎ Support built for global access</span></div>
         </div>
       </section>
-      <section className="section section-dark" style={{paddingTop:50}}>
-        <div className="section-inner">
+
+      <section className="support-page-section support-page-main">
+        <div className="support-page-container">
           <SupportClient />
-          <div className="support-bottom" id="quick-help">
-            <article className="list-panel"><h3>Quick Help</h3><div className="quick-links"><a href="mailto:support@esbgames.com?subject=Password reset help">🔑 Reset your password</a><a href="mailto:support@esbgames.com?subject=Subscription help">↻ Cancel or change a subscription</a><a href="mailto:safety@esbgames.com?subject=Safety report">🛡 Report a safety concern</a><a href="/developer-hub">⌘ Creator and publishing support</a></div></article>
-            <article className="list-panel"><div className="status-head"><h3>Platform Status</h3><span className="status-pill">● Pre-launch</span></div><div className="status-list"><div className="status-item"><span>Public platform</span><strong>In development</strong></div><div className="status-item"><span>ESB Studio</span><strong>In development</strong></div><div className="status-item"><span>Payments & billing</span><strong>Not live</strong></div><div className="status-item"><span>Support ticket API</span><strong>Ready to configure</strong></div></div></article>
+
+          <div className="support-info-grid" id="quick-help">
+            <article className="support-quick-panel">
+              <h2>Quick Help</h2>
+              <a href="/login">🔑 Reset your password</a>
+              <a href="/subscriptions">↻ Cancel or change a subscription</a>
+              <a href="mailto:support@esbgames.com?subject=Refund request">♟ Request a refund</a>
+              <a href="mailto:safety@esbgames.com?subject=Account appeal">◆ Appeal an account action</a>
+              <a href="mailto:safety@esbgames.com?subject=Player report">⚑ Report a player or game</a>
+              <a href="/developer-hub">♜ Creator publishing guide</a>
+            </article>
+
+            <div className="support-side-stack">
+              <article className="support-status-panel">
+                <div><h2>Platform Status</h2><span>● Pre-launch systems</span></div>
+                <p><span>Public platform</span><strong>In development</strong></p>
+                <p><span>ESB Studio / publishing</span><strong>In development</strong></p>
+                <p><span>Payments & billing</span><strong>Not live</strong></p>
+                <p><span>Authentication</span><strong>Prototype ready</strong></p>
+                <p><span>Support tickets</span><strong>Available</strong></p>
+              </article>
+              <article className="support-community-panel"><span>◉</span><div><h3>Community support</h3><p>Connect with the ESB Games community and staff through the official server.</p><a href="/signup">Join the community →</a></div></article>
+            </div>
           </div>
+        </div>
+      </section>
+
+      <section className="support-page-section support-faq-section">
+        <div className="support-page-container">
+          <header><span className="eyebrow">Frequently asked</span><h2>Common <span className="gradient-text">questions.</span></h2></header>
+          <SupportFAQ />
         </div>
       </section>
     </PageShell>

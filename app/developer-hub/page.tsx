@@ -1,70 +1,184 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import PageShell from "@/components/PageShell";
-import Reveal from "@/components/Reveal";
-import { BookIcon, CheckIcon, CubeIcon, DownloadIcon, GamepadIcon, GlobeIcon, UsersIcon } from "@/components/Icons";
+import {
+  BookIcon,
+  CheckIcon,
+  CubeIcon,
+  DownloadIcon,
+  GamepadIcon,
+  GlobeIcon,
+  RocketIcon,
+  SearchIcon,
+  UsersIcon,
+} from "@/components/Icons";
 
-export const metadata: Metadata = { title: "Developer Hub" };
+export const metadata: Metadata = {
+  title: "Creator Hub",
+  description: "Build, publish and grow games with ESB Studio and the ESB Games creator ecosystem.",
+};
+
+const creatorFeatures = [
+  {
+    icon: <CubeIcon />,
+    title: "Effortless development",
+    text: "Build faster with approachable tools, reusable templates, live preview workflows and advanced controls when you need them.",
+    tone: "purple",
+  },
+  {
+    icon: <RocketIcon />,
+    title: "Publish instantly",
+    text: "Move from your project to a live experience through one connected publishing workflow, without unnecessary friction.",
+    tone: "blue",
+  },
+  {
+    icon: <SearchIcon />,
+    title: "Built-in discovery",
+    text: "Reach players through personalised discovery, creator profiles, groups, events and platform-wide recommendations.",
+    tone: "orange",
+  },
+  {
+    icon: <GlobeIcon />,
+    title: "Grow your work",
+    text: "Manage releases, analyse performance and prepare your experiences for audiences around the world.",
+    tone: "green",
+  },
+];
+
+const resources = [
+  ["Download ESB Studio", "The official creation environment for Windows, macOS and Linux.", "Download →", "/early-access?type=creator"],
+  ["Documentation", "Guides, tutorials, product walkthroughs and future API documentation.", "Read docs →", "#studio"],
+  ["Assets & templates", "Starter projects, UI kits, environments, effects and reusable creator resources.", "Browse →", "#resources"],
+  ["API reference", "A future home for platform services, analytics, publishing and team APIs.", "View API →", "#resources"],
+  ["Creator roadmap", "See what is being designed, tested and prepared for the ESB creator ecosystem.", "View roadmap →", "/news"],
+  ["Creator community", "Connect with developers, artists, designers and collaborators across ESB Games.", "Join community →", "/signup"],
+] as const;
+
+const studioServices = [
+  ["World & environment design", "3D modelling · Level design", "Find teams for polished worlds, environments and immersive level design."],
+  ["Backend & multiplayer systems", "Engineering · Netcode", "Connect with specialists for scalable game systems, data and multiplayer architecture."],
+  ["UI, VFX & animation", "Product design · Visual craft", "Find creative specialists for interfaces, effects, animation and player-facing polish."],
+] as const;
 
 export default function DeveloperHubPage() {
   return (
     <PageShell>
-      <section className="hero hero-no-grid">
-        <div className="hero-inner">
-          <div className="hero-copy">
-            <span className="eyebrow">Developer Hub</span>
-            <h1>Create it.<br /><span className="gradient-text">Launch it.</span><br />Earn from it.</h1>
-            <p className="hero-lead">Build games on ESB Games, publish them to players worldwide and earn through your creations. Simple tools, powerful systems and a platform made for developers.</p>
-            <div className="hero-actions">
-              <Link href="/early-access?type=creator" className="button button-primary"><DownloadIcon size={17}/> Join Studio Access</Link>
-              <a href="#docs" className="button button-secondary"><BookIcon size={17}/> View Developer Docs</a>
+      <section className="creator-hero">
+        <div className="creator-hero-inner">
+          <div className="creator-hero-copy">
+            <span className="eyebrow">ESB Games Creator Hub</span>
+            <h1>Create it.<br /><span className="gradient-text">Launch it.</span><br />Grow it.</h1>
+            <p>
+              Build games in ESB Studio, publish them to players and manage every stage of your project through one connected creator ecosystem.
+            </p>
+            <div className="creator-hero-actions">
+              <Link href="/early-access?type=creator" className="button button-primary"><DownloadIcon size={17} /> Join Studio Access</Link>
+              <a href="#resources" className="button button-secondary"><BookIcon size={17} /> Explore Resources</a>
             </div>
           </div>
-          <div className="code-window" aria-label="ESB Studio code example">
-            <div className="code-titlebar"><i className="window-dot red"/><i className="window-dot yellow"/><i className="window-dot green"/><span>main.esb · ESB Studio</span></div>
-            <div className="code-body">
-              <div><span className="purple">local</span> game = ESB.<span className="cyan">CreateGame</span>(<span className="yellow">&quot;Neon City&quot;</span>)</div>
-              <div>game:<span className="cyan">Publish</span>()</div>
-              <div><span className="cyan">print</span>(<span className="yellow">&quot;Game published!&quot;</span>)</div>
+
+          <div className="creator-code-window" aria-label="Example ESB Studio publish workflow">
+            <div className="creator-code-titlebar">
+              <span className="creator-window-dots"><i /><i /><i /></span>
+              <span>main.esb · ESB Studio</span>
             </div>
-            <div className="code-status">✓ Game published · ready for worldwide release</div>
+            <div className="creator-code-body">
+              <p><span className="code-purple">local</span> game = ESB.<strong>CreateGame</strong>(<span className="code-yellow">&quot;Neon City&quot;</span>)</p>
+              <p>game:<strong>Publish</strong>()</p>
+              <p><strong>print</strong>(<span className="code-yellow">&quot;Game published!&quot;</span>)</p>
+            </div>
+            <div className="creator-code-status"><CheckIcon size={16} /> Project ready for publishing</div>
           </div>
         </div>
       </section>
 
-      <section className="section section-dark">
-        <div className="section-inner">
-          <Reveal><div className="stat-strip">
-            <div className="stat-item"><span className="card-icon"><UsersIcon/></span><div><strong>Team Create</strong><span>REAL-TIME COLLABORATION</span></div></div>
-            <div className="stat-item"><span className="card-icon"><GamepadIcon/></span><div><strong>One-click</strong><span>PUBLISHING PIPELINE</span></div></div>
-            <div className="stat-item"><span className="card-icon"><GlobeIcon/></span><div><strong>Global</strong><span>PLAYER REACH</span></div></div>
-            <div className="stat-item"><span className="card-icon"><CubeIcon/></span><div><strong>70/30</strong><span>PLANNED REVENUE SPLIT</span></div></div>
-          </div></Reveal>
+      <section className="creator-stat-wrap">
+        <div className="creator-stat-strip">
+          <div><span><UsersIcon /></span><strong>1M+</strong><small>CREATOR VISION</small></div>
+          <div><span><GamepadIcon /></span><strong>20K+</strong><small>GAMES TARGETED</small></div>
+          <div><span><GlobeIcon /></span><strong>150+</strong><small>COUNTRIES</small></div>
+          <div><span><CubeIcon /></span><strong>70/30</strong><small>PLANNED SPLIT</small></div>
         </div>
       </section>
 
-      <section className="section" id="docs">
-        <div className="section-inner">
-          <Reveal className="section-heading center"><span className="eyebrow">Build your way</span><h2>From first idea to <span className="gradient-text">live world.</span></h2><p>ESB Studio is planned as a downloadable creation environment with beginner and advanced workflows.</p></Reveal>
-          <div className="grid-3">
-            <Reveal><article className="card"><span className="card-icon"><CubeIcon/></span><h3>Powerful creation tools</h3><p>Terrain, UI, animation, sound, visual effects and templates in one connected editor.</p></article></Reveal>
-            <Reveal><article className="card"><span className="card-icon"><UsersIcon/></span><h3>Teams built in</h3><p>Collaborate live, manage permissions, review changes and keep version history.</p></article></Reveal>
-            <Reveal><article className="card"><span className="card-icon"><GlobeIcon/></span><h3>Publish and grow</h3><p>Release through the ESB Games Player, learn from analytics and reach new audiences.</p></article></Reveal>
+      <section className="creator-section creator-feature-section">
+        <div className="creator-container">
+          <header className="creator-center-heading">
+            <span className="eyebrow">Creator-first by design</span>
+            <h2>Built for creators, not <span className="gradient-text">gatekeepers.</span></h2>
+            <p>Tools, publishing and growth systems designed to help good ideas move forward.</p>
+          </header>
+          <div className="creator-feature-grid">
+            {creatorFeatures.map((feature) => (
+              <article className="creator-feature-card" key={feature.title}>
+                <span className={`creator-icon creator-icon-${feature.tone}`}>{feature.icon}</span>
+                <h3>{feature.title}</h3>
+                <p>{feature.text}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="section section-dark">
-        <div className="section-inner">
-          <Reveal className="section-heading"><span className="eyebrow">Creator economics</span><h2>Built to reward the people who <span className="gradient-text">make the worlds.</span></h2></Reveal>
-          <div className="grid-3">
-            {[
-              ["Transparent platform fee", "A simple planned 70/30 creator revenue split with clear reporting."],
-              ["Marketplace opportunities", "Sell assets, hire collaborators and use protected transaction systems."],
-              ["Fairer discovery", "Sponsored placements and recommendation systems designed not to bury small teams."],
-            ].map(([title, text]) => <Reveal key={title}><article className="card"><span className="card-icon"><CheckIcon/></span><h3>{title}</h3><p>{text}</p></article></Reveal>)}
+      <section className="creator-section" id="resources">
+        <div className="creator-container creator-resource-layout">
+          <div>
+            <header className="creator-section-heading">
+              <span className="eyebrow">Everything in one place</span>
+              <h2>Creator <span className="gradient-text">resources.</span></h2>
+            </header>
+            <div className="creator-resource-grid">
+              {resources.map(([title, text, linkText, href], index) => (
+                <article className="creator-resource-card" key={title}>
+                  <span className="creator-resource-icon">{index === 0 ? <DownloadIcon /> : index === 1 ? <BookIcon /> : index === 2 ? <CubeIcon /> : index === 3 ? <GlobeIcon /> : index === 4 ? <BookIcon /> : <UsersIcon />}</span>
+                  <div><h3>{title}</h3><p>{text}</p><Link href={href}>{linkText}</Link></div>
+                </article>
+              ))}
+            </div>
           </div>
-          <Reveal><div style={{textAlign:"center", marginTop:40}}><Link href="/early-access?type=creator" className="button button-primary">Register as a creator</Link></div></Reveal>
+
+          <aside className="creator-studio-directory">
+            <header><span className="eyebrow">Collaboration</span><h2>Find specialist <span className="gradient-text">studios.</span></h2></header>
+            {studioServices.map(([title, meta, text]) => (
+              <article className="creator-studio-card" key={title}>
+                <div className="creator-studio-card-head"><h3>{title}</h3><Link href="/signup">Connect</Link></div>
+                <strong>★ 4.9 <span>{meta}</span></strong>
+                <p>{text}</p>
+              </article>
+            ))}
+            <Link href="/signup" className="creator-directory-link">Explore the creator community →</Link>
+          </aside>
+        </div>
+      </section>
+
+      <section className="creator-section" id="studio">
+        <div className="creator-container">
+          <article className="creator-studio-showcase">
+            <div className="creator-studio-copy">
+              <span className="eyebrow">ESB Studio</span>
+              <h2>Worlds without <span className="gradient-text">limits.</span></h2>
+              <p>Bring scripting, animation, VFX, sound, UI and collaborative editing into one creation environment.</p>
+              <div className="creator-platform-buttons">
+                <Link href="/early-access?type=creator" className="button button-primary">Windows</Link>
+                <Link href="/early-access?type=creator" className="button button-secondary">macOS</Link>
+                <Link href="/early-access?type=creator" className="button button-secondary">Linux</Link>
+              </div>
+              <small>Pre-release access · availability will be announced before launch</small>
+            </div>
+            <div className="creator-studio-image">
+              <Image src="/hero-studio-preview.png" alt="ESB Studio VFX and creation tools" fill sizes="(max-width: 900px) 92vw, 620px" />
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section className="creator-section creator-final-section">
+        <div className="creator-container">
+          <div className="creator-final-cta">
+            <div><span className="eyebrow">Start creating</span><h2>Ready to build the next big <span className="gradient-text">world?</span></h2><p>Join the creator waitlist and be among the first to test ESB Studio.</p></div>
+            <Link href="/early-access?type=creator" className="button button-primary"><RocketIcon size={17} /> Apply for creator access</Link>
+          </div>
         </div>
       </section>
     </PageShell>

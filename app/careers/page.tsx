@@ -1,48 +1,92 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import PageShell from "@/components/PageShell";
-import Reveal from "@/components/Reveal";
 import CareersJobs from "@/components/CareersJobs";
 import { GlobeIcon, HeartIcon, SearchIcon, StarIcon, UsersIcon } from "@/components/Icons";
 
-export const metadata: Metadata = { title: "Careers" };
+export const metadata: Metadata = {
+  title: "Careers",
+  description: "Join ESB Games and help build a safer, more creative gaming platform.",
+};
+
+const impactCards = [
+  ["⚡", "Make a real impact", "Work on systems, experiences and tools that shape the platform from its earliest stages."],
+  ["👥", "Work alongside builders", "Collaborate across product, safety, engineering, community and creative disciplines."],
+  ["↗", "Accelerate your growth", "Take ownership, learn quickly and build a portfolio of meaningful platform work."],
+  ["♥", "Benefits that matter", "A flexible, supportive culture designed around sustainable work and shared success."],
+] as const;
+
+const peopleBenefits = [
+  ["Competitive compensation & meaningful equity", "We aim to reward important work fairly and share long-term success with the people building it."],
+  ["Remote-first, async-friendly culture", "Work with flexibility, thoughtful documentation and clear communication across time zones."],
+  ["Time to recharge", "Sustainable performance matters. We want people to have the space to rest and return with energy."],
+  ["Learning and development", "Develop through mentoring, courses, certifications and meaningful stretch opportunities."],
+  ["Home-office support", "Build a workspace that helps you contribute comfortably and consistently."],
+  ["Team connection", "Regular social sessions, collaborative events and future in-person opportunities."],
+] as const;
+
+const cultureCards = [
+  ["Collaborate", "Share ideas openly, ask better questions and build stronger outcomes together.", "career-culture-one"],
+  ["Create", "Experiment with ambitious ideas and turn them into thoughtful, polished experiences.", "career-culture-two"],
+  ["Have fun", "Take the work seriously without losing the joy that makes games worth building.", "career-culture-three"],
+  ["Give back", "Support creators, players and communities beyond the products we ship.", "career-culture-four"],
+] as const;
 
 export default function CareersPage() {
   return (
     <PageShell>
-      <section className="hero hero-no-grid">
-        <div className="hero-inner">
-          <div className="hero-copy">
+      <section className="career-hero">
+        <div className="career-container career-hero-grid">
+          <div className="career-hero-copy">
             <span className="eyebrow">Careers at ESB Games</span>
-            <h1>Build the<br />future of<br /><span className="gradient-text">gaming,</span> with us.</h1>
-            <p className="hero-lead">We&apos;re a remote-first collective of engineers, artists, designers and innovators building a new platform for creators. Together, we&apos;re shaping the future of interactive entertainment.</p>
-            <div className="hero-actions"><a href="#open-roles" className="button button-primary"><SearchIcon size={17}/> See open roles</a><a href="#culture" className="button button-secondary"><HeartIcon size={17}/> Our culture</a></div>
+            <h1>Build the future of <span className="gradient-text">gaming,</span> with us.</h1>
+            <p>We are a remote-first team bringing together people who care about creators, players, safety and the future of interactive entertainment.</p>
+            <div className="career-hero-actions"><a href="#open-roles" className="button button-primary"><SearchIcon size={17} /> See open roles</a><a href="#culture" className="button button-secondary"><HeartIcon size={17} /> Our culture</a></div>
           </div>
-          <div className="career-metrics">
-            <div className="metric-card"><UsersIcon/><strong>Remote-first</strong><span>TEAM STRUCTURE</span></div>
-            <div className="metric-card"><GlobeIcon/><strong>Global</strong><span>COLLABORATION</span></div>
-            <div className="metric-card"><HeartIcon/><strong>People-led</strong><span>WORKING CULTURE</span></div>
-            <div className="metric-card"><StarIcon/><strong>Creator-first</strong><span>SHARED MISSION</span></div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section section-dark" id="culture">
-        <div className="section-inner">
-          <Reveal className="section-heading center"><span className="eyebrow">Life at ESB Games</span><h2>Ambitious work. <span className="gradient-text">Human culture.</span></h2><p>We want people to do their best work without sacrificing curiosity, balance or kindness.</p></Reveal>
-          <div className="grid-3">
-            <Reveal><article className="card"><h3>Own meaningful work</h3><p>Small teams, clear responsibility and direct access to the decisions shaping the platform.</p></article></Reveal>
-            <Reveal><article className="card"><h3>Work from anywhere</h3><p>Remote-first communication, thoughtful documentation and flexible collaboration across time zones.</p></article></Reveal>
-            <Reveal><article className="card"><h3>Build with the community</h3><p>Learn directly from players and creators rather than building in isolation.</p></article></Reveal>
+          <div className="career-metric-grid">
+            <article><UsersIcon /><strong>Small teams</strong><span>HIGH OWNERSHIP</span></article>
+            <article><GlobeIcon /><strong>Remote-first</strong><span>GLOBAL COLLABORATION</span></article>
+            <article><HeartIcon /><strong>People-led</strong><span>SUPPORTIVE CULTURE</span></article>
+            <article><StarIcon /><strong>Mission-driven</strong><span>CREATOR & PLAYER FOCUS</span></article>
           </div>
         </div>
       </section>
 
-      <section className="section" id="open-roles">
-        <div className="section-inner">
-          <Reveal className="section-heading"><span className="eyebrow">Open positions</span><h2>Find your place in the <span className="gradient-text">universe.</span></h2><p>The roles below are example vacancies ready for you to replace with live positions before launch.</p></Reveal>
+      <section className="career-section career-impact-section">
+        <div className="career-container">
+          <div className="career-impact-grid">
+            {impactCards.map(([icon, title, text]) => <article key={title}><span>{icon}</span><h3>{title}</h3><p>{text}</p></article>)}
+          </div>
+        </div>
+      </section>
+
+      <section className="career-section" id="open-roles">
+        <div className="career-container">
+          <header className="career-section-heading career-jobs-title"><div><span className="eyebrow">Open opportunities</span><h2>Find your <span className="gradient-text">seat.</span></h2></div><p>Choose a department or location to explore current opportunities.</p></header>
           <CareersJobs />
-          <Reveal><div className="quote-panel" style={{marginTop:55}}><blockquote>Don&apos;t see the perfect role? <em>Introduce yourself.</em></blockquote><div style={{marginTop:24}}><Link className="button button-primary" href="mailto:careers@esbgames.com?subject=General application">Send a general application</Link></div></div></Reveal>
+        </div>
+      </section>
+
+      <section className="career-section career-people-section">
+        <div className="career-container">
+          <header className="career-center-heading"><span className="eyebrow">How we work</span><h2>We put <span className="gradient-text">people</span> first.</h2><p>Great products come from people who feel trusted, supported and able to do their best work.</p></header>
+          <div className="career-benefit-grid">
+            {peopleBenefits.map(([title, text]) => <article key={title}><span>✓</span><div><h3>{title}</h3><p>{text}</p></div></article>)}
+          </div>
+        </div>
+      </section>
+
+      <section className="career-section" id="culture">
+        <div className="career-container">
+          <header className="career-section-heading"><div><span className="eyebrow">Life at ESB Games</span><h2>More than just a <span className="gradient-text">team.</span></h2></div></header>
+          <div className="career-culture-grid">
+            {cultureCards.map(([title, text, className]) => <article className={className} key={title}><div><h3>{title}</h3><p>{text}</p></div></article>)}
+          </div>
+        </div>
+      </section>
+
+      <section className="career-section career-final-section">
+        <div className="career-container">
+          <div className="career-final-cta"><div><h2>Your next role starts with ESB Games.</h2><p>Explore current opportunities and help build the future of gaming.</p></div><a href="#open-roles" className="button button-primary"><SearchIcon size={17} /> See open roles</a></div>
         </div>
       </section>
     </PageShell>
