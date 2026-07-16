@@ -95,7 +95,8 @@ export default function HomePage() {
             <div className="home-hero-copy">
               <h1 className="home-hero-title">
                 <span>The universe</span>
-                <span>where everyone</span>
+                <span>where</span>
+                <span>everyone</span>
                 <span>can <span className="home-gradient">discover,</span></span>
                 <span><span className="home-gradient">belong</span> &amp;</span>
                 <span className="home-gradient">build.</span>
