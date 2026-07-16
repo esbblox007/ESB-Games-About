@@ -6,3 +6,6 @@ out
 .vercel
 *.log
 .DS_Store
+
+# Avoid committing environment-specific npm registry URLs
+package-lock.json
