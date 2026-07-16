@@ -82,8 +82,6 @@ const proofItems = [
   "Featured on Polygon",
   "★ 4.9 App Store",
   "Best New Platform 2025",
-  "Forbes 30 Under 30",
-  "1M Creators Onboard",
 ];
 
 export default function HomePage() {
@@ -176,7 +174,11 @@ export default function HomePage() {
 
         <section className="home-proof-strip" aria-label="Highlights">
           <div className="home-proof-track">
-            {proofItems.map((item, index) => <span key={`${item}-${index}`}><b>★</b>{item}</span>)}
+            {[0, 1].map((group) => (
+              <div className="home-proof-group" aria-hidden={group === 1} key={group}>
+                {proofItems.map((item) => <span key={`${group}-${item}`}><b>★</b>{item}</span>)}
+              </div>
+            ))}
           </div>
         </section>
 
@@ -253,7 +255,6 @@ export default function HomePage() {
               <p>Got a billing issue, a bug to report, or just need help with something? Our support team is real people - submit a ticket and we&apos;ll get back to you fast.</p>
               <div className="home-support-actions">
                 <Link href="/support" className="button button-primary"><HeadsetIcon/> Go to Support</Link>
-                <Link href="/support" className="button button-secondary"><TicketIcon size={18}/> Submit a Ticket</Link>
               </div>
             </div>
 

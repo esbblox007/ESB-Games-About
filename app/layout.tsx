@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import SiteTranslator from "@/components/SiteTranslator";
 
 export const metadata: Metadata = {
   title: { default: "ESB Games — Play. Create. Connect.", template: "%s | ESB Games" },
@@ -12,5 +13,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body>{children}</body></html>;
+  return <html lang="en"><body><SiteTranslator />{children}</body></html>;
 }

@@ -1,28 +1,53 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageShell from "@/components/PageShell";
+import Newsroom from "@/components/Newsroom";
+import { ArrowIcon } from "@/components/Icons";
 
-export const metadata: Metadata = { title: "News" };
-
-const stories = [
-  { tag: "Company", title: "Building the ESB Games ecosystem", text: "A look at how the player platform, creator tools and communities are being designed to work together." },
-  { tag: "Product", title: "Inside ESB Studio", text: "Discover the accessible creation workflow, advanced mode and integrated tools planned for creators." },
-  { tag: "Safety", title: "Safety by design", text: "How parental controls, account protections and moderation are being built into the platform from day one." },
-];
+export const metadata: Metadata = {
+  title: "News & Updates",
+  description: "Announcements, product updates, engineering insights and company stories from ESB Games.",
+};
 
 export default function NewsPage() {
   return (
     <PageShell>
-      <section className="page-banner news-banner">
-        <div className="section-inner"><span className="eyebrow">ESB GAMES NEWSROOM</span><h1 className="page-title">News, ideas and<br/><span className="gradient-text">company updates.</span></h1><p>Follow product development, creator stories, safety updates and announcements from ESB Games.</p></div>
-      </section>
-      <section className="section">
-        <div className="section-inner">
-          <div className="news-card-grid">
-            {stories.map((story, index) => <article className="news-story-card" key={story.title}><div className={`news-story-art news-story-art-${index + 1}`}><span>{story.tag}</span></div><div className="news-story-copy"><small>{story.tag} · Coming soon</small><h2>{story.title}</h2><p>{story.text}</p><Link href="/news">Read update <span>→</span></Link></div></article>)}
+      <div className="news-page">
+        <section className="news-hero">
+          <div className="news-container news-hero-grid">
+            <div className="news-hero-copy">
+              <span className="news-eyebrow">ESB Games Newsroom</span>
+              <h1>ESB Games<br /><span className="gradient-text">News & Updates</span></h1>
+              <p>The latest announcements, platform updates, engineering insights and stories from the ESB Games team.</p>
+              <div className="news-hero-actions">
+                <a className="button button-primary" href="mailto:news@esbgames.com?subject=Subscribe to ESB Games updates">⌁ Subscribe to Updates</a>
+                <Link className="button button-secondary" href="/signup">Follow ESB Games <ArrowIcon size={16} /></Link>
+              </div>
+            </div>
+
+            <article className="news-feature-card">
+              <div className="news-feature-art" aria-hidden="true">
+                <div className="news-feature-skyline left" />
+                <div className="news-feature-portal"><i /><b>ESB</b></div>
+                <div className="news-feature-skyline right" />
+                <div className="news-feature-people"><i /><i /><i /><i /><i /></div>
+              </div>
+              <div className="news-feature-copy">
+                <span>Latest announcement</span>
+                <small>July 2026</small>
+                <h2>A first look at the ESB Games ecosystem</h2>
+                <p>A new universe for creation, connection and play. One platform, built around players and creators.</p>
+                <button type="button">Read Announcement <ArrowIcon size={17} /></button>
+              </div>
+              <div className="news-feature-pagination"><button type="button">‹</button><span>1 / 4</span><button type="button">›</button></div>
+            </article>
           </div>
-        </div>
-      </section>
+        </section>
+
+        <section className="news-content-section">
+          <div className="news-container"><Newsroom /></div>
+        </section>
+      </div>
     </PageShell>
   );
 }
