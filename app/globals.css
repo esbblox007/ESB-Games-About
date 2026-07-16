@@ -312,14 +312,14 @@ main { min-height: 70vh; }
 }
 
 .home-hero-inner {
-  width: min(calc(100% - 56px), var(--home-max));
+  width: min(calc(100% - 40px), 1200px);
   min-height: calc(100vh - 76px);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: .86fr 1.14fr;
-  gap: 18px;
+  grid-template-columns: .82fr 1.18fr;
+  gap: 12px;
   align-items: center;
-  padding: 34px 0 18px;
+  padding: 22px 0 10px;
 }
 
 .home-hero-copy { position: relative; z-index: 2; }
@@ -327,7 +327,7 @@ main { min-height: 70vh; }
 .home-hero-title {
   margin: 0;
   display: grid;
-  font-size: clamp(58px, 5.15vw, 84px);
+  font-size: clamp(52px, 4.5vw, 74px);
   line-height: .97;
   letter-spacing: -.066em;
   font-weight: 900;
@@ -336,7 +336,7 @@ main { min-height: 70vh; }
 .home-hero-title > span { display: block; width: fit-content; }
 .home-hero-lead {
   max-width: 470px;
-  margin: 22px 0 18px;
+  margin: 18px 0 14px;
   color: #9da7c5;
   font-size: clamp(14px, 1.05vw, 16px);
   line-height: 1.65;
@@ -349,7 +349,7 @@ main { min-height: 70vh; }
 .home-player-proof strong { font-size: 11px; }
 .home-player-proof small { margin-top: 4px; color: #8f99b7; font-size: 9px; }
 
-.home-hero-stats { display: flex; margin-top: 26px; }
+.home-hero-stats { display: flex; margin-top: 16px; }
 .home-hero-stats > div { min-width: 128px; padding: 2px 22px 2px 14px; border-left: 1px solid rgba(255,255,255,.10); }
 .home-hero-stats > div:first-child { padding-left: 10px; }
 .home-hero-stats strong { display: block; font-size: 18px; letter-spacing: -.035em; }
@@ -377,17 +377,17 @@ main { min-height: 70vh; }
 .home-community-avatars i:nth-child(5) { background: linear-gradient(145deg,#20e2c8,#00a79f); }
 
 .home-hero-visual {
-  min-height: clamp(470px, 58vh, 620px);
+  min-height: clamp(400px, 50vh, 560px);
   position: relative;
   z-index: 1;
 }
 .home-aurora {
   position: absolute;
-  width: clamp(650px, 60vw, 900px);
+  width: clamp(540px, 53vw, 760px);
   aspect-ratio: 1;
-  left: 4%;
-  top: 52%;
-  transform: translateY(-49%);
+  left: 13%;
+  top: 51%;
+  transform: translateY(-50%);
   border-radius: 50%;
   background: radial-gradient(circle at 47% 50%,
     rgba(139, 55, 216, .78) 0%,
@@ -408,9 +408,9 @@ main { min-height: 70vh; }
 }
 .home-laptop-frame {
   position: absolute;
-  right: 0;
-  top: 10%;
-  width: min(78%, 560px);
+  right: -1%;
+  top: 16%;
+  width: min(69%, 510px);
   filter: drop-shadow(0 28px 58px rgba(3, 8, 25, .50));
   transform: perspective(1600px) rotateY(-18deg) rotateX(8deg) rotateZ(-2deg);
 }
@@ -466,12 +466,13 @@ main { min-height: 70vh; }
 }
 .home-tablet-frame {
   position: absolute;
-  left: 6%;
-  bottom: 5%;
-  width: min(44%, 320px);
+  left: 7%;
+  top: 34%;
+  bottom: auto;
+  width: min(48%, 350px);
   z-index: 2;
   filter: drop-shadow(0 20px 44px rgba(3, 8, 25, .48));
-  transform: perspective(1300px) rotateY(18deg) rotateX(4deg) rotateZ(1deg);
+  transform: perspective(1300px) rotateY(18deg) rotateX(4deg) rotateZ(-1deg);
 }
 .home-tablet-bezel {
   position: relative;
@@ -644,8 +645,8 @@ main { min-height: 70vh; }
 .home-footer-bottom button { height: 32px; padding: 0 12px; border: 1px solid rgba(137,149,190,.15); border-radius: 8px; color: #9ba8c4; background: #060915; font-size: 10px; }
 
 @media (max-width: 1100px) {
-  .home-hero-inner { grid-template-columns: .9fr 1.1fr; gap: 22px; }
-  .home-hero-title { font-size: clamp(58px,6.7vw,80px); }
+  .home-hero-inner { width: min(calc(100% - 34px), 1160px); grid-template-columns: .86fr 1.14fr; gap: 18px; }
+  .home-hero-title { font-size: clamp(52px,6vw,72px); }
   .home-hero-stats > div { min-width: 125px; }
   .home-proof-track { gap: 38px; }
   .home-footer-grid { gap: 35px; }
@@ -656,12 +657,12 @@ main { min-height: 70vh; }
   .home-hero-inner,
   .home-footer-grid { width: min(calc(100% - 34px),1040px); }
   .home-hero { min-height: auto; }
-  .home-hero-inner { min-height: auto; grid-template-columns: 1fr; padding: 64px 0 70px; }
+  .home-hero-inner { min-height: auto; grid-template-columns: 1fr; padding: 56px 0 64px; }
   .home-hero-title { font-size: clamp(54px,14vw,82px); }
   .home-hero-visual { min-height: 430px; }
-  .home-laptop-frame { width: min(84%, 500px); }
-  .home-tablet-frame { width: min(42%, 280px); left: 4%; bottom: 2%; }
-  .home-aurora { width: min(780px, 120vw); left: 50%; transform: translate(-50%, -50%); }
+  .home-laptop-frame { width: min(82%, 500px); top: 12%; right: 2%; }
+  .home-tablet-frame { width: min(48%, 300px); left: 6%; top: 34%; bottom: auto; }
+  .home-aurora { width: min(700px, 112vw); left: 52%; transform: translate(-50%, -50%); }
   .home-platform-section { padding-top: 68px; }
   .home-feature-grid { grid-template-columns: 1fr; }
   .home-feature-main { grid-row: auto; min-height: auto; }
@@ -683,21 +684,21 @@ main { min-height: 70vh; }
   .home-hero-inner,
   .home-section-inner,
   .home-footer-grid { width: min(calc(100% - 26px),1040px); }
-  .home-hero-title { font-size: 50px; }
+  .home-hero-title { font-size: 46px; }
   .home-hero-action-row { display: grid; }
   .home-hero-actions { display: grid; grid-template-columns: 1fr; width: 100%; }
   .home-hero-actions .button { width: 100%; }
   .home-player-proof { justify-content: flex-start; }
   .home-laptop-frame { position: relative; right: auto; top: auto; width: 100%; transform: none; }
-  .home-tablet-frame { width: min(60%, 240px); left: -1%; bottom: -4%; transform: none; }
+  .home-tablet-frame { width: min(62%, 250px); left: 0; top: 34%; bottom: auto; transform: none; }
   .home-tablet-bezel { padding: 8px; border-radius: 20px; }
   .home-tablet-screen { border-radius: 14px; }
-  .home-aurora { width: 118%; left: -8%; }
+  .home-aurora { width: 108%; left: -2%; }
   .home-hero-stats { margin-top: 18px; }
   .home-hero-stats > div { min-width: 0; padding: 0 10px; }
   .home-hero-stats strong { font-size: 16px; }
   .home-player-proof { margin-top: 4px; }
-  .home-hero-visual { min-height: 350px; }
+  .home-hero-visual { min-height: 330px; }
   .home-live-card { left: 0; }
   .home-tournament-card { right: -13px; }
   .home-streaming-card { left: 10%; min-width: 180px; }
