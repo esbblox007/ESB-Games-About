@@ -408,9 +408,9 @@ main { min-height: 70vh; }
 }
 .home-laptop-frame {
   position: absolute;
-  right: -1%;
-  top: 16%;
-  width: min(69%, 510px);
+  right: -2%;
+  top: 31%;
+  width: min(66%, 500px);
   filter: drop-shadow(0 28px 58px rgba(3, 8, 25, .50));
   transform: perspective(1600px) rotateY(-18deg) rotateX(8deg) rotateZ(-2deg);
 }
@@ -466,13 +466,13 @@ main { min-height: 70vh; }
 }
 .home-tablet-frame {
   position: absolute;
-  left: 7%;
-  top: 34%;
+  left: 2%;
+  top: 8%;
   bottom: auto;
-  width: min(48%, 350px);
-  z-index: 2;
+  width: min(56%, 400px);
+  z-index: 3;
   filter: drop-shadow(0 20px 44px rgba(3, 8, 25, .48));
-  transform: perspective(1300px) rotateY(18deg) rotateX(4deg) rotateZ(-1deg);
+  transform: perspective(1300px) rotateY(12deg) rotateX(3deg) rotateZ(-1deg);
 }
 .home-tablet-bezel {
   position: relative;
@@ -660,8 +660,8 @@ main { min-height: 70vh; }
   .home-hero-inner { min-height: auto; grid-template-columns: 1fr; padding: 56px 0 64px; }
   .home-hero-title { font-size: clamp(54px,14vw,82px); }
   .home-hero-visual { min-height: 430px; }
-  .home-laptop-frame { width: min(82%, 500px); top: 12%; right: 2%; }
-  .home-tablet-frame { width: min(48%, 300px); left: 6%; top: 34%; bottom: auto; }
+  .home-laptop-frame { width: min(76%, 480px); top: 31%; right: 0; }
+  .home-tablet-frame { width: min(58%, 360px); left: 1%; top: 7%; bottom: auto; }
   .home-aurora { width: min(700px, 112vw); left: 52%; transform: translate(-50%, -50%); }
   .home-platform-section { padding-top: 68px; }
   .home-feature-grid { grid-template-columns: 1fr; }
@@ -689,8 +689,8 @@ main { min-height: 70vh; }
   .home-hero-actions { display: grid; grid-template-columns: 1fr; width: 100%; }
   .home-hero-actions .button { width: 100%; }
   .home-player-proof { justify-content: flex-start; }
-  .home-laptop-frame { position: relative; right: auto; top: auto; width: 100%; transform: none; }
-  .home-tablet-frame { width: min(62%, 250px); left: 0; top: 34%; bottom: auto; transform: none; }
+  .home-laptop-frame { position: relative; right: auto; top: 72px; width: 100%; transform: none; }
+  .home-tablet-frame { width: min(68%, 275px); left: -2%; top: -2%; bottom: auto; transform: none; }
   .home-tablet-bezel { padding: 8px; border-radius: 20px; }
   .home-tablet-screen { border-radius: 14px; }
   .home-aurora { width: 108%; left: -2%; }
@@ -698,7 +698,7 @@ main { min-height: 70vh; }
   .home-hero-stats > div { min-width: 0; padding: 0 10px; }
   .home-hero-stats strong { font-size: 16px; }
   .home-player-proof { margin-top: 4px; }
-  .home-hero-visual { min-height: 330px; }
+  .home-hero-visual { min-height: 390px; }
   .home-live-card { left: 0; }
   .home-tournament-card { right: -13px; }
   .home-streaming-card { left: 10%; min-width: 180px; }
