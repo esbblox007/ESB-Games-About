@@ -377,28 +377,24 @@ main { min-height: 70vh; }
 .home-community-avatars i:nth-child(5) { background: linear-gradient(145deg,#20e2c8,#00a79f); }
 
 .home-hero-visual {
-  min-height: clamp(430px, 56vh, 620px);
+  min-height: clamp(440px, 58vh, 640px);
   position: relative;
   z-index: 1;
 }
 .home-aurora {
   position: absolute;
-  width: clamp(580px, 57vw, 820px);
-  aspect-ratio: 1;
-  left: 10%;
+  width: clamp(700px, 68vw, 980px);
+  height: clamp(460px, 48vw, 680px);
+  left: 50%;
   top: 50%;
-  transform: translateY(-50%);
-  border-radius: 50%;
-  background: radial-gradient(circle at 47% 50%,
-    rgba(139, 55, 216, .78) 0%,
-    rgba(112, 58, 194, .67) 30%,
-    rgba(64, 74, 176, .54) 53%,
-    rgba(20, 118, 178, .40) 69%,
-    rgba(0, 190, 213, .25) 80%,
-    rgba(0, 190, 213, .08) 87%,
-    transparent 89%);
-  filter: blur(1px);
-  box-shadow: 0 0 100px rgba(49, 98, 195, .18);
+  transform: translate(-45%, -50%);
+  background:
+    radial-gradient(ellipse at 30% 44%, rgba(171, 74, 255, .34) 0%, rgba(171, 74, 255, .21) 22%, rgba(171, 74, 255, .10) 38%, transparent 62%),
+    radial-gradient(ellipse at 68% 58%, rgba(25, 220, 255, .26) 0%, rgba(25, 220, 255, .16) 20%, rgba(25, 220, 255, .07) 38%, transparent 60%),
+    radial-gradient(ellipse at 50% 50%, rgba(105, 108, 255, .14) 0%, rgba(105, 108, 255, .08) 28%, transparent 68%);
+  filter: blur(30px);
+  opacity: .95;
+  pointer-events: none;
 }
 .home-visual-line { display: none; }
 .home-device-scene {
@@ -408,12 +404,12 @@ main { min-height: 70vh; }
 }
 .home-laptop-frame {
   position: absolute;
-  right: -1%;
-  top: 21%;
-  width: min(79%, 610px);
+  right: 1%;
+  top: 23%;
+  width: min(76%, 590px);
   z-index: 2;
-  filter: drop-shadow(0 32px 70px rgba(3, 8, 25, .56));
-  transform: perspective(1600px) rotateY(-16deg) rotateX(7deg) rotateZ(-1.2deg);
+  filter: drop-shadow(0 34px 78px rgba(3, 8, 25, .56));
+  transform: perspective(1600px) rotateY(-15deg) rotateX(6deg) rotateZ(-1deg);
 }
 .home-laptop-screen-shell {
   position: relative;
@@ -467,13 +463,13 @@ main { min-height: 70vh; }
 }
 .home-tablet-frame {
   position: absolute;
-  left: 0%;
+  left: 2%;
   top: 11%;
   bottom: auto;
-  width: min(45%, 350px);
+  width: min(48%, 400px);
   z-index: 3;
-  filter: drop-shadow(0 24px 52px rgba(3, 8, 25, .52));
-  transform: perspective(1300px) rotateY(14deg) rotateX(3deg) rotateZ(-1.4deg);
+  filter: drop-shadow(0 26px 56px rgba(3, 8, 25, .52));
+  transform: perspective(1300px) rotateY(12deg) rotateX(3deg) rotateZ(-1.2deg);
 }
 .home-tablet-bezel {
   position: relative;
@@ -660,10 +656,10 @@ main { min-height: 70vh; }
   .home-hero { min-height: auto; }
   .home-hero-inner { min-height: auto; grid-template-columns: 1fr; padding: 56px 0 64px; }
   .home-hero-title { font-size: clamp(54px,14vw,82px); }
-  .home-hero-visual { min-height: 460px; }
-  .home-laptop-frame { width: min(82%, 560px); top: 22%; right: -1%; }
-  .home-tablet-frame { width: min(46%, 320px); left: 2%; top: 11%; bottom: auto; }
-  .home-aurora { width: min(760px, 116vw); left: 50%; transform: translate(-50%, -50%); }
+  .home-hero-visual { min-height: 470px; }
+  .home-laptop-frame { width: min(80%, 560px); top: 25%; right: 0; }
+  .home-tablet-frame { width: min(49%, 340px); left: 3%; top: 12%; bottom: auto; }
+  .home-aurora { width: min(820px, 120vw); height: min(520px, 72vw); left: 50%; transform: translate(-50%, -50%); }
   .home-platform-section { padding-top: 68px; }
   .home-feature-grid { grid-template-columns: 1fr; }
   .home-feature-main { grid-row: auto; min-height: auto; }
@@ -690,16 +686,16 @@ main { min-height: 70vh; }
   .home-hero-actions { display: grid; grid-template-columns: 1fr; width: 100%; }
   .home-hero-actions .button { width: 100%; }
   .home-player-proof { justify-content: flex-start; }
-  .home-laptop-frame { position: relative; right: auto; top: 74px; width: 100%; transform: none; }
-  .home-tablet-frame { width: min(58%, 240px); left: 0; top: 4%; bottom: auto; transform: none; }
+  .home-laptop-frame { position: relative; right: auto; top: 78px; width: 100%; transform: none; }
+  .home-tablet-frame { width: min(60%, 250px); left: 0; top: 2%; bottom: auto; transform: none; }
   .home-tablet-bezel { padding: 8px; border-radius: 20px; }
   .home-tablet-screen { border-radius: 14px; }
-  .home-aurora { width: 108%; left: -2%; }
+  .home-aurora { width: 118%; height: 84%; left: -6%; top: 48%; transform: none; }
   .home-hero-stats { margin-top: 18px; }
   .home-hero-stats > div { min-width: 0; padding: 0 10px; }
   .home-hero-stats strong { font-size: 16px; }
   .home-player-proof { margin-top: 4px; }
-  .home-hero-visual { min-height: 410px; }
+  .home-hero-visual { min-height: 390px; }
   .home-live-card { left: 0; }
   .home-tournament-card { right: -13px; }
   .home-streaming-card { left: 10%; min-width: 180px; }
