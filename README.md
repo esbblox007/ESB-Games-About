@@ -1,58 +1,33 @@
 # ESB Games About Website
 
-The public ESB Games information website for `https://about.esbgames.com`, built with Next.js 15, React 19 and TypeScript.
+A coded, responsive seven-page website for `about.esbgames.com`, based on the supplied visual direction. The reference screenshots are **not** embedded as page images: the layout, gradients, navigation, cards, editor window, pricing, forms and animated elements are built with React, TypeScript and CSS.
 
-The project preserves the established ESB Games dark navy visual identity, blue shield branding, shared navigation, account links, responsive layouts and Vercel deployment structure. News, downloads, search and newsletter areas are prepared for the shared **ESB Games Production** Supabase project and the ESB Games Backend System.
+## Pages
 
-## Public routes
+1. `/` — Home
+2. `/about` — About
+3. `/developer-hub` — Developer Hub
+4. `/subscriptions` — Subscriptions
+5. `/careers` — Careers
+6. `/support` — Support
+7. `/early-access` — Early Access
 
-```text
-/                     Homepage
-/about                About ESB Games
-/developer-hub        Creator Hub
-/parental-controls    Parental Controls
-/news                 News index
-/news/[slug]          Published news or blog article
-/news/rss.xml         RSS feed
-/download             Official product downloads
-/careers              Careers and vacancies
-/support              Help and support
-/subscriptions        Subscription information
-/early-access         Existing early-access form
-/login                Existing About-site login design
-/signup               Existing About-site signup design
-```
+The top navigation changes route correctly, highlights the current page and becomes a mobile menu on smaller screens. The search button opens a working page search; `Ctrl/⌘ + K` opens it from anywhere.
 
-Legacy redirects:
+## Included functionality
 
-```text
-/blog                  → /news
-/blog/[slug]           → /news/[slug]
-/creator-hub           → /developer-hub
-```
-
-The main **Join Now**, **Start Playing** and equivalent public account actions use:
-
-```text
-https://esbgames.com/login
-```
-
-## Main capabilities
-
-- Responsive desktop, laptop, tablet and mobile layouts
-- Accessible mobile navigation drawer
-- Native-name language selector with 11 languages
-- Persistent selected locale and document-language updates
-- Automatic machine translation through Google Translate, with English fallback
-- Intent-aware global search across static pages, help content, careers, downloads, published articles and optional Backend search documents
-- Full `/news` and `/news/[slug]` publishing experience
-- Safe block-based article renderer; arbitrary article HTML is not rendered
-- Responsive image, gallery, table, code, callout and approved-video support
-- Article metadata, Open Graph, NewsArticle JSON-LD, breadcrumbs, sitemap entries and RSS
-- Backend-managed download releases with honest unavailable states
-- Working newsletter subscription form with validation and Supabase persistence
-- Existing support and early-access API integrations preserved
-- Cache tags and protected revalidation endpoint for Backend publishing workflows
+- Responsive desktop, tablet and mobile design
+- Shared navigation and footer
+- Functional page search
+- Monthly/yearly pricing toggle with a 20% yearly calculation
+- Careers department filters and working email application links
+- Support ticket form with generated references
+- Ticket tracking from local browser storage and optional Supabase records
+- Early-access waitlist form
+- Optional Resend confirmation and support emails
+- Optional Supabase persistence
+- Server-side validation and HTML escaping for email content
+- No external font or icon CDN dependency
 
 ## Run locally
 
@@ -63,162 +38,81 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-Production commands:
+For a production check:
 
 ```bash
 npm run build
 npm run start
 ```
 
+## Deploy through GitHub and Vercel
+
+1. Create a new GitHub repository.
+2. Upload the contents of this folder to the repository root.
+3. In Vercel, choose **Add New → Project** and import the repository.
+4. Vercel should detect **Next.js** automatically. Keep the default build command: `next build`.
+5. Add the environment variables below in **Project Settings → Environment Variables**.
+6. Deploy.
+7. In the Vercel project, open **Settings → Domains** and add `about.esbgames.com`.
+8. Add the DNS record Vercel gives you at the provider that controls `esbgames.com`.
+
 ## Environment variables
 
-Copy `env.example` to `.env.local` for local development.
+Copy `.env.example` to `.env.local` for local development.
 
 ```env
-NEXT_PUBLIC_SITE_URL=https://about.esbgames.com
 NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 RESEND_API_KEY=
-RESEND_FROM_EMAIL=
-REVALIDATION_SECRET=
-NEXT_PUBLIC_CONTENT_PREVIEW=false
+SUPPORT_INBOX_EMAIL=support@esbgames.com
+RESEND_FROM_EMAIL=ESB Games <support@your-verified-domain.com>
+NEXT_PUBLIC_SITE_URL=https://about.esbgames.com
 ```
 
-`SUPABASE_SERVICE_ROLE_KEY` and `REVALIDATION_SECRET` are server-only secrets. Never prefix them with `NEXT_PUBLIC_` or expose them in browser code.
+All integrations are optional. Without them, the forms still work in demonstration mode and save the current visitor's submitted details in that browser's local storage. Configure Supabase for permanent records and cross-device ticket tracking. Configure Resend for real email delivery.
 
-`NEXT_PUBLIC_CONTENT_PREVIEW` is disabled by default. Turning it on displays clearly labelled preview articles only for renderer testing when no content Backend is connected. It must remain `false` in production unless an authorised preview deployment intentionally uses it.
+### Important security note
+
+`SUPABASE_SERVICE_ROLE_KEY` must only be added as a Vercel server environment variable. Never prefix it with `NEXT_PUBLIC_` and never put it in client code.
 
 ## Supabase setup
 
-1. Open the shared **ESB Games Production** project.
-2. Review existing tables before creating anything new.
-3. Run only the missing parts of `supabase.sql` through Supabase SQL Editor.
-4. Add the required environment variables in Vercel.
-5. Keep Row Level Security enabled. The new content tables intentionally have no public policies and are accessed by server-side services or the Backend.
+1. Create a Supabase project.
+2. Open **SQL Editor**.
+3. Run the contents of `supabase.sql`.
+4. Copy the project URL and service-role key into Vercel.
 
-The schema includes or prepares:
+The database tables are protected by Row Level Security and accessed through the Next.js API routes.
 
-```text
-support_tickets
- early_access
-newsletter_subscriptions
-cms_articles
-download_releases
-site_search_documents
-```
+## Resend setup
 
-The article body uses the typed block structure in `lib/content/types.ts`. The Backend CMS should create that JSON structure instead of arbitrary executable HTML.
+1. Create a Resend account.
+2. Verify a sending domain, ideally a subdomain such as `mail.esbgames.com`.
+3. Create an API key.
+4. Set `RESEND_FROM_EMAIL` to an address on the verified domain.
+5. Set `SUPPORT_INBOX_EMAIL` to the inbox that should receive support tickets.
 
-## Backend publishing flow
+The support API sends an internal ticket email and a confirmation to the requester. The early-access API sends a waitlist confirmation.
 
-```text
-Backend draft
-→ Editorial review
-→ Approval
-→ Scheduled or immediate publication
-→ Published Supabase article
-→ About website revalidation
-→ News, article route, search index, sitemap and RSS update
-```
+## Content to review before public launch
 
-Only records with all of the following are public:
+The website deliberately labels product systems as planned, in development or pre-launch where appropriate. Before launch, review:
+
+- Subscription prices and benefits
+- Careers vacancies
+- Support response-time wording
+- Legal links and final privacy policy
+- Public launch dates
+- Email addresses
+- Platform-status information
+
+## Project structure
 
 ```text
-publication_state = Published
-visibility = Public
-published_at is not in the future
+app/                 Pages and API routes
+components/          Shared UI and interactive components
+lib/                 Supabase and Resend helpers
+public/              Static public files
+supabase.sql          Database schema
+.env.example          Environment-variable template
 ```
-
-The Backend may call `POST /api/revalidate` with:
-
-```text
-x-esb-revalidate-secret: <REVALIDATION_SECRET>
-```
-
-Optional JSON body:
-
-```json
-{
-  "slug": "article-slug",
-  "downloads": false,
-  "search": true
-}
-```
-
-## News content model
-
-Important `cms_articles` fields include title, slug, subtitle, excerpt, body, cover image or video, author, category, tags, publication state, featured state, SEO fields, canonical URL, published date, updated date, related articles, locale, translation group, reading time, creator and approver.
-
-Supported safe article blocks:
-
-```text
-paragraph
-heading
-list
-quote
-divider
-image
-gallery
-video
-callout
-code
-table
-button
-```
-
-YouTube and Vimeo embeds use an allowlist. Uploaded video URLs and all article/download URLs are validated before rendering.
-
-## Download management
-
-The `/download` page contains the official product areas for:
-
-- ESB Games Play Platform
-- ESB Studio
-
-The UI does not create fake downloads. A release needs an approved Backend record with `available = true` and a valid `file_url` before a download button is enabled.
-
-## Search architecture
-
-Search combines:
-
-1. A maintained static metadata index for public pages, common questions, keywords and synonyms.
-2. Published news articles.
-3. Live download release information.
-4. Optional `site_search_documents` records managed by the Backend.
-
-Results are ranked by exact title, phrase, keyword, common question, synonym, content and limited typo tolerance. The website does not scrape every page on each request.
-
-## Language system
-
-The selector always displays these native names in this order:
-
-```text
-English
-Español
-Português do Brasil
-Français
-Deutsch
-简体中文
-繁體中文
-日本語
-한국어
-Bahasa Indonesia
-हिन्दी
-```
-
-The explicit selection is saved in local storage and takes priority over automatic browser detection. Automatic page translation currently relies on Google Translate and therefore requires access to Google’s translation service. Approved first-party translated routes and `hreflang` entries can be added later when reviewed locale content exists.
-
-## Deployment
-
-1. Commit the project to the existing GitHub repository.
-2. Push to the production branch connected to Vercel.
-3. Confirm Vercel detects Next.js and uses `npm run build`.
-4. Add the environment variables in Vercel Project Settings.
-5. Deploy and test the production and custom-domain URLs.
-
-Do not add a generated `package-lock.json` containing environment-specific registry addresses. This repository intentionally excludes it.
-
-## Implementation status
-
-See `IMPLEMENTATION-REPORT.md` for completed work, verification, live integrations, Backend setup requirements and remaining limitations.

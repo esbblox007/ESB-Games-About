@@ -1,27 +1,3 @@
-ESB Games About Website - Verified Follow-up Fixes
+This complete repository includes the redesigned Creator Hub, Careers and Support pages, smaller footer social icons, a persistent language selector and the uncropped homepage iPad screenshot.
 
-This follow-up audit corrects the newsletter form bug and rechecks the full requested update.
-
-Confirmed updates:
-- Play Platform download card uses the blue ESB shield.
-- ESB Studio download card uses the green Studio shield.
-- Newsletter email row now spans the full form width.
-- Newsletter privacy wording is outside the bordered email field.
-- Visible punctuation dashes were removed from website copy where they were not joining compound words.
-- Footer language control uses a globe icon.
-- Guest locale detection uses Vercel country headers, with browser-language fallback.
-- Manually selected language remains preferred and persists.
-- Signed-in profile chip supports shared ESB profile cookies and Supabase session metadata when available.
-- Parental Controls retains the dashboard and phone preview and adds Family Centre links and account-linking steps.
-- Quick Help rows have arrows, hover states and working help-article routes.
-- Careers department filters use grey hover and light-purple selected states.
-- Clicking a role opens its details and application section below the list.
-- News search appears above the article category filters.
-- Support help pages were added to search and the sitemap.
-
-Validation:
-- 60 TypeScript and TSX files parsed with zero syntax errors.
-- CSS brace balance passed.
-- 13 of 13 requested source checks passed.
-
-A full Next.js production build was not run in this workspace because project dependencies could not be installed from the package registry. Vercel should perform the final dependency-backed build.
+No package-lock.json, node_modules or .next build output is included.

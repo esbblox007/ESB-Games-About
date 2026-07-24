@@ -1,13 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import Logo from "./Logo";
-import LanguageSelector from "./LanguageSelector";
-import SearchDialog from "./SearchDialog";
 import { CloseIcon, MenuIcon, SearchIcon, RocketIcon } from "./Icons";
-import { getClientAccountProfile, type SiteAccountProfile } from "@/lib/client/account";
 
 const nav = [
   ["Home", "/"],
@@ -19,48 +16,24 @@ const nav = [
   ["Support", "/support"],
 ] as const;
 
-const accountUrl = "https://esbgames.com/login";
-const accountHomeUrl = "https://esbgames.com/home";
-
-function AccountButton({ profile, mobile = false }: { profile: SiteAccountProfile | null; mobile?: boolean }) {
-  if (!profile) {
-    return (
-      <a href={accountUrl} className={`button button-primary header-cta${mobile ? " mobile-account-button" : ""}`} data-analytics="join-now">
-        <RocketIcon size={17} /> Join Now
-      </a>
-    );
-  }
-
-  const initials = profile.displayName
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("") || profile.username.slice(0, 2).toUpperCase();
-
-  return (
-    <a href={accountHomeUrl} className={`header-account-chip${mobile ? " mobile-account-chip" : ""}`} data-analytics="open-account">
-      <span className="header-account-avatar" aria-hidden="true">
-        {profile.avatarUrl ? (
-          <img src={profile.avatarUrl} alt="" width={30} height={30} />
-        ) : (
-          initials
-        )}
-      </span>
-      <span className="header-account-copy">
-        <strong>{profile.displayName}</strong>
-        <small>@{profile.username}</small>
-      </span>
-    </a>
-  );
-}
+const searchItems = [
+  { title: "Home", description: "Play, create and connect.", href: "/" },
+  { title: "About ESB Games", description: "Our mission, principles and platform vision.", href: "/about" },
+  { title: "Creator Hub", description: "ESB Studio, publishing and creator tools.", href: "/developer-hub" },
+  { title: "Parental Controls", description: "Safety, family settings and account supervision.", href: "/parental-controls" },
+  { title: "News", description: "Company updates, product blogs and announcements.", href: "/news" },
+  { title: "Careers", description: "Open roles and life at ESB Games.", href: "/careers" },
+  { title: "Support", description: "Help articles, tickets and platform status.", href: "/support" },
+  { title: "Create an account", description: "Join ESB Games and reserve your account.", href: "/signup" },
+  { title: "Log in", description: "Return to your ESB Games account.", href: "/login" },
+];
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [profile, setProfile] = useState<SiteAccountProfile | null>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     setMenuOpen(false);
@@ -68,44 +41,20 @@ export default function Header() {
   }, [pathname]);
 
   useEffect(() => {
-    const syncProfile = () => setProfile(getClientAccountProfile());
-    syncProfile();
-    window.addEventListener("storage", syncProfile);
-    window.addEventListener("focus", syncProfile);
-    return () => {
-      window.removeEventListener("storage", syncProfile);
-      window.removeEventListener("focus", syncProfile);
-    };
-  }, []);
-
-  useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
         setSearchOpen(true);
       }
-      if (event.key === "Escape") {
-        setSearchOpen(false);
-        setMenuOpen(false);
-      }
+      if (event.key === "Escape") setSearchOpen(false);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  useEffect(() => {
-    if (!menuOpen) return;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    const first = menuRef.current?.querySelector<HTMLElement>("a,button");
-    window.setTimeout(() => first?.focus(), 20);
-    return () => {
-      document.body.style.overflow = previous;
-    };
-  }, [menuOpen]);
-
-  const mobileSecondaryHref = useMemo(() => (profile ? accountHomeUrl : accountUrl), [profile]);
-  const mobileSecondaryLabel = profile ? "Open account" : "Log In";
+  const filtered = searchItems.filter((item) =>
+    `${item.title} ${item.description}`.toLowerCase().includes(query.toLowerCase()),
+  );
 
   return (
     <>
@@ -115,42 +64,49 @@ export default function Header() {
           <nav className="desktop-nav" aria-label="Primary navigation">
             {nav.map(([label, href]) => {
               const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
-              return <Link key={href} href={href} className={active ? "active" : ""} aria-current={active ? "page" : undefined}>{label}</Link>;
+              return <Link key={href} href={href} className={active ? "active" : ""}>{label}</Link>;
             })}
           </nav>
           <div className="header-actions">
-            <button className="search-button" aria-label="Search ESB Games" onClick={() => setSearchOpen(true)} aria-keyshortcuts="Control+K Meta+K">
+            <button className="search-button" aria-label="Search" onClick={() => setSearchOpen(true)}>
               <SearchIcon size={19} />
             </button>
-            <AccountButton profile={profile} />
-            <button className="menu-button" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen((value) => !value)}>
+            <Link href="/signup" className="button button-primary header-cta">
+              <RocketIcon size={17} /> Join Now
+            </Link>
+            <button className="menu-button" aria-label="Open menu" onClick={() => setMenuOpen((value) => !value)}>
               {menuOpen ? <CloseIcon /> : <MenuIcon />}
             </button>
           </div>
         </div>
+        {menuOpen && (
+          <nav className="mobile-nav" aria-label="Mobile navigation">
+            {nav.map(([label, href]) => <Link key={href} href={href}>{label}</Link>)}
+            <Link href="/signup">Join Now</Link>
+            <Link href="/login">Log In</Link>
+          </nav>
+        )}
       </header>
 
-      {menuOpen && (
-        <div className="mobile-nav-backdrop" role="presentation" onMouseDown={() => setMenuOpen(false)}>
-          <div id="mobile-navigation" className="mobile-nav-sheet" ref={menuRef} role="dialog" aria-modal="true" aria-label="Site navigation" onMouseDown={(event: ReactMouseEvent<HTMLDivElement>) => event.stopPropagation()}>
-            <div className="mobile-nav-heading"><strong>Menu</strong><button type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu"><CloseIcon /></button></div>
-            <button className="mobile-search-action" type="button" onClick={() => { setMenuOpen(false); setSearchOpen(true); }}><SearchIcon size={18} /> Search ESB Games</button>
-            <nav className="mobile-nav" aria-label="Mobile navigation">
-              {nav.map(([label, href]) => {
-                const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
-                return <Link key={href} href={href} className={active ? "active" : ""} aria-current={active ? "page" : undefined}>{label}</Link>;
-              })}
-            </nav>
-            <div className="mobile-nav-account-actions">
-              <AccountButton profile={profile} mobile />
-              <a className="button button-secondary" href={mobileSecondaryHref}>{mobileSecondaryLabel}</a>
+      {searchOpen && (
+        <div className="modal-backdrop" role="presentation" onMouseDown={() => setSearchOpen(false)}>
+          <section className="search-modal" role="dialog" aria-modal="true" aria-label="Search ESB Games" onMouseDown={(e) => e.stopPropagation()}>
+            <div className="search-field-wrap">
+              <SearchIcon size={20} />
+              <input autoFocus value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search pages…" />
+              <kbd>ESC</kbd>
             </div>
-            <div className="mobile-nav-language"><span>Language</span><LanguageSelector variant="mobile" /></div>
-          </div>
+            <div className="search-results">
+              {filtered.length ? filtered.map((item) => (
+                <button key={item.href} onClick={() => router.push(item.href)}>
+                  <strong>{item.title}</strong><span>{item.description}</span>
+                </button>
+              )) : <p className="empty-result">No results found.</p>}
+            </div>
+            <p className="search-tip">Tip: press Ctrl/⌘ + K anywhere to search.</p>
+          </section>
         </div>
       )}
-
-      <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }
