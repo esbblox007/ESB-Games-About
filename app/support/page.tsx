@@ -2,11 +2,21 @@ import type { Metadata } from "next";
 import PageShell from "@/components/PageShell";
 import SupportClient from "@/components/SupportClient";
 import SupportFAQ from "@/components/SupportFAQ";
+import { ArrowIcon } from "@/components/Icons";
 
 export const metadata: Metadata = {
   title: "Support",
   description: "Browse ESB Games help resources, submit a support ticket or track an existing request.",
 };
+
+const quickHelpLinks = [
+  ["Reset your password", "https://esbgames.com/login"],
+  ["Cancel or change a subscription", "/subscriptions"],
+  ["Request a refund", "mailto:support@esbgames.com?subject=Refund request"],
+  ["Appeal an account action", "mailto:safety@esbgames.com?subject=Account appeal"],
+  ["Report a player or game", "mailto:safety@esbgames.com?subject=Player report"],
+  ["Creator payout guide", "/developer-hub"],
+] as const;
 
 export default function SupportPage() {
   return (
@@ -27,30 +37,32 @@ export default function SupportPage() {
           <div className="support-info-grid" id="quick-help">
             <article className="support-quick-panel">
               <h2>Quick Help</h2>
-              <a href="https://esbgames.com/login">🔑 Reset your password</a>
-              <a href="/subscriptions">↻ Cancel or change a subscription</a>
-              <a href="mailto:support@esbgames.com?subject=Refund request">♟ Request a refund</a>
-              <a href="mailto:safety@esbgames.com?subject=Account appeal">◆ Appeal an account action</a>
-              <a href="mailto:safety@esbgames.com?subject=Player report">⚑ Report a player or game</a>
-              <a href="/developer-hub">♜ Creator publishing guide</a>
+              <div className="support-quick-links" role="list">
+                {quickHelpLinks.map(([label, href]) => (
+                  <a key={label} href={href} role="listitem" className="support-quick-link">
+                    <span>{label}</span>
+                    <ArrowIcon size={16} />
+                  </a>
+                ))}
+              </div>
             </article>
 
             <div className="support-side-stack">
               <article className="support-status-panel">
-                <div><h2>Platform Status</h2><span>● Pre-launch systems</span></div>
+                <div><h2>Platform Status</h2><span>● Pre launch systems</span></div>
                 <p><span>Public platform</span><strong>In development</strong></p>
-                <p><span>ESB Studio / publishing</span><strong>In development</strong></p>
-                <p><span>Payments & billing</span><strong>Not live</strong></p>
+                <p><span>ESB Studio and publishing</span><strong>In development</strong></p>
+                <p><span>Payments and billing</span><strong>Not live</strong></p>
                 <p><span>Authentication</span><strong>Prototype ready</strong></p>
                 <p><span>Support tickets</span><strong>Available</strong></p>
               </article>
-              <article className="support-community-panel"><span>◉</span><div><h3>Community support</h3><p>Connect with the ESB Games community and staff through the official server.</p><a href="https://esbgames.com/login">Join the community →</a></div></article>
+              <article className="support-community-panel"><span>◉</span><div><h3>Community support</h3><p>Connect with the ESB Games community and staff through the official server.</p><a href="https://esbgames.com/login">Join the community <ArrowIcon size={15} /></a></div></article>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="support-page-section support-faq-section">
+      <section className="support-page-section support-faq-section" id="faq">
         <div className="support-page-container">
           <header><span className="eyebrow">Frequently asked</span><h2>Common <span className="gradient-text">questions.</span></h2></header>
           <SupportFAQ />

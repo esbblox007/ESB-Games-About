@@ -107,7 +107,7 @@ export default function HomePage() {
               </h1>
 
               <p className="home-hero-lead">
-                ESB Games is the next-generation gaming platform, many worlds, one community, infinite possibilities.
+                ESB Games is the next generation gaming platform, many worlds, one community, infinite possibilities.
                 Whether you come to discover new experiences, find your people, or build your own, you belong here.
               </p>
 
@@ -192,7 +192,7 @@ export default function HomePage() {
           <div className="home-section-inner">
             <header className="home-center-heading">
               <h2>A platform that puts <span className="home-gradient">you</span> first.</h2>
-              <p>We built ESB from the ground up - for players who want freedom, creators who want fairness,<br className="home-desktop-break"/> and communities that deserve safety.</p>
+              <p>We built ESB from the ground up for players who want freedom, creators who want fairness,<br className="home-desktop-break"/> and communities that deserve safety.</p>
             </header>
 
             <div className="home-feature-grid">
@@ -212,7 +212,7 @@ export default function HomePage() {
               <article className="home-feature-card home-feature-small home-feature-performance">
                 <span className="home-feature-icon home-feature-icon-pink"><BoltIcon/></span>
                 <h3>Smooth Performance Everywhere</h3>
-                <p>Our custom-built rendering pipeline is engineered to scale effortlessly from low-end mobile devices to high-performance gaming PCs. Experience fluid 60 FPS gameplay, immersive visuals, and responsive performance across every platform.</p>
+                <p>Our custom built rendering pipeline is engineered to scale effortlessly from low end mobile devices to high performance gaming PCs. Experience fluid 60 FPS gameplay, immersive visuals, and responsive performance across every platform.</p>
               </article>
 
               <article className="home-feature-card home-feature-half">
@@ -232,7 +232,7 @@ export default function HomePage() {
               <article className="home-audience-card home-creators-card">
                 <span className="home-overline">FOR CREATORS</span>
                 <h3>Build it. Ship it.<br/>Get paid for it.</h3>
-                <p>Industry-leading 70/30 revenue split, instant payouts in 100+ countries, and direct fan subscriptions. Your game, your rules.</p>
+                <p>Industry leading 70/30 revenue split, instant payouts in 100+ countries, and direct fan subscriptions. Your game, your rules.</p>
                 <div className="home-mini-metrics">
                   <div><strong>70%</strong><span>REV SHARE</span></div>
                   <div><strong>$1M+</strong><span>TOP EARNER</span></div>
@@ -244,7 +244,7 @@ export default function HomePage() {
               <article className="home-audience-card home-players-card">
                 <span className="home-overline home-overline-cyan">FOR PLAYERS</span>
                 <h3>Find your people.<br/>Make your legend.</h3>
-                <p>Friends, parties, groups, events, voice - all under one roof. Plus parental controls and ML safety baked in from day one.</p>
+                <p>Friends, parties, groups, events and voice, all under one roof. Plus parental controls and ML safety baked in from day one.</p>
                 <div className="home-community-avatars" aria-label="80 million community members">
                   <i/><i/><i/><i/><i/><b>80M</b>
                 </div>
@@ -258,14 +258,14 @@ export default function HomePage() {
           <div className="home-section-inner home-support-grid">
             <div className="home-support-copy">
               <h2>We&apos;re here when<br/><span className="home-gradient">you need us</span>.</h2>
-              <p>Got a billing issue, a bug to report, or just need help with something? Our support team is real people - submit a ticket and we&apos;ll get back to you fast.</p>
+              <p>Got a billing issue, a bug to report, or just need help with something? Our support team is made up of real people, submit a ticket and we&apos;ll get back to you fast.</p>
               <div className="home-support-actions">
                 <Link href="/support" className="button button-primary"><HeadsetIcon/> Go to Support</Link>
               </div>
             </div>
 
             <div className="home-support-cards">
-              <article><span className="home-feature-icon home-feature-icon-magenta"><TicketIcon/></span><h3>Open a Ticket</h3><p>Report bugs, account issues, or anything else - tracked end to end.</p></article>
+              <article><span className="home-feature-icon home-feature-icon-magenta"><TicketIcon/></span><h3>Open a Ticket</h3><p>Report bugs, account issues, or anything else, tracked end to end.</p></article>
               <article><span className="home-feature-icon home-feature-icon-blue"><BoltIcon/></span><h3>Fast Responses</h3><p>Most tickets are resolved within 24 hours by our in-house team.</p></article>
               <article><span className="home-feature-icon home-feature-icon-teal"><SearchIcon/></span><h3>Safety Reports</h3><p>Report harassment, cheating, or abuse. Every report is reviewed.</p></article>
               <article><span className="home-feature-icon home-feature-icon-orange"><BookIcon/></span><h3>Help Articles</h3><p>Hundreds of guides for account, billing, creators and more.</p></article>
@@ -296,7 +296,7 @@ export default function HomePage() {
               <div>
                 <span className="home-newsletter-overline"><i/> STAY IN THE LOOP</span>
                 <h2>Get drops, updates &amp; insider<br/>news.</h2>
-                <p>Patch notes, beta invites and exclusive cosmetics - straight to your inbox. No spam, ever.</p>
+                <p>Patch notes, beta invites and exclusive cosmetics, straight to your inbox. No spam, ever.</p>
               </div>
               <NewsletterForm />
             </div>

@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
+import { GlobeIcon } from "./Icons";
+import { isClientSignedIn } from "@/lib/client/account";
 
 export const languages = [
   { locale: "en", google: "en", label: "English" },
@@ -30,6 +32,28 @@ function setTranslationCookie(googleCode: string) {
   }
 }
 
+export function resolvePreferredLocale() {
+  const saved = window.localStorage.getItem("esb-language");
+  if (saved && languages.some((language) => language.locale === saved)) return saved;
+
+  if (isClientSignedIn()) return "en";
+
+  const browserLocales = [...new Set([...(navigator.languages || []), navigator.language, document.documentElement.lang].filter(Boolean))];
+  for (const browserLocale of browserLocales) {
+    const lower = browserLocale.toLowerCase();
+    const exact = languages.find((language) => language.locale.toLowerCase() === lower || language.google.toLowerCase() === lower);
+    if (exact) return exact.locale;
+    const base = languages.find((language) => {
+      const localeBase = language.locale.toLowerCase().split("-")[0];
+      const googleBase = language.google.toLowerCase().split("-")[0];
+      return lower.startsWith(`${localeBase}-`) || lower === localeBase || lower.startsWith(`${googleBase}-`) || lower === googleBase;
+    });
+    if (base) return base.locale;
+  }
+
+  return "en";
+}
+
 export default function LanguageSelector({ variant = "footer" }: { variant?: "footer" | "mobile" }) {
   const id = useId();
   const rootRef = useRef<HTMLDivElement>(null);
@@ -40,8 +64,8 @@ export default function LanguageSelector({ variant = "footer" }: { variant?: "fo
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem("esb-language");
-    if (saved && languages.some((language) => language.locale === saved)) setLocale(saved);
+    const preferred = resolvePreferredLocale();
+    setLocale(preferred);
   }, []);
 
   useEffect(() => {
@@ -63,12 +87,13 @@ export default function LanguageSelector({ variant = "footer" }: { variant?: "fo
 
   const selected = languages.find((language) => language.locale === locale) || languages[0];
 
-  const selectLanguage = (nextLocale: string) => {
+  const selectLanguage = (nextLocale: string, source: "manual" | "auto" = "manual") => {
     const language = languages.find((item) => item.locale === nextLocale) || languages[0];
     setLocale(language.locale);
     setOpen(false);
     setQuery("");
     window.localStorage.setItem("esb-language", language.locale);
+    window.localStorage.setItem("esb-language-source", source);
     document.documentElement.lang = language.locale;
     setTranslationCookie(language.google);
     window.dispatchEvent(new CustomEvent("esb-language-change", { detail: { locale: language.locale, google: language.google } }));
@@ -77,12 +102,25 @@ export default function LanguageSelector({ variant = "footer" }: { variant?: "fo
     if (googleSelect) {
       googleSelect.value = language.google;
       googleSelect.dispatchEvent(new Event("change"));
-    } else {
+    } else if (source === "manual") {
       window.setTimeout(() => window.location.reload(), 80);
     }
   };
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+  useEffect(() => {
+    const source = window.localStorage.getItem("esb-language-source");
+    if (!isClientSignedIn() && source !== "manual") {
+      const preferred = resolvePreferredLocale();
+      if (preferred !== locale) selectLanguage(preferred, "auto");
+      else {
+        const language = languages.find((item) => item.locale === preferred) || languages[0];
+        setTranslationCookie(language.google);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locale]);
+
+  const onKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
     if (!open && ["Enter", " ", "ArrowDown"].includes(event.key)) {
       event.preventDefault();
       setOpen(true);
@@ -98,7 +136,7 @@ export default function LanguageSelector({ variant = "footer" }: { variant?: "fo
   return (
     <div ref={rootRef} className={`language-selector language-selector-${variant} notranslate`} translate="no" onKeyDown={onKeyDown}>
       <button type="button" className="language-trigger" aria-haspopup="listbox" aria-expanded={open} aria-controls={`${id}-menu`} onClick={() => setOpen((value) => !value)}>
-        <span className="language-globe" aria-hidden="true">◎</span>
+        <span className="language-globe" aria-hidden="true"><GlobeIcon size={15} /></span>
         <span>{selected.label}</span>
         <span className="language-chevron" aria-hidden="true">⌄</span>
       </button>

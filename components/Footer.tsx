@@ -49,7 +49,7 @@ export default function Footer() {
       <div className="home-footer-grid">
         <div className="home-footer-brand">
           <Logo />
-          <p>The next-generation gaming universe - where players become creators and creators reach millions.</p>
+          <p>The next generation gaming universe where players become creators and creators reach millions.</p>
           <div className="home-social-row">
             {socials.map((item) => {
               const external = item.href.startsWith("http");

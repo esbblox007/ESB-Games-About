@@ -42,18 +42,22 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
               <h1>News, updates and ideas from <span className="gradient-text">across ESB Games.</span></h1>
               <p>Follow company announcements, product updates, creator stories, safety work and engineering insights.</p>
             </div>
-            <form className="news-search-form" action="/news" role="search">
-              <label htmlFor="news-search">Search news</label>
-              <div>
-                <input id="news-search" name="q" defaultValue={query} placeholder="Search articles, topics or teams" />
-                <button className="button button-primary" type="submit">Search</button>
-              </div>
-            </form>
           </div>
         </section>
 
         <section className="news-index-content">
           <div className="news-index-container">
+            <div className="news-filter-toolbar">
+              <form className="news-search-form" action="/news" role="search">
+                <label htmlFor="news-search">Search news</label>
+                <div>
+                  <input id="news-search" name="q" defaultValue={query} placeholder="Search articles, topics or teams" />
+                  {category && <input type="hidden" name="category" value={category} />}
+                  <button className="button button-primary" type="submit">Search</button>
+                </div>
+              </form>
+            </div>
+
             <nav className="news-category-tabs" aria-label="News categories">
               <Link className={!category ? "active" : ""} href={query ? `/news?q=${encodeURIComponent(query)}` : "/news"}>All articles</Link>
               {result.categories.map((item) => {

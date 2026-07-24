@@ -103,7 +103,7 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
         <header className="article-header">
           <div className="article-container article-header-inner">
             <nav className="article-breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span>/</span><Link href="/news">News</Link><span>/</span><span aria-current="page">{article.category}</span></nav>
-            {article.preview && <span className="article-preview-banner">Content preview — not a live Backend article</span>}
+            {article.preview && <span className="article-preview-banner">Content preview, not a live Backend article</span>}
             <span className="article-category">{article.category}</span>
             <h1>{article.title}</h1>
             {article.subtitle && <p className="article-subtitle">{article.subtitle}</p>}

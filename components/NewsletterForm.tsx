@@ -47,11 +47,13 @@ export default function NewsletterForm() {
 
   return (
     <form className="home-newsletter-form" onSubmit={submit} noValidate>
-      <label className="sr-only" htmlFor="newsletter-email">Email address</label>
-      <span className="newsletter-mail-icon" aria-hidden="true">✉</span>
-      <input id="newsletter-email" type="email" name="email" placeholder="you@example.com" autoComplete="email" aria-describedby="newsletter-privacy newsletter-status" required />
-      <input className="newsletter-honeypot" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
-      <button className="button button-primary" type="submit" disabled={state === "loading"}>{state === "loading" ? "Subscribing…" : "Subscribe"}</button>
+      <div className="home-newsletter-input-row">
+        <label className="sr-only" htmlFor="newsletter-email">Email address</label>
+        <span className="newsletter-mail-icon" aria-hidden="true">✉</span>
+        <input id="newsletter-email" type="email" name="email" placeholder="you@example.com" autoComplete="email" aria-describedby="newsletter-privacy newsletter-status" required />
+        <input className="newsletter-honeypot" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+        <button className="button button-primary" type="submit" disabled={state === "loading"}>{state === "loading" ? "Subscribing…" : "Subscribe"}</button>
+      </div>
       <p id="newsletter-status" className={`newsletter-status${isSuccess ? " success" : ""}`} role="status" aria-live="polite">{message}</p>
       <p id="newsletter-privacy" className="newsletter-privacy">By subscribing, you agree to receive major ESB Games updates. You can unsubscribe from any email.</p>
     </form>

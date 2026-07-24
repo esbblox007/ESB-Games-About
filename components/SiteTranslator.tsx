@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { languages } from "./LanguageSelector";
+import { languages, resolvePreferredLocale } from "./LanguageSelector";
 
 declare global {
   interface Window {
@@ -12,9 +12,9 @@ declare global {
 
 const supportedLanguages = languages.map((language) => language.google).join(",");
 
-function applySavedLanguage() {
-  const savedLocale = window.localStorage.getItem("esb-language") || "en";
-  const language = languages.find((item) => item.locale === savedLocale) || languages[0];
+function applySelectedLanguage() {
+  const preferredLocale = resolvePreferredLocale();
+  const language = languages.find((item) => item.locale === preferredLocale) || languages[0];
   document.documentElement.lang = language.locale;
   if (language.google === "en") return;
   window.setTimeout(() => {
@@ -33,15 +33,15 @@ function initialiseTranslator() {
   if (!TranslateElement) return;
   new TranslateElement({ pageLanguage: "en", includedLanguages: supportedLanguages, autoDisplay: false, multilanguagePage: true }, "google_translate_element");
   target.dataset.ready = "true";
-  applySavedLanguage();
+  applySelectedLanguage();
 }
 
 export default function SiteTranslator() {
   useEffect(() => {
-    applySavedLanguage();
+    applySelectedLanguage();
     window.googleTranslateElementInit = initialiseTranslator;
-    const onLanguageChange = () => applySavedLanguage();
-    window.addEventListener("esb-language-change", onLanguageChange);
+    const onLanguageChange = () => applySelectedLanguage();
+    window.addEventListener("esb-language-change" as keyof WindowEventMap, onLanguageChange as EventListener);
 
     if (window.google?.translate?.TranslateElement) initialiseTranslator();
     else if (!document.getElementById("google-translate-script")) {
@@ -53,7 +53,7 @@ export default function SiteTranslator() {
       document.body.appendChild(script);
     }
 
-    return () => window.removeEventListener("esb-language-change", onLanguageChange);
+    return () => window.removeEventListener("esb-language-change" as keyof WindowEventMap, onLanguageChange as EventListener);
   }, []);
 
   return <div id="google_translate_element" className="google-translate-host notranslate" translate="no" aria-hidden="true" />;

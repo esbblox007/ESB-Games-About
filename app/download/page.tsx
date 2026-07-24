@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import PageShell from "@/components/PageShell";
 import DownloadPlatformHint from "@/components/DownloadPlatformHint";
@@ -44,7 +45,15 @@ export default async function DownloadPage() {
             <div className="download-product-grid">
               {result.products.map((product) => (
                 <article className="download-product-card" key={product.id}>
-                  <div className={`download-product-icon ${product.icon}`} aria-hidden="true">{product.icon === "play" ? "▶" : "◇"}</div>
+                  <div className={`download-product-icon ${product.icon}`} aria-hidden="true">
+                    <Image
+                      src={product.slug === "studio" ? "/esb-studio-green-logo.png" : "/esb-blue-logo.png"}
+                      alt=""
+                      width={58}
+                      height={58}
+                      className="download-product-logo"
+                    />
+                  </div>
                   <div className="download-product-heading"><span>{product.slug === "studio" ? "Create" : "Play"}</span><h2>{product.name}</h2><p>{product.description}</p></div>
                   <div className="download-release-list">
                     {product.releases.length === 0 ? (

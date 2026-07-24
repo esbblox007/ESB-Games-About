@@ -63,7 +63,7 @@ export default function SupportClient() {
         <article className="card support-card"><span className="card-icon cyan"><TicketIcon/></span><h3>Submit a Ticket</h3><p>Can&apos;t find an answer? Send a request to the ESB Games support team.</p><button className="card-link" style={{background:"none",border:0,padding:0,cursor:"pointer"}} onClick={() => {setOpen(true);setError(null);setResult(null);}}>Open a ticket →</button></article>
         <article className="card support-card"><span className="card-icon green"><SearchIcon/></span><h3>Track a Ticket</h3><p>Enter your ticket reference to check its current status.</p><form className="track-form" onSubmit={trackTicket}><input className="input" value={trackId} onChange={(e)=>setTrackId(e.target.value)} placeholder="ESB-XXXXXX" aria-label="Ticket ID"/><button className="button button-primary">Go</button></form></article>
       </div>
-      {tracked && <div className="success-box" style={{marginTop:18}}><strong>{tracked.id}</strong> — {tracked.status}. Submitted {new Date(tracked.createdAt).toLocaleString()}.</div>}
+      {tracked && <div className="success-box" style={{marginTop:18}}><strong>{tracked.id}</strong> {"·"} {tracked.status}. Submitted {new Date(tracked.createdAt).toLocaleString()}.</div>}
       {error && !open && <div className="success-box error-box" style={{marginTop:18}}>{error}</div>}
 
       {open && <div className="modal-backdrop" onMouseDown={() => setOpen(false)}>

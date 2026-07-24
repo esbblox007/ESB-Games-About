@@ -102,7 +102,7 @@ export default function AboutPage() {
               <span className="about-trailer-play"><PlayIcon /></span>
               <span>
                 <strong>ESB Games company trailer</strong>
-                <small>Video placeholder — ready for your YouTube link or uploaded MP4.</small>
+                <small>Video placeholder, ready for your YouTube link or uploaded MP4.</small>
               </span>
             </div>
           </div>
@@ -114,9 +114,9 @@ export default function AboutPage() {
               <article className="about-mission-card">
                 <span className="about-quote-mark">“</span>
                 <blockquote>
-                  Our mission is to create the safest, fairest and most <em>creative gaming universe</em> on the planet — and to share its success with the players and creators who build it.
+                  Our mission is to create the safest, fairest and most <em>creative gaming universe</em> on the planet, and to share its success with the players and creators who build it.
                 </blockquote>
-                <p>— The ESB Games founding team</p>
+                <p>The ESB Games founding team</p>
               </article>
             </Reveal>
 
