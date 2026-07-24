@@ -71,7 +71,7 @@ export default function SignupPage() {
             <label>
               <span>Username</span>
               <div className="auth-input-wrap"><i><UserIcon/></i><input type="text" name="username" placeholder="Choose a unique username" autoComplete="username" /></div>
-              <small>3–20 characters, using letters, numbers and underscores.</small>
+              <small>Use between 3 and 20 characters, with letters, numbers and underscores.</small>
             </label>
             <label>
               <span>Email address</span>

@@ -1,15 +1,28 @@
-# Verification status
+# Verified Follow-up Changes
 
-This repository contains the global news, search, downloads, language and responsive refinement applied to the latest complete ESB Games About project available in the conversation.
+The latest ESB Games About project was audited against the complete follow-up request.
 
-Verified in the available workspace:
+## Confirmed
 
-- 56 TypeScript/TSX files parsed with no syntax errors.
-- New server-side content and search services passed strict TypeScript checking.
-- `app/globals.css` parsed successfully with PostCSS.
-- Internal static route references were checked with no missing routes.
-- No package lock, dependency folder, Next build output or environment secret is included.
+1. Blue Play Platform and green ESB Studio download logos.
+2. Newsletter form layout bug corrected.
+3. Unnecessary punctuation dashes removed from visible copy.
+4. Globe icon added to the footer language selector.
+5. Country-aware guest locale detection with browser fallback.
+6. Signed-in profile header support using shared cookies or Supabase session metadata when available.
+7. Expanded Parental Controls content and Family Centre account-linking guidance.
+8. Quick Help rows with arrows, hover feedback and dedicated help pages.
+9. Careers filters with grey hover and light-purple selected styling.
+10. Clickable careers roles with details and application content.
+11. News search repositioned above category filters.
+12. Support help pages included in search and sitemap.
 
-A full `next build` was attempted but could not install dependencies because the package registries were unavailable (HTTP 503 from the configured registry and `EAI_AGAIN` from the public registry). No unsupported claim of a successful production build is made.
+## Checks completed
 
-See `IMPLEMENTATION-REPORT.md` for the complete implementation and limitation details.
+- TypeScript and TSX syntax: 60 files, zero syntax errors.
+- CSS braces: balanced.
+- Requested implementation checks: 13 of 13 passed.
+
+## Integration note
+
+The account profile chip can only display the live signed-in user when the main ESB Games account system exposes session or profile information to `about.esbgames.com`, preferably through cookies scoped to `.esbgames.com` or an approved shared session endpoint.

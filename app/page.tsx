@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   title: "Play. Create. Connect.",
   description: "Discover ESB Games, the next-generation universe for playing, creating and connecting.",
   alternates: { canonical: "/" },
-  openGraph: { title: "ESB Games — Play. Create. Connect.", description: "Discover, play and build across one connected gaming universe.", url: "/" },
+  openGraph: { title: "ESB Games: Play. Create. Connect.", description: "Discover, play and build across one connected gaming universe.", url: "/" },
 };
 
 function SparklesIcon({ size = 22 }: { size?: number }) {

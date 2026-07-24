@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getPublishedArticleIndex } from "@/lib/content/news";
+import { supportArticles } from "@/lib/content/support";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://about.esbgames.com";
@@ -33,5 +34,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: article.featured ? 0.85 : 0.75,
   }));
 
-  return [...staticEntries, ...articleEntries];
+  const supportEntries: MetadataRoute.Sitemap = supportArticles.map((article) => ({
+    url: `${base}/support/help/${article.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.65,
+  }));
+
+  return [...staticEntries, ...articleEntries, ...supportEntries];
 }

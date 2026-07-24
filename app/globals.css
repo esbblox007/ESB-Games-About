@@ -2626,3 +2626,55 @@ img, video, iframe { max-width: 100%; }
   .news-filter-toolbar { justify-content: stretch; }
   .news-filter-toolbar .news-search-form { width: 100%; }
 }
+
+/* Newsletter layout correction: privacy copy sits beneath the field, not inside it */
+.home-newsletter-form {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.home-newsletter-input-row {
+  min-height: 54px;
+  padding: 6px 7px 6px 15px;
+  border: 1px solid rgba(128, 139, 183, .20);
+  border-radius: 13px;
+  background: #040713;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
+}
+.home-newsletter-input-row:focus-within {
+  border-color: rgba(170, 104, 255, .55);
+  box-shadow: 0 0 0 3px rgba(127, 66, 255, .10), inset 0 1px 0 rgba(255,255,255,.04);
+}
+.home-newsletter-form .newsletter-privacy,
+.home-newsletter-form .newsletter-status {
+  padding-inline: 3px;
+}
+
+.support-help-page { min-height: 72vh; padding: clamp(70px, 8vw, 110px) 0; background: #030610; }
+.support-help-container { width: min(calc(100% - 48px), 920px); margin: 0 auto; }
+.support-help-breadcrumb { display: flex; flex-wrap: wrap; gap: 9px; color: #8f9ab3; font-size: 12px; }
+.support-help-breadcrumb a { color: #c7a7ff; }
+.support-help-header { padding: 48px 0 32px; }
+.support-help-header h1 { margin: 12px 0 16px; font-size: clamp(42px, 6vw, 72px); line-height: 1; letter-spacing: -.055em; }
+.support-help-header p { max-width: 760px; margin: 0; color: #a4aec6; font-size: 17px; line-height: 1.75; }
+.support-help-content { display: grid; gap: 18px; }
+.support-help-content section { padding: 26px; border: 1px solid rgba(132,145,187,.14); border-radius: 16px; background: #080d1c; }
+.support-help-content h2 { margin: 0 0 14px; font-size: 24px; }
+.support-help-content p, .support-help-content li { color: #bac4d8; line-height: 1.75; }
+.support-help-content ol { margin: 14px 0 0; padding-left: 21px; }
+.support-help-cta { margin-top: 24px; padding: 24px; display: flex; justify-content: space-between; gap: 20px; align-items: center; border: 1px solid rgba(147, 98, 255, .28); border-radius: 16px; background: linear-gradient(135deg, rgba(94, 44, 170, .22), rgba(5, 25, 46, .92)); }
+.support-help-cta strong { font-size: 20px; }
+.support-help-cta p { margin: 7px 0 0; color: #9da8c0; }
+
+@media (max-width: 640px) {
+  .home-newsletter-input-row { grid-template-columns: auto minmax(0, 1fr); padding: 11px; }
+  .home-newsletter-input-row .button { grid-column: 1 / -1; width: 100%; }
+  .support-help-container { width: calc(100% - 28px); }
+  .support-help-cta { align-items: stretch; flex-direction: column; }
+  .support-help-cta .button { width: 100%; }
+}
+
+/* Ensure the newsletter field always spans the full right column */
+.home-newsletter-form { width: 100%; grid-template-columns: minmax(0, 1fr); align-items: stretch; }
+.home-newsletter-input-row { grid-column: 1 / -1; width: 100%; }

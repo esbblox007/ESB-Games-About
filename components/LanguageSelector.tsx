@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { GlobeIcon } from "./Icons";
 import { isClientSignedIn } from "@/lib/client/account";
 
@@ -63,10 +63,53 @@ export default function LanguageSelector({ variant = "footer" }: { variant?: "fo
   const [locale, setLocale] = useState("en");
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const selectLanguage = useCallback((nextLocale: string, source: "manual" | "auto" = "manual") => {
+    const language = languages.find((item) => item.locale === nextLocale) || languages[0];
+    setLocale(language.locale);
+    setOpen(false);
+    setQuery("");
+    window.localStorage.setItem("esb-language", language.locale);
+    window.localStorage.setItem("esb-language-source", source);
+    document.documentElement.lang = language.locale;
+    setTranslationCookie(language.google);
+    window.dispatchEvent(new CustomEvent("esb-language-change", { detail: { locale: language.locale, google: language.google } }));
+
+    const googleSelect = document.querySelector<HTMLSelectElement>(".goog-te-combo");
+    if (googleSelect) {
+      googleSelect.value = language.google;
+      googleSelect.dispatchEvent(new Event("change"));
+    } else if (source === "manual") {
+      window.setTimeout(() => window.location.reload(), 80);
+    }
+  }, []);
+
   useEffect(() => {
     const preferred = resolvePreferredLocale();
     setLocale(preferred);
-  }, []);
+    document.documentElement.lang = preferred;
+
+    const source = window.localStorage.getItem("esb-language-source");
+    if (isClientSignedIn() || source === "manual") return;
+
+    const controller = new AbortController();
+    fetch("/api/locale", { signal: controller.signal, cache: "no-store" })
+      .then((response) => response.ok ? response.json() as Promise<{ locale?: string | null }> : null)
+      .then((result) => {
+        const detected = result?.locale;
+        if (detected && languages.some((language) => language.locale === detected) && detected !== preferred) {
+          selectLanguage(detected, "auto");
+        } else {
+          const language = languages.find((item) => item.locale === preferred) || languages[0];
+          setTranslationCookie(language.google);
+        }
+      })
+      .catch(() => {
+        const language = languages.find((item) => item.locale === preferred) || languages[0];
+        setTranslationCookie(language.google);
+      });
+
+    return () => controller.abort();
+  }, [selectLanguage]);
 
   useEffect(() => {
     if (!open) return;
@@ -86,39 +129,6 @@ export default function LanguageSelector({ variant = "footer" }: { variant?: "fo
   useEffect(() => setActiveIndex(0), [query, open]);
 
   const selected = languages.find((language) => language.locale === locale) || languages[0];
-
-  const selectLanguage = (nextLocale: string, source: "manual" | "auto" = "manual") => {
-    const language = languages.find((item) => item.locale === nextLocale) || languages[0];
-    setLocale(language.locale);
-    setOpen(false);
-    setQuery("");
-    window.localStorage.setItem("esb-language", language.locale);
-    window.localStorage.setItem("esb-language-source", source);
-    document.documentElement.lang = language.locale;
-    setTranslationCookie(language.google);
-    window.dispatchEvent(new CustomEvent("esb-language-change", { detail: { locale: language.locale, google: language.google } }));
-
-    const googleSelect = document.querySelector<HTMLSelectElement>(".goog-te-combo");
-    if (googleSelect) {
-      googleSelect.value = language.google;
-      googleSelect.dispatchEvent(new Event("change"));
-    } else if (source === "manual") {
-      window.setTimeout(() => window.location.reload(), 80);
-    }
-  };
-
-  useEffect(() => {
-    const source = window.localStorage.getItem("esb-language-source");
-    if (!isClientSignedIn() && source !== "manual") {
-      const preferred = resolvePreferredLocale();
-      if (preferred !== locale) selectLanguage(preferred, "auto");
-      else {
-        const language = languages.find((item) => item.locale === preferred) || languages[0];
-        setTranslationCookie(language.google);
-      }
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locale]);
 
   const onKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
     if (!open && ["Enter", " ", "ArrowDown"].includes(event.key)) {

@@ -1,6 +1,7 @@
 import type { SearchDocument } from "@/lib/content/types";
+import { supportArticles } from "@/lib/content/support";
 
-export const staticSearchDocuments: SearchDocument[] = [
+const coreSearchDocuments: SearchDocument[] = [
   {
     id: "home",
     type: "Page",
@@ -155,4 +156,22 @@ export const staticSearchDocuments: SearchDocument[] = [
     content: "Membership tiers, platform perks and account upgrades.",
     priority: 80,
   },
+];
+
+export const staticSearchDocuments: SearchDocument[] = [
+  ...coreSearchDocuments,
+  ...supportArticles.map((article) => ({
+    id: `support-${article.slug}`,
+    type: "Help" as const,
+    title: article.title,
+    description: article.description,
+    route: `/support/help/${article.slug}`,
+    category: "Support",
+    locale: "en",
+    keywords: [article.title, article.slug.replaceAll("-", " "), "support help"],
+    synonyms: article.sections.flatMap((section) => [section.heading]),
+    questions: [],
+    content: [article.intro, ...article.sections.flatMap((section) => [...section.body, ...(section.steps || [])])].join(" "),
+    priority: 86,
+  })),
 ];

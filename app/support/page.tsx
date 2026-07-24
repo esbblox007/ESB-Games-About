@@ -10,12 +10,12 @@ export const metadata: Metadata = {
 };
 
 const quickHelpLinks = [
-  ["Reset your password", "https://esbgames.com/login"],
-  ["Cancel or change a subscription", "/subscriptions"],
-  ["Request a refund", "mailto:support@esbgames.com?subject=Refund request"],
-  ["Appeal an account action", "mailto:safety@esbgames.com?subject=Account appeal"],
-  ["Report a player or game", "mailto:safety@esbgames.com?subject=Player report"],
-  ["Creator payout guide", "/developer-hub"],
+  ["Reset your password", "/support/help/reset-password"],
+  ["Cancel or change a subscription", "/support/help/manage-subscription"],
+  ["Request a refund", "/support/help/request-refund"],
+  ["Appeal an account action", "/support/help/appeal-account-action"],
+  ["Report a player or game", "/support/help/report-player-or-game"],
+  ["Creator payout guide", "/support/help/creator-payout-guide"],
 ] as const;
 
 export default function SupportPage() {
@@ -56,7 +56,7 @@ export default function SupportPage() {
                 <p><span>Authentication</span><strong>Prototype ready</strong></p>
                 <p><span>Support tickets</span><strong>Available</strong></p>
               </article>
-              <article className="support-community-panel"><span>◉</span><div><h3>Community support</h3><p>Connect with the ESB Games community and staff through the official server.</p><a href="https://esbgames.com/login">Join the community <ArrowIcon size={15} /></a></div></article>
+              <article className="support-community-panel"><span>◉</span><div><h3>Community support</h3><p>Connect with the ESB Games community and staff through the official server.</p><a href="/support/help/reset-password">Join the community <ArrowIcon size={15} /></a></div></article>
             </div>
           </div>
         </div>

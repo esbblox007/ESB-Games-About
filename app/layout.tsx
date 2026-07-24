@@ -5,7 +5,7 @@ import SiteTranslator from "@/components/SiteTranslator";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://about.esbgames.com";
 
 export const metadata: Metadata = {
-  title: { default: "ESB Games — Play. Create. Connect.", template: "%s | ESB Games" },
+  title: { default: "ESB Games: Play. Create. Connect.", template: "%s | ESB Games" },
   description: "Discover ESB Games, a creator-first gaming ecosystem for playing, building and connecting.",
   metadataBase: new URL(siteUrl),
   alternates: { canonical: siteUrl },
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "ESB Games",
-    title: "ESB Games — Play. Create. Connect.",
+    title: "ESB Games: Play. Create. Connect.",
     description: "A creator-first gaming ecosystem for playing, building and connecting.",
     url: siteUrl,
   },
