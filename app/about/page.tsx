@@ -14,7 +14,8 @@ import {
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Meet ESB Games, our mission, principles, leadership and vision for the future of play and creation.",
+  description: "Learn about the ESB Games mission, principles and vision for the future of play and creation.",
+  alternates: { canonical: "/about" },
 };
 
 const principles = [
@@ -50,12 +51,7 @@ const principles = [
   },
 ] as const;
 
-const team = [
-  { initials: "ES", name: "Ethan Sage", role: "Founder & Chief Executive Officer", focus: "Company vision, platform direction and long-term strategy." },
-  { initials: "AS", name: "Abhay Shankar", role: "Managing Director", focus: "Leadership, business execution and company-wide alignment." },
-  { initials: "J", name: "Jerin", role: "Chief Operating Officer", focus: "Day-to-day operations and support across every department." },
-  { initials: "H", name: "Harry", role: "Chief People & Resources Officer", focus: "People, culture, recruitment and organisational development." },
-] as const;
+
 
 function PlayIcon() {
   return (
@@ -97,7 +93,7 @@ export default function AboutPage() {
                 Safe, fair, connected and designed for the next generation of digital experiences.
               </p>
               <div className="about-hero-actions">
-                <Link href="/signup" className="button button-primary"><RocketIcon size={17} /> Join ESB Games</Link>
+                <a href="https://esbgames.com/login" className="button button-primary" data-analytics="join-now"><RocketIcon size={17} /> Join ESB Games</a>
                 <Link href="/careers" className="button button-secondary">Join the team</Link>
               </div>
             </div>
@@ -106,7 +102,7 @@ export default function AboutPage() {
               <span className="about-trailer-play"><PlayIcon /></span>
               <span>
                 <strong>ESB Games company trailer</strong>
-                <small>Video placeholder — ready for your YouTube link or uploaded MP4.</small>
+                <small>Video placeholder, ready for your YouTube link or uploaded MP4.</small>
               </span>
             </div>
           </div>
@@ -118,9 +114,9 @@ export default function AboutPage() {
               <article className="about-mission-card">
                 <span className="about-quote-mark">“</span>
                 <blockquote>
-                  Our mission is to create the safest, fairest and most <em>creative gaming universe</em> on the planet — and to share its success with the players and creators who build it.
+                  Our mission is to create the safest, fairest and most <em>creative gaming universe</em> on the planet, and to share its success with the players and creators who build it.
                 </blockquote>
-                <p>— The ESB Games founding team</p>
+                <p>The ESB Games founding team</p>
               </article>
             </Reveal>
 
@@ -155,32 +151,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="about-team-section">
-          <div className="about-section-inner">
-            <Reveal className="about-team-heading">
-              <div>
-                <span className="about-kicker">Meet the team</span>
-                <h2>Built by people who believe gaming can be better.</h2>
-              </div>
-              <p>Our leadership team brings together product vision, operations, people and business execution to turn ESB Games into a global platform.</p>
-            </Reveal>
-
-            <div className="about-team-grid">
-              {team.map((member) => (
-                <Reveal key={member.name}>
-                  <article className="about-team-card">
-                    <div className="about-team-avatar" aria-hidden="true">{member.initials}</div>
-                    <div>
-                      <h3>{member.name}</h3>
-                      <span>{member.role}</span>
-                      <p>{member.focus}</p>
-                    </div>
-                  </article>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
+        
 
         <section className="about-platform-section">
           <div className="about-section-inner about-platform-layout">
@@ -208,7 +179,7 @@ export default function AboutPage() {
                 <h2>Ready to join the future of gaming?</h2>
                 <p>Discover worlds, connect with communities and build something entirely your own.</p>
               </div>
-              <Link href="/signup" className="button button-primary"><RocketIcon size={17} /> Join Now</Link>
+              <a href="https://esbgames.com/login" className="button button-primary" data-analytics="join-now"><RocketIcon size={17} /> Join Now</a>
             </div>
           </Reveal>
         </section>

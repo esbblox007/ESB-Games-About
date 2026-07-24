@@ -1,18 +1,28 @@
-# Verified design changes
+# Verified Follow-up Changes
 
-This repository was rebuilt from the GitHub ZIP supplied by the user.
+The latest ESB Games About project was audited against the complete follow-up request.
 
-Changes applied:
+## Confirmed
 
-1. Enlarged the “Worlds built in minutes, not months.” heading without changing the card dimensions.
-2. Reworked all primary purple buttons so the left edge begins in violet and has no red/pink stripe artefact.
-3. Tightened the footer columns and bottom legal bar so the content sits closer together and remains inside the page margins.
-4. Replaced the gradient “E” brand mark in the header and footer with the supplied blue ESB logo. The same logo is used for site icons.
-5. Enlarged and strengthened the circular hero glow while retaining exactly three animated activity cards on the right.
-6. Removed misplaced duplicate files from the repository root and restored a proper `.gitignore`.
+1. Blue Play Platform and green ESB Studio download logos.
+2. Newsletter form layout bug corrected.
+3. Unnecessary punctuation dashes removed from visible copy.
+4. Globe icon added to the footer language selector.
+5. Country-aware guest locale detection with browser fallback.
+6. Signed-in profile header support using shared cookies or Supabase session metadata when available.
+7. Expanded Parental Controls content and Family Centre account-linking guidance.
+8. Quick Help rows with arrows, hover feedback and dedicated help pages.
+9. Careers filters with grey hover and light-purple selected styling.
+10. Clickable careers roles with details and application content.
+11. News search repositioned above category filters.
+12. Support help pages included in search and sitemap.
 
-Verification completed:
+## Checks completed
 
-- Next.js 15.2.8 production compilation completed successfully.
-- Type checking completed successfully.
-- All seven pages returned HTTP 200 in a local production server test.
+- TypeScript and TSX syntax: 60 files, zero syntax errors.
+- CSS braces: balanced.
+- Requested implementation checks: 13 of 13 passed.
+
+## Integration note
+
+The account profile chip can only display the live signed-in user when the main ESB Games account system exposes session or profile information to `about.esbgames.com`, preferably through cookies scoped to `.esbgames.com` or an approved shared session endpoint.

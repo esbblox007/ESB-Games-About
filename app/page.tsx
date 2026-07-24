@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import PageShell from "@/components/PageShell";
+import NewsletterForm from "@/components/NewsletterForm";
 import {
   BookIcon,
   CubeIcon,
@@ -14,7 +15,12 @@ import {
   UsersIcon,
 } from "@/components/Icons";
 
-export const metadata: Metadata = { title: "Play. Create. Connect." };
+export const metadata: Metadata = {
+  title: "Play. Create. Connect.",
+  description: "Discover ESB Games, the next-generation universe for playing, creating and connecting.",
+  alternates: { canonical: "/" },
+  openGraph: { title: "ESB Games: Play. Create. Connect.", description: "Discover, play and build across one connected gaming universe.", url: "/" },
+};
 
 function SparklesIcon({ size = 22 }: { size?: number }) {
   return (
@@ -82,8 +88,6 @@ const proofItems = [
   "Featured on Polygon",
   "★ 4.9 App Store",
   "Best New Platform 2025",
-  "Forbes 30 Under 30",
-  "1M Creators Onboard",
 ];
 
 export default function HomePage() {
@@ -103,15 +107,15 @@ export default function HomePage() {
               </h1>
 
               <p className="home-hero-lead">
-                ESB Games is the next-generation gaming platform, many worlds, one community, infinite possibilities.
+                ESB Games is the next generation gaming platform, many worlds, one community, infinite possibilities.
                 Whether you come to discover new experiences, find your people, or build your own, you belong here.
               </p>
 
               <div className="home-hero-action-row">
                 <div className="home-hero-actions">
-                  <Link href="/early-access" className="button button-primary home-primary-action">
+                  <a href="https://esbgames.com/login" className="button button-primary home-primary-action" data-analytics="join-now">
                     <GamepadIcon size={17}/> Start Playing
-                  </Link>
+                  </a>
                   <Link href="/developer-hub" className="button button-secondary home-secondary-action">
                     <CubeIcon size={17}/> Start Creating
                   </Link>
@@ -176,7 +180,11 @@ export default function HomePage() {
 
         <section className="home-proof-strip" aria-label="Highlights">
           <div className="home-proof-track">
-            {proofItems.map((item, index) => <span key={`${item}-${index}`}><b>★</b>{item}</span>)}
+            {[0, 1, 2].map((group) => (
+              <div className="home-proof-group" aria-hidden={group !== 0} key={group}>
+                {proofItems.map((item) => <span key={`${group}-${item}`}><b>★</b>{item}</span>)}
+              </div>
+            ))}
           </div>
         </section>
 
@@ -184,7 +192,7 @@ export default function HomePage() {
           <div className="home-section-inner">
             <header className="home-center-heading">
               <h2>A platform that puts <span className="home-gradient">you</span> first.</h2>
-              <p>We built ESB from the ground up - for players who want freedom, creators who want fairness,<br className="home-desktop-break"/> and communities that deserve safety.</p>
+              <p>We built ESB from the ground up for players who want freedom, creators who want fairness,<br className="home-desktop-break"/> and communities that deserve safety.</p>
             </header>
 
             <div className="home-feature-grid">
@@ -204,7 +212,7 @@ export default function HomePage() {
               <article className="home-feature-card home-feature-small home-feature-performance">
                 <span className="home-feature-icon home-feature-icon-pink"><BoltIcon/></span>
                 <h3>Smooth Performance Everywhere</h3>
-                <p>Our custom-built rendering pipeline is engineered to scale effortlessly from low-end mobile devices to high-performance gaming PCs. Experience fluid 60 FPS gameplay, immersive visuals, and responsive performance across every platform.</p>
+                <p>Our custom built rendering pipeline is engineered to scale effortlessly from low end mobile devices to high performance gaming PCs. Experience fluid 60 FPS gameplay, immersive visuals, and responsive performance across every platform.</p>
               </article>
 
               <article className="home-feature-card home-feature-half">
@@ -224,7 +232,7 @@ export default function HomePage() {
               <article className="home-audience-card home-creators-card">
                 <span className="home-overline">FOR CREATORS</span>
                 <h3>Build it. Ship it.<br/>Get paid for it.</h3>
-                <p>Industry-leading 70/30 revenue split, instant payouts in 100+ countries, and direct fan subscriptions. Your game, your rules.</p>
+                <p>Industry leading 70/30 revenue split, instant payouts in 100+ countries, and direct fan subscriptions. Your game, your rules.</p>
                 <div className="home-mini-metrics">
                   <div><strong>70%</strong><span>REV SHARE</span></div>
                   <div><strong>$1M+</strong><span>TOP EARNER</span></div>
@@ -236,11 +244,11 @@ export default function HomePage() {
               <article className="home-audience-card home-players-card">
                 <span className="home-overline home-overline-cyan">FOR PLAYERS</span>
                 <h3>Find your people.<br/>Make your legend.</h3>
-                <p>Friends, parties, groups, events, voice - all under one roof. Plus parental controls and ML safety baked in from day one.</p>
+                <p>Friends, parties, groups, events and voice, all under one roof. Plus parental controls and ML safety baked in from day one.</p>
                 <div className="home-community-avatars" aria-label="80 million community members">
                   <i/><i/><i/><i/><i/><b>80M</b>
                 </div>
-                <Link href="/early-access" className="button button-secondary"><UserPlusIcon/> Join the community</Link>
+                <a href="https://esbgames.com/login" className="button button-secondary" data-analytics="join-now"><UserPlusIcon/> Join the community</a>
               </article>
             </div>
           </div>
@@ -250,15 +258,14 @@ export default function HomePage() {
           <div className="home-section-inner home-support-grid">
             <div className="home-support-copy">
               <h2>We&apos;re here when<br/><span className="home-gradient">you need us</span>.</h2>
-              <p>Got a billing issue, a bug to report, or just need help with something? Our support team is real people - submit a ticket and we&apos;ll get back to you fast.</p>
+              <p>Got a billing issue, a bug to report, or just need help with something? Our support team is made up of real people, submit a ticket and we&apos;ll get back to you fast.</p>
               <div className="home-support-actions">
                 <Link href="/support" className="button button-primary"><HeadsetIcon/> Go to Support</Link>
-                <Link href="/support" className="button button-secondary"><TicketIcon size={18}/> Submit a Ticket</Link>
               </div>
             </div>
 
             <div className="home-support-cards">
-              <article><span className="home-feature-icon home-feature-icon-magenta"><TicketIcon/></span><h3>Open a Ticket</h3><p>Report bugs, account issues, or anything else - tracked end to end.</p></article>
+              <article><span className="home-feature-icon home-feature-icon-magenta"><TicketIcon/></span><h3>Open a Ticket</h3><p>Report bugs, account issues, or anything else, tracked end to end.</p></article>
               <article><span className="home-feature-icon home-feature-icon-blue"><BoltIcon/></span><h3>Fast Responses</h3><p>Most tickets are resolved within 24 hours by our in-house team.</p></article>
               <article><span className="home-feature-icon home-feature-icon-teal"><SearchIcon/></span><h3>Safety Reports</h3><p>Report harassment, cheating, or abuse. Every report is reviewed.</p></article>
               <article><span className="home-feature-icon home-feature-icon-orange"><BookIcon/></span><h3>Help Articles</h3><p>Hundreds of guides for account, billing, creators and more.</p></article>
@@ -270,7 +277,7 @@ export default function HomePage() {
               <h2>Your next favorite game is<br/><span className="home-gradient">already here</span>.</h2>
               <p>Be the first to play. Be the first to build. Join the waitlist and lock in your founder rewards.</p>
               <div className="home-banner-actions">
-                <Link href="/early-access" className="button button-primary"><RocketIcon/> Get Early Access</Link>
+                <a href="https://esbgames.com/login" className="button button-primary" data-analytics="join-now"><RocketIcon/> Join Now</a>
                 <Link href="/about" className="button button-secondary">Learn more</Link>
               </div>
               <div className="home-banner-trust">
@@ -289,13 +296,9 @@ export default function HomePage() {
               <div>
                 <span className="home-newsletter-overline"><i/> STAY IN THE LOOP</span>
                 <h2>Get drops, updates &amp; insider<br/>news.</h2>
-                <p>Patch notes, beta invites and exclusive cosmetics - straight to your inbox. No spam, ever.</p>
+                <p>Patch notes, beta invites and exclusive cosmetics, straight to your inbox. No spam, ever.</p>
               </div>
-              <form className="home-newsletter-form" action="/early-access">
-                <MailIcon/>
-                <input type="email" name="email" placeholder="you@playerone.gg" aria-label="Email address" required/>
-                <button type="submit">Subscribe</button>
-              </form>
+              <NewsletterForm />
             </div>
           </div>
         </section>
