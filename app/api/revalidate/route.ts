@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
   try { payload = await request.json(); } catch { /* an empty body refreshes News */ }
 
   const refreshDownloads = payload.type === "downloads" || payload.type === "all" || payload.downloads === true;
-  const refreshNews = payload.type !== "downloads" || payload.type === "all" || Boolean(payload.slug);
+  const refreshNews = payload.type === undefined || payload.type === "news" || payload.type === "all" || Boolean(payload.slug);
   const refreshSearch = payload.search !== false;
   const paths: string[] = [];
 
