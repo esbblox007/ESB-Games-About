@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import Logo from "./Logo";
+import LanguageSelector from "./LanguageSelector";
+import SearchDialog from "./SearchDialog";
 import { CloseIcon, MenuIcon, SearchIcon, RocketIcon } from "./Icons";
 
 const nav = [
@@ -16,24 +18,13 @@ const nav = [
   ["Support", "/support"],
 ] as const;
 
-const searchItems = [
-  { title: "Home", description: "Play, create and connect.", href: "/" },
-  { title: "About ESB Games", description: "Our mission, principles and platform vision.", href: "/about" },
-  { title: "Creator Hub", description: "ESB Studio, publishing and creator tools.", href: "/developer-hub" },
-  { title: "Parental Controls", description: "Safety, family settings and account supervision.", href: "/parental-controls" },
-  { title: "News", description: "Company updates, product blogs and announcements.", href: "/news" },
-  { title: "Careers", description: "Open roles and life at ESB Games.", href: "/careers" },
-  { title: "Support", description: "Help articles, tickets and platform status.", href: "/support" },
-  { title: "Create an account", description: "Join ESB Games and reserve your account.", href: "/signup" },
-  { title: "Log in", description: "Return to your ESB Games account.", href: "/login" },
-];
+const accountUrl = "https://esbgames.com/login";
 
 export default function Header() {
   const pathname = usePathname();
-  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [query, setQuery] = useState("");
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMenuOpen(false);
@@ -46,15 +37,23 @@ export default function Header() {
         event.preventDefault();
         setSearchOpen(true);
       }
-      if (event.key === "Escape") setSearchOpen(false);
+      if (event.key === "Escape") {
+        setSearchOpen(false);
+        setMenuOpen(false);
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const filtered = searchItems.filter((item) =>
-    `${item.title} ${item.description}`.toLowerCase().includes(query.toLowerCase()),
-  );
+  useEffect(() => {
+    if (!menuOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const first = menuRef.current?.querySelector<HTMLElement>("a,button");
+    window.setTimeout(() => first?.focus(), 20);
+    return () => { document.body.style.overflow = previous; };
+  }, [menuOpen]);
 
   return (
     <>
@@ -64,49 +63,41 @@ export default function Header() {
           <nav className="desktop-nav" aria-label="Primary navigation">
             {nav.map(([label, href]) => {
               const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
-              return <Link key={href} href={href} className={active ? "active" : ""}>{label}</Link>;
+              return <Link key={href} href={href} className={active ? "active" : ""} aria-current={active ? "page" : undefined}>{label}</Link>;
             })}
           </nav>
           <div className="header-actions">
-            <button className="search-button" aria-label="Search" onClick={() => setSearchOpen(true)}>
+            <button className="search-button" aria-label="Search ESB Games" onClick={() => setSearchOpen(true)} aria-keyshortcuts="Control+K Meta+K">
               <SearchIcon size={19} />
             </button>
-            <Link href="/signup" className="button button-primary header-cta">
+            <a href={accountUrl} className="button button-primary header-cta" data-analytics="join-now">
               <RocketIcon size={17} /> Join Now
-            </Link>
-            <button className="menu-button" aria-label="Open menu" onClick={() => setMenuOpen((value) => !value)}>
+            </a>
+            <button className="menu-button" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen((value) => !value)}>
               {menuOpen ? <CloseIcon /> : <MenuIcon />}
             </button>
           </div>
         </div>
-        {menuOpen && (
-          <nav className="mobile-nav" aria-label="Mobile navigation">
-            {nav.map(([label, href]) => <Link key={href} href={href}>{label}</Link>)}
-            <Link href="/signup">Join Now</Link>
-            <Link href="/login">Log In</Link>
-          </nav>
-        )}
       </header>
 
-      {searchOpen && (
-        <div className="modal-backdrop" role="presentation" onMouseDown={() => setSearchOpen(false)}>
-          <section className="search-modal" role="dialog" aria-modal="true" aria-label="Search ESB Games" onMouseDown={(e) => e.stopPropagation()}>
-            <div className="search-field-wrap">
-              <SearchIcon size={20} />
-              <input autoFocus value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search pages…" />
-              <kbd>ESC</kbd>
-            </div>
-            <div className="search-results">
-              {filtered.length ? filtered.map((item) => (
-                <button key={item.href} onClick={() => router.push(item.href)}>
-                  <strong>{item.title}</strong><span>{item.description}</span>
-                </button>
-              )) : <p className="empty-result">No results found.</p>}
-            </div>
-            <p className="search-tip">Tip: press Ctrl/⌘ + K anywhere to search.</p>
-          </section>
+      {menuOpen && (
+        <div className="mobile-nav-backdrop" role="presentation" onMouseDown={() => setMenuOpen(false)}>
+          <div id="mobile-navigation" className="mobile-nav-sheet" ref={menuRef} role="dialog" aria-modal="true" aria-label="Site navigation" onMouseDown={(event: ReactMouseEvent<HTMLDivElement>) => event.stopPropagation()}>
+            <div className="mobile-nav-heading"><strong>Menu</strong><button type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu"><CloseIcon /></button></div>
+            <button className="mobile-search-action" type="button" onClick={() => { setMenuOpen(false); setSearchOpen(true); }}><SearchIcon size={18} /> Search ESB Games</button>
+            <nav className="mobile-nav" aria-label="Mobile navigation">
+              {nav.map(([label, href]) => {
+                const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+                return <Link key={href} href={href} className={active ? "active" : ""} aria-current={active ? "page" : undefined}>{label}</Link>;
+              })}
+            </nav>
+            <div className="mobile-nav-account-actions"><a className="button button-primary" href={accountUrl}><RocketIcon size={17} /> Join Now</a><a className="button button-secondary" href={accountUrl}>Log In</a></div>
+            <div className="mobile-nav-language"><span>Language</span><LanguageSelector variant="mobile" /></div>
+          </div>
         </div>
       )}
+
+      <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }

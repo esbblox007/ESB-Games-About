@@ -1,3 +1,5 @@
-This complete repository includes the redesigned Creator Hub, Careers and Support pages, smaller footer social icons, a persistent language selector and the uncropped homepage iPad screenshot.
+ESB Games About Website — Global News, Search, Downloads and Responsive Refinement
 
-No package-lock.json, node_modules or .next build output is included.
+This repository includes the complete updated website source. News, downloads, search and newsletter data use honest empty or unavailable states until the shared ESB Games Production Supabase tables and Backend publishing workflows are configured.
+
+No package-lock.json, node_modules, .next output or environment secrets are included.

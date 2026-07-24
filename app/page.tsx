@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import PageShell from "@/components/PageShell";
+import NewsletterForm from "@/components/NewsletterForm";
 import {
   BookIcon,
   CubeIcon,
@@ -14,7 +15,12 @@ import {
   UsersIcon,
 } from "@/components/Icons";
 
-export const metadata: Metadata = { title: "Play. Create. Connect." };
+export const metadata: Metadata = {
+  title: "Play. Create. Connect.",
+  description: "Discover ESB Games, the next-generation universe for playing, creating and connecting.",
+  alternates: { canonical: "/" },
+  openGraph: { title: "ESB Games — Play. Create. Connect.", description: "Discover, play and build across one connected gaming universe.", url: "/" },
+};
 
 function SparklesIcon({ size = 22 }: { size?: number }) {
   return (
@@ -107,9 +113,9 @@ export default function HomePage() {
 
               <div className="home-hero-action-row">
                 <div className="home-hero-actions">
-                  <Link href="/early-access" className="button button-primary home-primary-action">
+                  <a href="https://esbgames.com/login" className="button button-primary home-primary-action" data-analytics="join-now">
                     <GamepadIcon size={17}/> Start Playing
-                  </Link>
+                  </a>
                   <Link href="/developer-hub" className="button button-secondary home-secondary-action">
                     <CubeIcon size={17}/> Start Creating
                   </Link>
@@ -174,8 +180,8 @@ export default function HomePage() {
 
         <section className="home-proof-strip" aria-label="Highlights">
           <div className="home-proof-track">
-            {[0, 1].map((group) => (
-              <div className="home-proof-group" aria-hidden={group === 1} key={group}>
+            {[0, 1, 2].map((group) => (
+              <div className="home-proof-group" aria-hidden={group !== 0} key={group}>
                 {proofItems.map((item) => <span key={`${group}-${item}`}><b>★</b>{item}</span>)}
               </div>
             ))}
@@ -242,7 +248,7 @@ export default function HomePage() {
                 <div className="home-community-avatars" aria-label="80 million community members">
                   <i/><i/><i/><i/><i/><b>80M</b>
                 </div>
-                <Link href="/early-access" className="button button-secondary"><UserPlusIcon/> Join the community</Link>
+                <a href="https://esbgames.com/login" className="button button-secondary" data-analytics="join-now"><UserPlusIcon/> Join the community</a>
               </article>
             </div>
           </div>
@@ -271,7 +277,7 @@ export default function HomePage() {
               <h2>Your next favorite game is<br/><span className="home-gradient">already here</span>.</h2>
               <p>Be the first to play. Be the first to build. Join the waitlist and lock in your founder rewards.</p>
               <div className="home-banner-actions">
-                <Link href="/early-access" className="button button-primary"><RocketIcon/> Get Early Access</Link>
+                <a href="https://esbgames.com/login" className="button button-primary" data-analytics="join-now"><RocketIcon/> Join Now</a>
                 <Link href="/about" className="button button-secondary">Learn more</Link>
               </div>
               <div className="home-banner-trust">
@@ -292,11 +298,7 @@ export default function HomePage() {
                 <h2>Get drops, updates &amp; insider<br/>news.</h2>
                 <p>Patch notes, beta invites and exclusive cosmetics - straight to your inbox. No spam, ever.</p>
               </div>
-              <form className="home-newsletter-form" action="/early-access">
-                <MailIcon/>
-                <input type="email" name="email" placeholder="you@playerone.gg" aria-label="Email address" required/>
-                <button type="submit">Subscribe</button>
-              </form>
+              <NewsletterForm />
             </div>
           </div>
         </section>

@@ -109,7 +109,7 @@ export default function ParentalControlsPage() {
               <h1>A safer universe<br />for <span className="gradient-text">every</span> player.</h1>
               <p>Powerful tools for parents and guardians to manage screen time, control spending and help young players stay safe while they play, create and connect.</p>
               <div className="parental-actions">
-                <Link href="/signup" className="button button-primary"><ShieldIcon size={17} /> Explore Parental Controls</Link>
+                <a href="https://esbgames.com/login" className="button button-primary"><ShieldIcon size={17} /> Explore Parental Controls</a>
                 <a href="#parental-features" className="button button-secondary">Learn More <ArrowIcon size={16} /></a>
               </div>
               <div className="parental-trust-row">

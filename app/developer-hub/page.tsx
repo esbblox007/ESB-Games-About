@@ -47,12 +47,12 @@ const creatorFeatures = [
 ];
 
 const resources = [
-  ["Download ESB Studio", "The official creation environment for Windows, macOS and Linux.", "Download →", "/early-access?type=creator"],
+  ["Download ESB Studio", "The official creation environment and current release availability.", "View downloads →", "/download"],
   ["Documentation", "Guides, tutorials, product walkthroughs and future API documentation.", "Read docs →", "#studio"],
   ["Assets & templates", "Starter projects, UI kits, environments, effects and reusable creator resources.", "Browse →", "#resources"],
   ["API reference", "A future home for platform services, analytics, publishing and team APIs.", "View API →", "#resources"],
   ["Creator roadmap", "See what is being designed, tested and prepared for the ESB creator ecosystem.", "View roadmap →", "/news"],
-  ["Creator community", "Connect with developers, artists, designers and collaborators across ESB Games.", "Join community →", "/signup"],
+  ["Creator community", "Connect with developers, artists, designers and collaborators across ESB Games.", "Join community →", "https://esbgames.com/login"],
 ] as const;
 
 const studioServices = [
@@ -73,7 +73,7 @@ export default function DeveloperHubPage() {
               Build games in ESB Studio, publish them to players and manage every stage of your project through one connected creator ecosystem.
             </p>
             <div className="creator-hero-actions">
-              <Link href="/early-access?type=creator" className="button button-primary"><DownloadIcon size={17} /> Join Studio Access</Link>
+              <Link href="/download" className="button button-primary"><DownloadIcon size={17} /> Download & Availability</Link>
               <a href="#resources" className="button button-secondary"><BookIcon size={17} /> Explore Resources</a>
             </div>
           </div>
@@ -142,12 +142,12 @@ export default function DeveloperHubPage() {
             <header><span className="eyebrow">Collaboration</span><h2>Find specialist <span className="gradient-text">studios.</span></h2></header>
             {studioServices.map(([title, meta, text]) => (
               <article className="creator-studio-card" key={title}>
-                <div className="creator-studio-card-head"><h3>{title}</h3><Link href="/signup">Connect</Link></div>
+                <div className="creator-studio-card-head"><h3>{title}</h3><a href="https://esbgames.com/login">Connect</a></div>
                 <strong>★ 4.9 <span>{meta}</span></strong>
                 <p>{text}</p>
               </article>
             ))}
-            <Link href="/signup" className="creator-directory-link">Explore the creator community →</Link>
+            <a href="https://esbgames.com/login" className="creator-directory-link">Explore the creator community →</a>
           </aside>
         </div>
       </section>

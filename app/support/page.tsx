@@ -27,7 +27,7 @@ export default function SupportPage() {
           <div className="support-info-grid" id="quick-help">
             <article className="support-quick-panel">
               <h2>Quick Help</h2>
-              <a href="/login">🔑 Reset your password</a>
+              <a href="https://esbgames.com/login">🔑 Reset your password</a>
               <a href="/subscriptions">↻ Cancel or change a subscription</a>
               <a href="mailto:support@esbgames.com?subject=Refund request">♟ Request a refund</a>
               <a href="mailto:safety@esbgames.com?subject=Account appeal">◆ Appeal an account action</a>
@@ -44,7 +44,7 @@ export default function SupportPage() {
                 <p><span>Authentication</span><strong>Prototype ready</strong></p>
                 <p><span>Support tickets</span><strong>Available</strong></p>
               </article>
-              <article className="support-community-panel"><span>◉</span><div><h3>Community support</h3><p>Connect with the ESB Games community and staff through the official server.</p><a href="/signup">Join the community →</a></div></article>
+              <article className="support-community-panel"><span>◉</span><div><h3>Community support</h3><p>Connect with the ESB Games community and staff through the official server.</p><a href="https://esbgames.com/login">Join the community →</a></div></article>
             </div>
           </div>
         </div>

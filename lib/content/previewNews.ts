@@ -1,0 +1,67 @@
+import type { NewsArticle } from "./types";
+
+/**
+ * Editorial preview content is disabled by default and exists only to validate
+ * the article renderer before the Backend CMS is connected.
+ */
+export const previewNewsArticles: NewsArticle[] = [
+  {
+    id: "preview-ecosystem",
+    slug: "preview-esb-games-ecosystem",
+    title: "A preview of the ESB Games ecosystem",
+    subtitle: "How play, creation and community can work together across one connected platform.",
+    excerpt: "A design preview of the systems planned across ESB Games, ESB Studio and the wider creator ecosystem.",
+    author: "ESB Games Editorial",
+    category: "Company News",
+    tags: ["ESB Games", "Platform", "Preview"],
+    publicationState: "Published",
+    featured: true,
+    publishedAt: "2026-07-01T09:00:00.000Z",
+    updatedAt: "2026-07-01T09:00:00.000Z",
+    relatedSlugs: ["preview-creator-tools"],
+    locale: "en",
+    readingTime: 4,
+    preview: true,
+    coverImage: "/hero-discover-preview.png",
+    coverImageAlt: "Preview of the ESB Games Discover platform",
+    body: [
+      { type: "callout", tone: "info", title: "Preview content", text: "This article is included only when content preview mode is enabled. Live articles should be published through the ESB Games Backend." },
+      { type: "paragraph", text: "ESB Games is being designed as one connected ecosystem where players can discover experiences, creators can build them, and communities can grow around them." },
+      { type: "heading", level: 2, text: "One identity across the ecosystem" },
+      { type: "paragraph", text: "A universal ESB Games account is planned to connect the Play Platform, Creator Hub, ESB Studio, Family Centre and relevant support services." },
+      { type: "list", items: ["Discover and play community experiences", "Create and publish through ESB Studio", "Connect with friends, groups and events", "Use family and safety tools across supported services"] },
+      { type: "image", src: "/hero-discover-preview.png", alt: "ESB Games Discover interface", caption: "A current design preview of the Discover experience.", width: "wide" },
+      { type: "quote", text: "Play, create and connect should feel like parts of one universe, not separate products.", attribution: "ESB Games product direction" },
+      { type: "button", label: "Explore the Creator Hub", href: "/developer-hub", variant: "primary" },
+    ],
+  },
+  {
+    id: "preview-creator-tools",
+    slug: "preview-creator-tools",
+    title: "Designing creator tools without unnecessary barriers",
+    subtitle: "A preview of the principles guiding ESB Studio and creator publishing.",
+    excerpt: "Accessible workflows, collaboration and transparent publishing are central to the planned creator experience.",
+    author: "ESB Games Editorial",
+    category: "Creator Updates",
+    tags: ["ESB Studio", "Creators", "Tools"],
+    publicationState: "Published",
+    featured: false,
+    publishedAt: "2026-06-24T09:00:00.000Z",
+    updatedAt: "2026-06-24T09:00:00.000Z",
+    relatedSlugs: ["preview-esb-games-ecosystem"],
+    locale: "en",
+    readingTime: 5,
+    preview: true,
+    coverImage: "/hero-studio-preview.png",
+    coverImageAlt: "Preview of the ESB Studio VFX editor",
+    body: [
+      { type: "callout", tone: "info", title: "Preview content", text: "This article is included only when content preview mode is enabled. Live articles should be published through the ESB Games Backend." },
+      { type: "paragraph", text: "Creator tools should support beginners without limiting experienced developers. ESB Studio is planned around approachable workflows with room for advanced scripting, collaboration and production systems." },
+      { type: "heading", level: 2, text: "Build, test and publish in one workflow" },
+      { type: "list", ordered: true, items: ["Start from a template or a blank world", "Build with visual tools and scripting", "Test collaboratively", "Publish through the Creator Hub", "Review analytics and improve the experience"] },
+      { type: "image", src: "/hero-studio-preview.png", alt: "ESB Studio creator interface", caption: "A current design preview of the ESB Studio editor.", width: "wide" },
+      { type: "code", language: "lua", code: "local game = ESB.CreateGame(\"Neon City\")\n\ngame:Publish()", caption: "Illustrative creator workflow." },
+      { type: "button", label: "Visit the Creator Hub", href: "/developer-hub", variant: "secondary" },
+    ],
+  },
+];
