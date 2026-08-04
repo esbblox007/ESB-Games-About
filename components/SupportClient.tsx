@@ -150,8 +150,11 @@ export default function SupportClient() {
         headers: authHeaders(),
         body: form,
       });
-      const body = (await response.json()) as CreatedTicket & { error?: string };
-      if (!response.ok) throw new Error(body.error ?? "Your support ticket could not be created.");
+      const body = (await response.json()) as CreatedTicket & { error?: string; incidentReference?: string };
+      if (!response.ok) {
+        const reference = body.incidentReference ? ` Reference: ${body.incidentReference}.` : "";
+        throw new Error(`${body.error ?? "Your support ticket could not be created."}${reference}`);
+      }
       setCreated(body);
       event.currentTarget.reset();
       setSelectedFiles([]);

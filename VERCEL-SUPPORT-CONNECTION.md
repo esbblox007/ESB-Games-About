@@ -92,3 +92,14 @@ The ticket wizard no longer blocks the user because a separate readiness request
 failed. The real submission request is the source of truth. A failed submission
 still produces a clear user-safe message and records detailed diagnostics in the
 Vercel function logs.
+
+## Support submission pipeline v2
+
+After the original Support migrations and the Data API permission fix, also run:
+
+```text
+20260804_006_support_submission_pipeline_fix.sql
+```
+
+The v2 health endpoint performs a deep RPC preflight rather than only reading a
+category row. Deploy the matching About code after running the migration.

@@ -27,8 +27,7 @@ export class SupportRateLimitError extends Error {
 
 export function supportNetworkKey(request: NextRequest) {
   const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
-  const candidate = forwarded || request.headers.get("x-real-ip") || request.headers.get("cf-connecting-ip") || "unknown-network";
-  return sha256(candidate);
+  return forwarded || request.headers.get("x-real-ip") || request.headers.get("cf-connecting-ip") || "unknown-network";
 }
 
 export async function takeSupportRateLimit(input: {
@@ -38,13 +37,14 @@ export async function takeSupportRateLimit(input: {
   maxRequests: number;
   blockSeconds?: number;
 }) {
-  const result = await supabaseRpc<Record<string, unknown>>("support_take_rate_limit", {
+  const rawResult = await supabaseRpc<unknown>("support_take_rate_limit_v2", {
     p_scope: input.scope,
     p_key_hash: sha256(input.key),
     p_window_seconds: input.windowSeconds,
     p_max_requests: input.maxRequests,
     p_block_seconds: input.blockSeconds ?? 900,
   });
+  const result = normaliseRpcObject(rawResult, "support rate-limit");
   if (result.allowed !== true) {
     throw new SupportRateLimitError(Number(result.retryAfterSeconds ?? 60));
   }
@@ -100,6 +100,18 @@ export function generateAccessToken() { return randomBytes(32).toString("hex"); 
 export function generateVerificationCode() { return randomInt(100000, 1000000).toString(); }
 export function generateGuestSessionToken() { return randomBytes(32).toString("hex"); }
 
+function normaliseRpcObject(value: unknown, operation: string): Record<string, unknown> {
+  let result = value;
+  if (Array.isArray(result)) result = result[0];
+  if (typeof result === "string") {
+    try { result = JSON.parse(result); } catch { /* handled below */ }
+  }
+  if (!result || typeof result !== "object" || Array.isArray(result)) {
+    throw new Error(`The ${operation} service returned an invalid response.`);
+  }
+  return result as Record<string, unknown>;
+}
+
 export async function createSupportTicket(input: {
   request: NextRequest;
   name: string;
@@ -113,7 +125,7 @@ export async function createSupportTicket(input: {
     ? String(account.userMetadata.display_name ?? account.userMetadata.full_name ?? account.userMetadata.username ?? input.name).trim()
     : input.name.trim();
   const email = String(account?.email ?? input.email).trim().toLowerCase();
-  return supabaseRpc<Record<string, unknown>>("support_create_ticket", {
+  const rawResult = await supabaseRpc<unknown>("support_create_ticket_v2", {
     p_requester_account_id: account?.id ?? null,
     p_requester_name: displayName,
     p_requester_email: email || null,
@@ -124,6 +136,7 @@ export async function createSupportTicket(input: {
     p_requester_region: input.request.headers.get("x-vercel-ip-country") ?? null,
     p_source: "About Website",
   });
+  return normaliseRpcObject(rawResult, "support ticket creation");
 }
 
 export async function getTicketByAccessToken(accessToken: string) {

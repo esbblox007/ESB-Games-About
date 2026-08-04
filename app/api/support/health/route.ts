@@ -1,8 +1,14 @@
 import { NextResponse } from "next/server";
-import { getSupabaseServerConfig, supabaseSelect } from "@/lib/server/supabase";
+import { getSupabaseServerConfig, supabaseRpc } from "@/lib/server/supabase";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+
+type Preflight = {
+  ready?: boolean;
+  categoryCount?: number;
+  evidenceBucketReady?: boolean;
+};
 
 export async function GET() {
   const config = getSupabaseServerConfig();
@@ -14,18 +20,37 @@ export async function GET() {
   }
 
   try {
-    await supabaseSelect<{ category_id: string }>("support_categories", "select=category_id&limit=1");
+    const raw = await supabaseRpc<unknown>("support_submission_preflight_v2", {});
+    const result = normalisePreflight(raw);
+    if (result.ready !== true) {
+      return NextResponse.json(
+        { available: false, state: "database_unavailable" },
+        { status: 503, headers: noStoreHeaders() },
+      );
+    }
+
     return NextResponse.json(
       { available: true, state: "ready" },
       { headers: noStoreHeaders() },
     );
   } catch (error) {
-    console.error("[support-health] Supabase readiness check failed", error);
+    console.error("[support-health] Support submission preflight failed", error);
     return NextResponse.json(
       { available: false, state: "database_unavailable" },
       { status: 503, headers: noStoreHeaders() },
     );
   }
+}
+
+function normalisePreflight(value: unknown): Preflight {
+  let result = value;
+  if (Array.isArray(result)) result = result[0];
+  if (typeof result === "string") {
+    try { result = JSON.parse(result); } catch { return {}; }
+  }
+  return result && typeof result === "object" && !Array.isArray(result)
+    ? result as Preflight
+    : {};
 }
 
 function noStoreHeaders() {
