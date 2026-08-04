@@ -8,6 +8,7 @@ type Preflight = {
   ready?: boolean;
   categoryCount?: number;
   evidenceBucketReady?: boolean;
+  pipelineVersion?: number;
 };
 
 export async function GET() {
@@ -20,7 +21,7 @@ export async function GET() {
   }
 
   try {
-    const raw = await supabaseRpc<unknown>("support_submission_preflight_v2", {});
+    const raw = await supabaseRpc<unknown>("support_submission_preflight_v3", {});
     const result = normalisePreflight(raw);
     if (result.ready !== true) {
       return NextResponse.json(
@@ -30,7 +31,7 @@ export async function GET() {
     }
 
     return NextResponse.json(
-      { available: true, state: "ready" },
+      { available: true, state: "ready", pipelineVersion: result.pipelineVersion ?? 3 },
       { headers: noStoreHeaders() },
     );
   } catch (error) {

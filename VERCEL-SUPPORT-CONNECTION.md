@@ -103,3 +103,13 @@ After the original Support migrations and the Data API permission fix, also run:
 
 The v2 health endpoint performs a deep RPC preflight rather than only reading a
 category row. Deploy the matching About code after running the migration.
+
+## Pipeline version 3
+
+After deploying the runtime fix, the health endpoint should include:
+
+```json
+{"available":true,"state":"ready","pipelineVersion":3}
+```
+
+If `pipelineVersion` is absent, Vercel is still serving an older deployment.

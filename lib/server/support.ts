@@ -125,7 +125,12 @@ export async function createSupportTicket(input: {
     ? String(account.userMetadata.display_name ?? account.userMetadata.full_name ?? account.userMetadata.username ?? input.name).trim()
     : input.name.trim();
   const email = String(account?.email ?? input.email).trim().toLowerCase();
-  const rawResult = await supabaseRpc<unknown>("support_create_ticket_v2", {
+
+  // Generate the private token in the trusted About server and send only its
+  // SHA-256 hash to Supabase. This avoids relying on the database extension
+  // search path for pgcrypto during ticket creation.
+  const accessToken = generateAccessToken();
+  const rawResult = await supabaseRpc<unknown>("support_create_ticket_v3", {
     p_requester_account_id: account?.id ?? null,
     p_requester_name: displayName,
     p_requester_email: email || null,
@@ -135,8 +140,10 @@ export async function createSupportTicket(input: {
     p_requester_locale: input.request.headers.get("accept-language")?.split(",")[0] ?? "en-GB",
     p_requester_region: input.request.headers.get("x-vercel-ip-country") ?? null,
     p_source: "About Website",
+    p_access_token_hash: sha256(accessToken),
   });
-  return normaliseRpcObject(rawResult, "support ticket creation");
+  const result = normaliseRpcObject(rawResult, "support ticket creation");
+  return { ...result, accessToken };
 }
 
 export async function getTicketByAccessToken(accessToken: string) {
