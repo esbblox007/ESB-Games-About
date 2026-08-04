@@ -68,7 +68,7 @@ export interface NewsListResult {
   unavailable: boolean;
 }
 
-export type DownloadReleaseState = "Unavailable" | "Early Access" | "Beta" | "Stable" | "Paused";
+export type DownloadReleaseState = "Unavailable" | "Preview" | "Beta" | "Stable" | "Paused";
 
 export interface DownloadRelease {
   id: string;

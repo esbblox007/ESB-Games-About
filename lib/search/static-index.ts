@@ -1,5 +1,6 @@
 import type { SearchDocument } from "@/lib/content/types";
 import { supportArticles } from "@/lib/content/support";
+import { jobs } from "@/lib/content/careers";
 
 const coreSearchDocuments: SearchDocument[] = [
   {
@@ -90,14 +91,14 @@ const coreSearchDocuments: SearchDocument[] = [
     id: "support",
     type: "Support",
     title: "ESB Games Support",
-    description: "Open or track a support ticket and find help with accounts, billing, safety and creator tools.",
+    description: "Preview support routes and find help with accounts, billing, safety and creator tools.",
     route: "/support",
     category: "Support",
     locale: "en",
     keywords: ["support", "help", "ticket", "report", "billing", "account issue", "refund"],
     synonyms: ["customer service", "contact support", "need help", "appeal a ban"],
     questions: ["How do I contact support?", "I forgot my password", "How do I request a refund?", "How do I report a player?"],
-    content: "Account and access, billing and payments, creator support, safety reports, technical issues and ticket tracking.",
+    content: "Account and access, billing and payments, creator support, safety guidance and technical help. Online submissions are not yet connected.",
     priority: 98,
   },
   {
@@ -133,33 +134,47 @@ const coreSearchDocuments: SearchDocument[] = [
     type: "Help",
     title: "Create an ESB Games account",
     description: "Join ESB Games through the universal account portal.",
-    route: "https://esbgames.com/login",
+    route: "https://esbgames.com/sign-up",
     category: "Accounts",
     locale: "en",
     keywords: ["create account", "sign up", "register", "join ESB Games", "new account"],
     synonyms: ["make an account", "account registration", "join now"],
     questions: ["How do I create an account?", "How do I join ESB Games?"],
-    content: "Open the main ESB Games login portal and choose the account creation option.",
+    content: "Open the main ESB Games sign-up page to create an account.",
     priority: 100,
   },
   {
     id: "subscriptions",
     type: "Page",
     title: "ESB Games subscriptions",
-    description: "Compare ESB Games membership plans and platform benefits.",
+    description: "Preview the planned ESB Games membership structure and provisional benefits.",
     route: "/subscriptions",
     category: "Platform",
     locale: "en",
     keywords: ["subscriptions", "membership", "plans", "premium", "plus", "pro", "max"],
     synonyms: ["paid plan", "upgrade account"],
     questions: ["What subscriptions does ESB Games offer?"],
-    content: "Membership tiers, platform perks and account upgrades.",
+    content: "Provisional Member, Plus, Pro and Max tiers. Prices and benefits may change before launch.",
     priority: 80,
   },
 ];
 
 export const staticSearchDocuments: SearchDocument[] = [
   ...coreSearchDocuments,
+  ...jobs.map((job) => ({
+    id: `career-${job.slug}`,
+    type: "Careers" as const,
+    title: job.title,
+    description: job.summary,
+    route: `/careers/${job.slug}`,
+    category: job.departments[0],
+    locale: "en",
+    keywords: [job.title, ...job.departments, job.location, job.type],
+    synonyms: [job.reportsTo, ...job.responsibilities],
+    questions: [`How do I apply for ${job.title}?`],
+    content: [...job.responsibilities, ...job.requirements, ...job.desirable, job.applicationPrompt].join(" "),
+    priority: 89,
+  })),
   ...supportArticles.map((article) => ({
     id: `support-${article.slug}`,
     type: "Help" as const,

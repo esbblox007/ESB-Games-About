@@ -12,8 +12,8 @@ import {
   SearchIcon,
   ShieldIcon,
   TicketIcon,
-  UsersIcon,
 } from "@/components/Icons";
+import { homeProofItems, siteMetrics } from "@/lib/content/siteMetrics";
 
 export const metadata: Metadata = {
   title: "Play. Create. Connect.",
@@ -73,22 +73,8 @@ function UserPlusIcon({ size = 21 }: { size?: number }) {
   );
 }
 
-function MailIcon({ size = 18 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="2"/>
-      <path d="m4 7 8 6 8-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  );
-}
 
-const proofItems = [
-  "Forbes 30 Under 30",
-  "1M Creators Onboard",
-  "Featured on Polygon",
-  "★ 4.9 App Store",
-  "Best New Platform 2025",
-];
+
 
 export default function HomePage() {
   return (
@@ -125,14 +111,14 @@ export default function HomePage() {
                   <div className="home-avatar-stack" aria-hidden="true">
                     <i/><i/><i/><i/><i/>
                   </div>
-                  <span><strong>80M+ players</strong><small>already onboard</small></span>
+                  <span><strong>One account</strong><small>across the ESB Games ecosystem</small></span>
                 </div>
               </div>
 
               <div className="home-hero-stats" aria-label="Platform statistics">
-                <div><strong>20K+</strong><span>GAMES</span></div>
-                <div><strong>1M+</strong><span>CREATORS</span></div>
-                <div><strong>150+</strong><span>COUNTRIES</span></div>
+                <div><strong>{siteMetrics.connectedServices}</strong><span>CONNECTED SERVICES</span></div>
+                <div><strong>{siteMetrics.corePlatformAreas}+</strong><span>PLATFORM AREAS</span></div>
+                <div><strong>{siteMetrics.plannedDesktopPlatforms}</strong><span>STUDIO PLATFORMS PLANNED</span></div>
               </div>
 
             </div>
@@ -182,7 +168,7 @@ export default function HomePage() {
           <div className="home-proof-track">
             {[0, 1, 2].map((group) => (
               <div className="home-proof-group" aria-hidden={group !== 0} key={group}>
-                {proofItems.map((item) => <span key={`${group}-${item}`}><b>★</b>{item}</span>)}
+                {homeProofItems.map((item) => <span key={`${group}-${item}`}><b>★</b>{item}</span>)}
               </div>
             ))}
           </div>
@@ -198,33 +184,33 @@ export default function HomePage() {
             <div className="home-feature-grid">
               <article className="home-feature-card home-feature-main">
                 <span className="home-feature-icon home-feature-icon-magenta"><SparklesIcon/></span>
-                <h3>Worlds built in minutes,<br/>not months.</h3>
-                <p>Your imagination deserves a platform without limits. ESB Studio combines hot-reload workflows, real-time multiplayer collaboration, AI-assisted scripting, and one-click publishing into a seamless creation experience. Build at your own pace, transform ideas into immersive digital worlds, and bring your creativity to life without technical barriers.</p>
+                <h3>Build ambitious worlds,<br/>step by step.</h3>
+                <p>ESB Studio is being designed around approachable building tools, reusable workflows, scripting, animation, VFX and connected publishing. Features will be introduced in stages as the creator tool moves through testing.</p>
                 <Link href="/developer-hub">Open Studio <span>→</span></Link>
               </article>
 
               <article className="home-feature-card home-feature-small">
                 <span className="home-feature-icon home-feature-icon-blue"><ShieldIcon size={21}/></span>
                 <h3>Safe by Design</h3>
-                <p>Advanced ML-powered moderation, granular parental controls, and a zero-tolerance approach to toxicity ensure a secure and welcoming environment for every creator and player. Safety isn&apos;t an afterthought, it&apos;s built into the foundation of ESB Studio.</p>
+                <p>Moderation workflows, parental controls, account protection and age-appropriate settings are being designed alongside the platform. Safety requirements will continue to be tested and improved before public launch.</p>
               </article>
 
               <article className="home-feature-card home-feature-small home-feature-performance">
                 <span className="home-feature-icon home-feature-icon-pink"><BoltIcon/></span>
                 <h3>Smooth Performance Everywhere</h3>
-                <p>Our custom built rendering pipeline is engineered to scale effortlessly from low end mobile devices to high performance gaming PCs. Experience fluid 60 FPS gameplay, immersive visuals, and responsive performance across every platform.</p>
+                <p>The platform and Studio are being developed with responsive controls, scalable graphics settings and support for a wide range of devices. Final performance targets will be confirmed through testing.</p>
               </article>
 
               <article className="home-feature-card home-feature-half">
                 <span className="home-feature-icon home-feature-icon-purple"><CodeIcon/></span>
                 <h3>Built for Creators</h3>
-                <p>Empowering creators is at the core of ESB Studio. With industry-leading revenue sharing, live multiplayer editing, and instant publishing tools, creators can collaborate, launch, and grow their worlds faster than ever before.</p>
+                <p>Creator tools, analytics, collaboration and publishing workflows are being developed as one connected experience. Monetisation and publishing requirements will be published before those systems launch.</p>
               </article>
 
               <article className="home-feature-card home-feature-half">
                 <span className="home-feature-icon home-feature-icon-orange"><InfinityIcon/></span>
                 <h3>Endless Universes</h3>
-                <p>Explore thousands of community-driven experiences or create one entirely your own in just minutes. Why limit your imagination when you can turn it into an infinite universe of possibilities?</p>
+                <p>Discover experiences, join communities and build projects through one connected ecosystem. The public experience library will grow as creators begin publishing to ESB Games.</p>
               </article>
             </div>
 
@@ -232,11 +218,11 @@ export default function HomePage() {
               <article className="home-audience-card home-creators-card">
                 <span className="home-overline">FOR CREATORS</span>
                 <h3>Build it. Ship it.<br/>Get paid for it.</h3>
-                <p>Industry leading 70/30 revenue split, instant payouts in 100+ countries, and direct fan subscriptions. Your game, your rules.</p>
+                <p>A planned creator-first model brings building, publishing, analytics and monetisation into one ecosystem. Final payout rules, supported regions and programme terms will be published before launch.</p>
                 <div className="home-mini-metrics">
-                  <div><strong>70%</strong><span>REV SHARE</span></div>
-                  <div><strong>$1M+</strong><span>TOP EARNER</span></div>
-                  <div><strong>48h</strong><span>PAYOUT</span></div>
+                  <div><strong>{siteMetrics.plannedCreatorShare}%</strong><span>PLANNED CREATOR SHARE</span></div>
+                  <div><strong>{siteMetrics.universalAccounts}</strong><span>UNIVERSAL ACCOUNT</span></div>
+                  <div><strong>{siteMetrics.connectedServices}</strong><span>CONNECTED SERVICES</span></div>
                 </div>
                 <Link href="/developer-hub" className="button button-primary"><CodeIcon size={17}/> Start Building</Link>
               </article>
@@ -244,11 +230,11 @@ export default function HomePage() {
               <article className="home-audience-card home-players-card">
                 <span className="home-overline home-overline-cyan">FOR PLAYERS</span>
                 <h3>Find your people.<br/>Make your legend.</h3>
-                <p>Friends, parties, groups, events and voice, all under one roof. Plus parental controls and ML safety baked in from day one.</p>
-                <div className="home-community-avatars" aria-label="80 million community members">
-                  <i/><i/><i/><i/><i/><b>80M</b>
+                <p>Friends, groups, events, messaging and discovery are being brought together with family controls and platform safety systems.</p>
+                <div className="home-community-avatars" aria-label="One connected ESB Games community">
+                  <i/><i/><i/><i/><i/><b>ESB</b>
                 </div>
-                <a href="https://esbgames.com/login" className="button button-secondary" data-analytics="join-now"><UserPlusIcon/> Join the community</a>
+                <a href="https://esbgames.com/sign-up" className="button button-secondary" data-analytics="join-now"><UserPlusIcon/> Create an account</a>
               </article>
             </div>
           </div>
@@ -265,26 +251,26 @@ export default function HomePage() {
             </div>
 
             <div className="home-support-cards">
-              <article><span className="home-feature-icon home-feature-icon-magenta"><TicketIcon/></span><h3>Open a Ticket</h3><p>Report bugs, account issues, or anything else, tracked end to end.</p></article>
-              <article><span className="home-feature-icon home-feature-icon-blue"><BoltIcon/></span><h3>Fast Responses</h3><p>Most tickets are resolved within 24 hours by our in-house team.</p></article>
-              <article><span className="home-feature-icon home-feature-icon-teal"><SearchIcon/></span><h3>Safety Reports</h3><p>Report harassment, cheating, or abuse. Every report is reviewed.</p></article>
-              <article><span className="home-feature-icon home-feature-icon-orange"><BookIcon/></span><h3>Help Articles</h3><p>Hundreds of guides for account, billing, creators and more.</p></article>
+              <article><span className="home-feature-icon home-feature-icon-magenta"><TicketIcon/></span><h3>Structured Requests</h3><p>Account, billing, creator, technical and general support categories are prepared.</p></article>
+              <article><span className="home-feature-icon home-feature-icon-blue"><BoltIcon/></span><h3>Clear Statuses</h3><p>The planned backend will track each request from receipt through review and resolution.</p></article>
+              <article><span className="home-feature-icon home-feature-icon-teal"><SearchIcon/></span><h3>Safety Route</h3><p>A dedicated safety form is prepared for harassment, abuse and dangerous content concerns.</p></article>
+              <article><span className="home-feature-icon home-feature-icon-orange"><BookIcon/></span><h3>Growing Help Centre</h3><p>Initial guidance covers accounts, subscriptions, appeals, reports and creator payouts.</p></article>
             </div>
           </div>
 
           <div className="home-section-inner">
             <div className="home-early-banner">
-              <h2>Your next favorite game is<br/><span className="home-gradient">already here</span>.</h2>
-              <p>Be the first to play. Be the first to build. Join the waitlist and lock in your founder rewards.</p>
+              <h2>The next era of play is<br/><span className="home-gradient">being built</span>.</h2>
+              <p>Create your ESB Games account and follow the platform as testing, creator tools and public availability expand.</p>
               <div className="home-banner-actions">
-                <a href="https://esbgames.com/login" className="button button-primary" data-analytics="join-now"><RocketIcon/> Join Now</a>
+                <a href="https://esbgames.com/sign-up" className="button button-primary" data-analytics="join-now"><RocketIcon/> Join Now</a>
                 <Link href="/about" className="button button-secondary">Learn more</Link>
               </div>
               <div className="home-banner-trust">
-                <span><ShieldIcon size={14}/> Safe &amp; moderated</span>
-                <span><BoltIcon size={14}/> 60fps everywhere</span>
-                <span><GlobeIcon size={14}/> 150+ countries</span>
-                <span>● No credit card needed</span>
+                <span><ShieldIcon size={14}/> Safety systems in development</span>
+                <span><BoltIcon size={14}/> Staff-first testing planned</span>
+                <span><GlobeIcon size={14}/> International expansion planned</span>
+                <span>● One connected account</span>
               </div>
             </div>
           </div>
@@ -296,7 +282,7 @@ export default function HomePage() {
               <div>
                 <span className="home-newsletter-overline"><i/> STAY IN THE LOOP</span>
                 <h2>Get drops, updates &amp; insider<br/>news.</h2>
-                <p>Patch notes, beta invites and exclusive cosmetics, straight to your inbox. No spam, ever.</p>
+                <p>Product updates, development notes and launch announcements, sent to your inbox. Unsubscribe at any time.</p>
               </div>
               <NewsletterForm />
             </div>

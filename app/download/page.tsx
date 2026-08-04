@@ -34,7 +34,7 @@ export default async function DownloadPage() {
           <div className="download-container">
             <span className="page-eyebrow">Official downloads</span>
             <h1>Download <span className="gradient-text">ESB Games.</span></h1>
-            <p>Get the ESB Games Play Platform to discover and play experiences, or download ESB Studio to start creating.</p>
+            <p>Official ESB Games Play Platform and ESB Studio downloads will appear here when public releases are approved.</p>
             <DownloadPlatformHint />
           </div>
         </section>
@@ -60,7 +60,7 @@ export default async function DownloadPage() {
                       <div className="download-empty-state">
                         <strong>Not yet available for public download.</strong>
                         <p>No public download is currently available for this product. Release information will be published from the ESB Games Backend.</p>
-                        <div><a className="button button-primary" href="https://esbgames.com/login">Join Early Access</a><Link className="button button-secondary" href={product.learnMoreHref}>Learn More</Link></div>
+                        <div><a className="button button-primary" href="https://esbgames.com/sign-up">Create an account</a><Link className="button button-secondary" href={product.learnMoreHref}>Learn More</Link></div>
                       </div>
                     ) : product.releases.map((release) => (
                       <section className="download-release" key={release.id}>

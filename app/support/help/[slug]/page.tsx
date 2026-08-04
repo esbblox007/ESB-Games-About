@@ -46,8 +46,8 @@ export default async function SupportHelpPage({ params }: { params: Promise<{ sl
             ))}
           </div>
           <aside className="support-help-cta">
-            <div><strong>Still need help?</strong><p>Submit a ticket and include any relevant account or transaction details.</p></div>
-            <Link className="button button-primary" href="/support#submit-ticket">Go to Support</Link>
+            <div><strong>Still need help?</strong><p>Preview the support routes being prepared for launch. Online submissions are not connected yet.</p></div>
+            <Link className="button button-primary" href="/support#contact-support">Go to Support</Link>
           </aside>
         </div>
       </main>

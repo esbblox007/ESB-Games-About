@@ -24,7 +24,7 @@ export const supportArticles: SupportArticle[] = [
     intro: "Subscription controls will be available from the billing area of your ESB Games account.",
     sections: [
       { heading: "Manage your plan", body: ["Sign in to your ESB Games account, open Settings and choose Subscriptions or Billing."], steps: ["Review the active plan.", "Choose Change Plan or Cancel Renewal.", "Read the confirmation details before continuing.", "Keep the confirmation email for your records."] },
-      { heading: "Need billing help?", body: ["Submit a Billing and Payments support ticket with the account username and transaction reference. Do not include full card information."] },
+      { heading: "Need billing help?", body: ["The planned Billing & Payments form will request the account username and transaction reference. Never include passwords or full card information."] },
     ],
   },
   {
@@ -34,7 +34,7 @@ export const supportArticles: SupportArticle[] = [
     intro: "Refund eligibility depends on the purchase, account activity and applicable consumer rules.",
     sections: [
       { heading: "Before submitting", body: ["Gather the purchase date, receipt or transaction reference, account username and a clear explanation of the issue."] },
-      { heading: "Submit your request", body: ["Open a Billing and Payments ticket through the support page. ESB Games will review the request and reply to the email on the ticket."], steps: ["Choose Billing and Payments.", "Select Refund Request.", "Add the transaction details.", "Submit the ticket and keep the ticket ID."] },
+      { heading: "Submit your request", body: ["The planned Billing & Payments workflow will collect the information needed for a review and send a confirmation once the request has been stored."], steps: ["Choose Billing & Payments.", "Select the relevant purchase issue.", "Add the transaction details.", "Only treat the request as submitted after receiving a confirmation reference."] },
     ],
   },
   {
@@ -43,18 +43,18 @@ export const supportArticles: SupportArticle[] = [
     description: "Ask ESB Games to review a moderation or account enforcement decision.",
     intro: "Appeals should explain why you believe the decision should be reviewed and include the relevant moderation reference where available.",
     sections: [
-      { heading: "What to include", body: ["Provide the username, moderation date, action type and any relevant context. Keep the appeal factual and do not submit duplicate tickets."] },
-      { heading: "What happens next", body: ["A member of the Trust and Safety team will review the original action and the information supplied. Submitting an appeal does not guarantee that the action will change."] },
+      { heading: "What to include", body: ["Provide the username, moderation date, action type and any relevant context. Keep the appeal factual and avoid sending duplicate requests once the appeal system is live."] },
+      { heading: "What happens next", body: ["The planned appeal workflow will provide the original action and supplied context to the appropriate reviewer. An appeal will not guarantee that the action changes."] },
     ],
   },
   {
     slug: "report-player-or-game",
     title: "Report a player or game",
     description: "Report safety, abuse or content concerns to ESB Games.",
-    intro: "Use in platform reporting tools whenever they are available. Urgent safety concerns should be sent through the Safety and Abuse support category.",
+    intro: "Use in-platform reporting tools when they become available. The dedicated Safety & Abuse route is being prepared for concerns that need additional review.",
     sections: [
       { heading: "Useful evidence", body: ["Include usernames, experience names, approximate times, message references and screenshots where appropriate. Do not put yourself at risk to collect evidence."] },
-      { heading: "After reporting", body: ["ESB Games reviews reports according to priority and severity. Privacy rules may prevent the team from sharing the exact action taken against another account."] },
+      { heading: "After reporting", body: ["The planned process will prioritise reports by severity. Privacy rules may limit what can be shared about action taken against another account."] },
     ],
   },
   {

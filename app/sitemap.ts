@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getPublishedArticleIndex } from "@/lib/content/news";
 import { supportArticles } from "@/lib/content/support";
+import { jobs } from "@/lib/content/careers";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://about.esbgames.com";
@@ -14,16 +15,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/careers",
     "/support",
     "/subscriptions",
-    "/early-access",
-    "/login",
-    "/signup",
   ];
 
   const staticEntries: MetadataRoute.Sitemap = paths.map((path) => ({
     url: `${base}${path}`,
     lastModified: new Date(),
     changeFrequency: path === "" || path === "/news" ? "weekly" : "monthly",
-    priority: path === "" ? 1 : path === "/news" || path === "/download" ? 0.9 : path === "/login" || path === "/signup" ? 0.6 : 0.8,
+    priority: path === "" ? 1 : path === "/news" || path === "/download" ? 0.9 : 0.8,
   }));
 
   const news = await getPublishedArticleIndex();
@@ -41,5 +39,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.65,
   }));
 
-  return [...staticEntries, ...articleEntries, ...supportEntries];
+  const careerEntries: MetadataRoute.Sitemap = jobs.map((job) => ({
+    url: `${base}/careers/${job.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 0.75,
+  }));
+
+  return [...staticEntries, ...articleEntries, ...supportEntries, ...careerEntries];
 }

@@ -1,86 +1,90 @@
 "use client";
 
-import { FormEvent, useState } from "react";
-import { BookIcon, CloseIcon, SearchIcon, TicketIcon } from "./Icons";
+import { useEffect, useRef, useState } from "react";
+import { BookIcon, CloseIcon, SearchIcon, ShieldIcon, TicketIcon } from "./Icons";
 
-type Ticket = {
-  id: string;
-  name: string;
-  email: string;
-  category: string;
-  subject: string;
-  message: string;
-  status: string;
-  createdAt: string;
-};
-
-function getLocalTickets(): Ticket[] {
-  try { return JSON.parse(localStorage.getItem("esb-support-tickets") || "[]"); }
-  catch { return []; }
-}
+type SupportMode = "general" | "safety";
 
 export default function SupportClient() {
-  const [open, setOpen] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [trackId, setTrackId] = useState("");
-  const [tracked, setTracked] = useState<Ticket | null>(null);
+  const [mode, setMode] = useState<SupportMode | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const modalRef = useRef<HTMLElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
-  async function submitTicket(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setSubmitting(true); setError(null); setResult(null);
-    const form = event.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries());
-    try {
-      const response = await fetch("/api/support", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
-      const payload = await response.json();
-      if (!response.ok) throw new Error(payload.error || "Unable to submit your ticket.");
-      const ticket: Ticket = { id: payload.ticketId, name: String(data.name), email: String(data.email), category: String(data.category), subject: String(data.subject), message: String(data.message), status: payload.status || "Received", createdAt: new Date().toISOString() };
-      localStorage.setItem("esb-support-tickets", JSON.stringify([ticket, ...getLocalTickets()].slice(0, 20)));
-      setResult(ticket.id); form.reset();
-    } catch (err) { setError(err instanceof Error ? err.message : "Something went wrong."); }
-    finally { setSubmitting(false); }
-  }
+  useEffect(() => {
+    if (!mode) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.setTimeout(() => closeButtonRef.current?.focus(), 20);
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMode(null);
+      if (event.key === "Tab") {
+        const focusable = Array.from(modalRef.current?.querySelectorAll<HTMLElement>("button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex='-1'])") || []);
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKey);
+      previousFocusRef.current?.focus();
+    };
+  }, [mode]);
 
-  async function trackTicket(event: FormEvent) {
-    event.preventDefault(); setTracked(null); setError(null);
-    const id = trackId.trim().toUpperCase();
-    if (!id) return;
-    const local = getLocalTickets().find((ticket) => ticket.id.toUpperCase() === id);
-    if (local) { setTracked(local); return; }
-    try {
-      const response = await fetch(`/api/support/${encodeURIComponent(id)}`);
-      const payload = await response.json();
-      if (!response.ok) throw new Error(payload.error || "Ticket not found.");
-      setTracked(payload.ticket);
-    } catch (err) { setError(err instanceof Error ? err.message : "Ticket not found."); }
+  const selectedCategory = mode === "safety" ? "Safety & Abuse" : "Account & Access";
+
+  function openForm(nextMode: SupportMode) {
+    previousFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    setMode(nextMode);
   }
 
   return (
     <>
-      <div className="grid-3 support-cards">
-        <article className="card support-card"><span className="card-icon"><BookIcon/></span><h3>Help Centre</h3><p>Browse answers covering accounts, billing, creator tools, safety and more.</p><a className="card-link" href="#quick-help">Browse articles →</a></article>
-        <article className="card support-card" id="submit-ticket"><span className="card-icon cyan"><TicketIcon/></span><h3>Submit a Ticket</h3><p>Can&apos;t find an answer? Send a request to the ESB Games support team.</p><button className="card-link" style={{background:"none",border:0,padding:0,cursor:"pointer"}} onClick={() => {setOpen(true);setError(null);setResult(null);}}>Open a ticket →</button></article>
-        <article className="card support-card"><span className="card-icon green"><SearchIcon/></span><h3>Track a Ticket</h3><p>Enter your ticket reference to check its current status.</p><form className="track-form" onSubmit={trackTicket}><input className="input" value={trackId} onChange={(e)=>setTrackId(e.target.value)} placeholder="ESB-XXXXXX" aria-label="Ticket ID"/><button className="button button-primary">Go</button></form></article>
+      <div className="support-action-grid">
+        <article className="card support-card"><span className="card-icon"><BookIcon /></span><h3>Help Centre</h3><p>Browse guidance covering accounts, billing, creator tools, safety and more.</p><a className="card-link" href="#quick-help">Browse help articles →</a></article>
+        <article className="card support-card" id="contact-support"><span className="card-icon cyan"><TicketIcon /></span><h3>Contact Support</h3><p>Preview the full support form that will connect to the ESB Games support backend.</p><button className="card-link support-link-button" type="button" onClick={() => openForm("general")}>Open support form →</button></article>
+        <article className="card support-card"><span className="card-icon green"><ShieldIcon /></span><h3>Report a Safety Concern</h3><p>Use a dedicated form for harassment, abuse, dangerous content or other safety concerns.</p><button className="card-link support-link-button" type="button" onClick={() => openForm("safety")}>Open safety form →</button></article>
+        <article className="card support-card"><span className="card-icon orange"><SearchIcon /></span><h3>Service Status</h3><p>View the separate ESB Games status page for current service information and incidents.</p><a className="card-link" href="https://status.esbgames.com">View service status →</a></article>
       </div>
-      {tracked && <div className="success-box" style={{marginTop:18}}><strong>{tracked.id}</strong> {"·"} {tracked.status}. Submitted {new Date(tracked.createdAt).toLocaleString()}.</div>}
-      {error && !open && <div className="success-box error-box" style={{marginTop:18}}>{error}</div>}
 
-      {open && <div className="modal-backdrop" onMouseDown={() => setOpen(false)}>
-        <section className="form-modal" role="dialog" aria-modal="true" aria-label="Submit a support ticket" onMouseDown={(e)=>e.stopPropagation()}>
-          <div className="modal-heading"><div><span className="eyebrow">ESB Games Support</span><h2>Submit a ticket</h2></div><button className="icon-button" aria-label="Close" onClick={()=>setOpen(false)}><CloseIcon/></button></div>
-          <form className="form-grid" onSubmit={submitTicket}>
-            <div className="field"><label htmlFor="name">Name</label><input className="input" id="name" name="name" required minLength={2}/></div>
-            <div className="field"><label htmlFor="email">Email address</label><input className="input" id="email" name="email" type="email" required/></div>
-            <div className="field"><label htmlFor="category">Category</label><select className="input" id="category" name="category" defaultValue="Account"><option>Account</option><option>Billing</option><option>Creator tools</option><option>Safety report</option><option>Technical issue</option><option>Other</option></select></div>
-            <div className="field"><label htmlFor="subject">Subject</label><input className="input" id="subject" name="subject" required minLength={4}/></div>
-            <div className="field full"><label htmlFor="message">How can we help?</label><textarea className="input" id="message" name="message" required minLength={15}/></div>
-            <div className="field full"><button className="button button-primary" disabled={submitting}>{submitting ? "Submitting…" : "Submit ticket"}</button></div>
-          </form>
-          {result && <div className="success-box">Ticket submitted successfully. Your reference is <strong>{result}</strong>. Keep it somewhere safe.</div>}
-          {error && <div className="success-box error-box">{error}</div>}
-        </section>
-      </div>}
+      <div className="support-frontend-notice" role="note">
+        <strong>Frontend preview</strong>
+        <span>Online support submissions and ticket tracking are not connected yet. No information entered into the preview form is sent or stored.</span>
+      </div>
+
+      {mode && (
+        <div className="modal-backdrop" onMouseDown={() => setMode(null)}>
+          <section ref={modalRef} className="form-modal support-form-modal" role="dialog" aria-modal="true" aria-labelledby="support-form-title" onMouseDown={(event) => event.stopPropagation()}>
+            <div className="modal-heading">
+              <div><span className="eyebrow">ESB Games Support</span><h2 id="support-form-title">{mode === "safety" ? "Report a safety concern" : "Contact support"}</h2></div>
+              <button ref={closeButtonRef} className="icon-button" aria-label="Close support form" onClick={() => setMode(null)}><CloseIcon /></button>
+            </div>
+
+            <div className="support-modal-warning">
+              <strong>This form is not connected yet.</strong>
+              <p>Completing it will not send a report. Do not assume ESB Games has received a safety or support request until a confirmed submission reference is shown after the backend is connected.</p>
+            </div>
+
+            <form className="form-grid support-preview-form" onSubmit={(event) => event.preventDefault()}>
+              <div className="field"><label htmlFor="support-category">Category</label><select className="input" id="support-category" name="category" defaultValue={selectedCategory}><option>Account & Access</option><option>Billing & Payments</option><option>Creator & Developer Support</option><option>Safety & Abuse</option><option>Technical Issues</option><option>Something Else</option></select></div>
+              <div className="field"><label htmlFor="support-product">Product or service</label><select className="input" id="support-product" name="product" defaultValue="Play Platform"><option>Play Platform</option><option>ESB Studio</option><option>Creator Hub</option><option>Family Centre</option><option>About Website</option><option>Account & Authentication</option><option>Other</option></select></div>
+              <div className="field"><label htmlFor="support-name">Full name</label><input className="input" id="support-name" name="name" autoComplete="name" /></div>
+              <div className="field"><label htmlFor="support-email">Email address</label><input className="input" id="support-email" name="email" type="email" autoComplete="email" /></div>
+              <div className="field"><label htmlFor="support-username">Username or account ID <small>(optional)</small></label><input className="input" id="support-username" name="username" autoComplete="username" /></div>
+              <div className="field"><label htmlFor="support-device">Device and operating system</label><input className="input" id="support-device" name="device" placeholder="For example: Windows 11 · Edge" /></div>
+              <div className="field full"><label htmlFor="support-subject">Subject</label><input className="input" id="support-subject" name="subject" maxLength={120} /></div>
+              <div className="field full"><label htmlFor="support-message">What happened?</label><textarea className="input" id="support-message" name="message" maxLength={5000} placeholder="Include the relevant usernames, dates, pages, error messages or other details. Never include passwords or full payment-card information." /></div>
+              <label className="support-upload-field field full"><span>Attachments</span><input type="file" multiple accept="image/*,.pdf,.txt,.log" /><b>Add screenshots or supporting files</b><small>Visual preview only. Files are not uploaded.</small></label>
+              <label className="support-consent field full"><input type="checkbox" /><span>I understand this frontend preview does not submit or store my information.</span></label>
+              <div className="field full support-form-actions"><button className="button button-primary" type="submit" disabled aria-disabled="true">Online submissions opening soon</button><button className="button button-secondary" type="button" onClick={() => setMode(null)}>Close</button></div>
+            </form>
+          </section>
+        </div>
+      )}
     </>
   );
 }

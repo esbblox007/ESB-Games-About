@@ -12,16 +12,16 @@ const impactCards = [
   ["⚡", "Make a real impact", "Work on systems, experiences and tools that shape the platform from its earliest stages."],
   ["👥", "Work alongside builders", "Collaborate across product, safety, engineering, community and creative disciplines."],
   ["↗", "Accelerate your growth", "Take ownership, learn quickly and build a portfolio of meaningful platform work."],
-  ["♥", "Benefits that matter", "A flexible, supportive culture designed around sustainable work and shared success."],
+  ["♥", "Clear role expectations", "Responsibilities, reporting lines and application requirements are explained before you apply."],
 ] as const;
 
 const peopleBenefits = [
-  ["Competitive compensation & meaningful equity", "We aim to reward important work fairly and share long-term success with the people building it."],
+  ["Role-specific arrangements", "Compensation, working expectations and any additional arrangements are confirmed clearly for each successful applicant."],
   ["Remote-first, async-friendly culture", "Work with flexibility, thoughtful documentation and clear communication across time zones."],
-  ["Time to recharge", "Sustainable performance matters. We want people to have the space to rest and return with energy."],
-  ["Learning and development", "Develop through mentoring, courses, certifications and meaningful stretch opportunities."],
-  ["Home-office support", "Build a workspace that helps you contribute comfortably and consistently."],
-  ["Team connection", "Regular social sessions, collaborative events and future in-person opportunities."],
+  ["Sustainable collaboration", "We value realistic planning, clear priorities and respectful working practices across the team."],
+  ["Learning through ownership", "Team members are encouraged to build skills through meaningful work, feedback and shared knowledge."],
+  ["Remote-first working", "Roles are designed around remote collaboration, documentation and clear communication across time zones."],
+  ["Team connection", "Collaborative sessions and clear communication help a distributed team stay connected."],
 ] as const;
 
 const cultureCards = [

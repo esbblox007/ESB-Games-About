@@ -2,12 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
+import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import Logo from "./Logo";
 import LanguageSelector from "./LanguageSelector";
 import SearchDialog from "./SearchDialog";
 import { CloseIcon, MenuIcon, SearchIcon, RocketIcon } from "./Icons";
-import { getClientAccountProfile, type SiteAccountProfile } from "@/lib/client/account";
 
 const nav = [
   ["Home", "/"],
@@ -19,38 +18,13 @@ const nav = [
   ["Support", "/support"],
 ] as const;
 
-const accountUrl = "https://esbgames.com/login";
-const accountHomeUrl = "https://esbgames.com/home";
+const signUpUrl = "https://esbgames.com/sign-up";
+const loginUrl = "https://esbgames.com/login";
 
-function AccountButton({ profile, mobile = false }: { profile: SiteAccountProfile | null; mobile?: boolean }) {
-  if (!profile) {
-    return (
-      <a href={accountUrl} className={`button button-primary header-cta${mobile ? " mobile-account-button" : ""}`} data-analytics="join-now">
-        <RocketIcon size={17} /> Join Now
-      </a>
-    );
-  }
-
-  const initials = profile.displayName
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("") || profile.username.slice(0, 2).toUpperCase();
-
+function JoinButton({ mobile = false }: { mobile?: boolean }) {
   return (
-    <a href={accountHomeUrl} className={`header-account-chip${mobile ? " mobile-account-chip" : ""}`} data-analytics="open-account">
-      <span className="header-account-avatar" aria-hidden="true">
-        {profile.avatarUrl ? (
-          <img src={profile.avatarUrl} alt="" width={30} height={30} />
-        ) : (
-          initials
-        )}
-      </span>
-      <span className="header-account-copy">
-        <strong>{profile.displayName}</strong>
-        <small>@{profile.username}</small>
-      </span>
+    <a href={signUpUrl} className={`button button-primary header-cta${mobile ? " mobile-account-button" : ""}`} data-analytics="join-now">
+      <RocketIcon size={17} /> Join Now
     </a>
   );
 }
@@ -59,24 +33,13 @@ export default function Header() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [profile, setProfile] = useState<SiteAccountProfile | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const menuPreviousFocusRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     setMenuOpen(false);
     setSearchOpen(false);
   }, [pathname]);
-
-  useEffect(() => {
-    const syncProfile = () => setProfile(getClientAccountProfile());
-    syncProfile();
-    window.addEventListener("storage", syncProfile);
-    window.addEventListener("focus", syncProfile);
-    return () => {
-      window.removeEventListener("storage", syncProfile);
-      window.removeEventListener("focus", syncProfile);
-    };
-  }, []);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -95,17 +58,27 @@ export default function Header() {
 
   useEffect(() => {
     if (!menuOpen) return;
+    menuPreviousFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const first = menuRef.current?.querySelector<HTMLElement>("a,button");
     window.setTimeout(() => first?.focus(), 20);
+    const trapFocus = (event: KeyboardEvent) => {
+      if (event.key !== "Tab") return;
+      const focusable = Array.from(menuRef.current?.querySelectorAll<HTMLElement>("a[href], button:not([disabled]), [tabindex]:not([tabindex='-1'])") || []);
+      if (!focusable.length) return;
+      const firstItem = focusable[0];
+      const lastItem = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === firstItem) { event.preventDefault(); lastItem.focus(); }
+      else if (!event.shiftKey && document.activeElement === lastItem) { event.preventDefault(); firstItem.focus(); }
+    };
+    window.addEventListener("keydown", trapFocus);
     return () => {
       document.body.style.overflow = previous;
+      window.removeEventListener("keydown", trapFocus);
+      menuPreviousFocusRef.current?.focus();
     };
   }, [menuOpen]);
-
-  const mobileSecondaryHref = useMemo(() => (profile ? accountHomeUrl : accountUrl), [profile]);
-  const mobileSecondaryLabel = profile ? "Open account" : "Log In";
 
   return (
     <>
@@ -119,13 +92,9 @@ export default function Header() {
             })}
           </nav>
           <div className="header-actions">
-            <button className="search-button" aria-label="Search ESB Games" onClick={() => setSearchOpen(true)} aria-keyshortcuts="Control+K Meta+K">
-              <SearchIcon size={19} />
-            </button>
-            <AccountButton profile={profile} />
-            <button className="menu-button" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen((value) => !value)}>
-              {menuOpen ? <CloseIcon /> : <MenuIcon />}
-            </button>
+            <button className="search-button" aria-label="Search ESB Games" onClick={() => setSearchOpen(true)} aria-keyshortcuts="Control+K Meta+K"><SearchIcon size={19} /></button>
+            <JoinButton />
+            <button className="menu-button" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen((value) => !value)}>{menuOpen ? <CloseIcon /> : <MenuIcon />}</button>
           </div>
         </div>
       </header>
@@ -141,10 +110,7 @@ export default function Header() {
                 return <Link key={href} href={href} className={active ? "active" : ""} aria-current={active ? "page" : undefined}>{label}</Link>;
               })}
             </nav>
-            <div className="mobile-nav-account-actions">
-              <AccountButton profile={profile} mobile />
-              <a className="button button-secondary" href={mobileSecondaryHref}>{mobileSecondaryLabel}</a>
-            </div>
+            <div className="mobile-nav-account-actions"><JoinButton mobile /><a className="button button-secondary" href={loginUrl}>Log In</a></div>
             <div className="mobile-nav-language"><span>Language</span><LanguageSelector variant="mobile" /></div>
           </div>
         </div>

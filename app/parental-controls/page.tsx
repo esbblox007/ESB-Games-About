@@ -56,7 +56,7 @@ const linkingSteps = [
 
 function FamilyDashboardMockup() {
   return (
-    <div className="parental-product" aria-label="Preview of the ESB Games parental controls dashboard">
+    <div className="parental-product" aria-label="Product concept preview of the ESB Games parental controls dashboard">
       <div className="parental-laptop">
         <div className="parental-laptop-screen">
           <aside>
@@ -114,19 +114,19 @@ export default function ParentalControlsPage() {
             <div className="parental-hero-copy">
               <span className="parental-eyebrow"><ShieldIcon size={15} /> Parental Controls</span>
               <h1>A safer universe<br />for <span className="gradient-text">every</span> player.</h1>
-              <p>Powerful tools for parents and guardians to manage screen time, control spending and help young players stay safe while they play, create and connect.</p>
+              <p>Family Centre is being designed to help parents and guardians manage screen time, spending, communication and account safety as ESB Games develops.</p>
               <div className="parental-actions">
                 <a href="https://family.esbgames.com" className="button button-primary"><ShieldIcon size={17} /> Open Family Centre</a>
                 <a href="#linking-steps" className="button button-secondary">How linking works <ArrowIcon size={16} /></a>
               </div>
               <div className="parental-trust-row">
-                <span><ShieldIcon size={17} /> Privacy First</span>
-                <span><CheckIcon size={17} /> COPPA Ready</span>
-                <span>◌ GDPR Aligned</span>
-                <span><UsersIcon size={17} /> Built for Families</span>
+                <span><ShieldIcon size={17} /> Privacy-focused design</span>
+                <span><CheckIcon size={17} /> Age-appropriate controls</span>
+                <span>◌ Parent-managed settings</span>
+                <span><UsersIcon size={17} /> Built for families</span>
               </div>
             </div>
-            <FamilyDashboardMockup />
+            <div className="parental-preview-wrap"><span className="product-preview-label">Product concept · Final controls may change</span><FamilyDashboardMockup /></div>
           </div>
         </section>
 
@@ -154,7 +154,7 @@ export default function ParentalControlsPage() {
             <div className="parental-linking-copy">
               <span className="eyebrow">Link parent and child accounts</span>
               <h2>How account linking <span className="gradient-text">works.</span></h2>
-              <p>Parents manage controls through the ESB Games Family Centre. Once linked, they can review requests, manage limits and receive reports for the connected child account.</p>
+              <p>The planned Family Centre links parent and child accounts so approved controls, requests, limits and reports can be managed in one place.</p>
               <div className="parental-linking-actions">
                 <a href="https://family.esbgames.com" className="button button-primary">Go to family.esbgames.com</a>
                 <Link href="/support" className="button button-secondary">Get setup help</Link>
@@ -176,12 +176,12 @@ export default function ParentalControlsPage() {
             <article>
               <span className="eyebrow">Why use Family Centre?</span>
               <h3>One place for approvals, reports and family settings.</h3>
-              <p>Parents can manage multiple family members, review recent activity and update limits as their child grows.</p>
+              <p>The planned dashboard brings linked family members, recent activity and adjustable limits into one place.</p>
             </article>
             <article>
               <span className="eyebrow">Need more help?</span>
               <h3>We&apos;re here to support families.</h3>
-              <p>If you need help linking an account or understanding any setting, our support team can guide you through it.</p>
+              <p>Support guidance for linking accounts and understanding family settings will be published before the controls launch.</p>
             </article>
           </div>
         </section>

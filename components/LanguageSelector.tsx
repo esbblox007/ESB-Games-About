@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { GlobeIcon } from "./Icons";
-import { isClientSignedIn } from "@/lib/client/account";
 
 export const languages = [
   { locale: "en", google: "en", label: "English" },
@@ -36,7 +35,6 @@ export function resolvePreferredLocale() {
   const saved = window.localStorage.getItem("esb-language");
   if (saved && languages.some((language) => language.locale === saved)) return saved;
 
-  if (isClientSignedIn()) return "en";
 
   const browserLocales = [...new Set([...(navigator.languages || []), navigator.language, document.documentElement.lang].filter(Boolean))];
   for (const browserLocale of browserLocales) {
@@ -88,27 +86,8 @@ export default function LanguageSelector({ variant = "footer" }: { variant?: "fo
     setLocale(preferred);
     document.documentElement.lang = preferred;
 
-    const source = window.localStorage.getItem("esb-language-source");
-    if (isClientSignedIn() || source === "manual") return;
-
-    const controller = new AbortController();
-    fetch("/api/locale", { signal: controller.signal, cache: "no-store" })
-      .then((response) => response.ok ? response.json() as Promise<{ locale?: string | null }> : null)
-      .then((result) => {
-        const detected = result?.locale;
-        if (detected && languages.some((language) => language.locale === detected) && detected !== preferred) {
-          selectLanguage(detected, "auto");
-        } else {
-          const language = languages.find((item) => item.locale === preferred) || languages[0];
-          setTranslationCookie(language.google);
-        }
-      })
-      .catch(() => {
-        const language = languages.find((item) => item.locale === preferred) || languages[0];
-        setTranslationCookie(language.google);
-      });
-
-    return () => controller.abort();
+    const language = languages.find((item) => item.locale === preferred) || languages[0];
+    setTranslationCookie(language.google);
   }, [selectLanguage]);
 
   useEffect(() => {
