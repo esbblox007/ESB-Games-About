@@ -1,13 +1,26 @@
-export const hasSupabase = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+function integrationConfig() {
+  const url = (process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL)?.replace(/\/$/, "");
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    ?? process.env.SUPABASE_SECRET_KEY
+    ?? process.env.SUPABASE_SERVICE_KEY;
+  return url && serviceKey ? { url, serviceKey } : null;
+}
+
+function apiKeyHeaders(key: string): Record<string, string> {
+  return key.startsWith("sb_secret_") || key.startsWith("sb_publishable_")
+    ? { apikey: key }
+    : { apikey: key, Authorization: `Bearer ${key}` };
+}
+
+export const hasSupabase = Boolean(integrationConfig());
 
 export async function supabaseInsert(table: string, data: Record<string, unknown>) {
-  if (!hasSupabase) return { configured: false };
-  const base = process.env.NEXT_PUBLIC_SUPABASE_URL!.replace(/\/$/, "");
-  const response = await fetch(`${base}/rest/v1/${table}`, {
+  const config = integrationConfig();
+  if (!config) return { configured: false };
+  const response = await fetch(`${config.url}/rest/v1/${table}`, {
     method: "POST",
     headers: {
-      apikey: process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+      ...apiKeyHeaders(config.serviceKey),
       "Content-Type": "application/json",
       Prefer: "return=minimal",
     },
@@ -19,11 +32,11 @@ export async function supabaseInsert(table: string, data: Record<string, unknown
 }
 
 export async function supabaseSelectOne(table: string, column: string, value: string) {
-  if (!hasSupabase) return null;
-  const base = process.env.NEXT_PUBLIC_SUPABASE_URL!.replace(/\/$/, "");
-  const url = `${base}/rest/v1/${table}?${encodeURIComponent(column)}=eq.${encodeURIComponent(value)}&select=*&limit=1`;
+  const config = integrationConfig();
+  if (!config) return null;
+  const url = `${config.url}/rest/v1/${table}?${encodeURIComponent(column)}=eq.${encodeURIComponent(value)}&select=*&limit=1`;
   const response = await fetch(url, {
-    headers: { apikey: process.env.SUPABASE_SERVICE_ROLE_KEY!, Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}` },
+    headers: apiKeyHeaders(config.serviceKey),
     cache: "no-store",
   });
   if (!response.ok) throw new Error(`Supabase query failed: ${await response.text()}`);

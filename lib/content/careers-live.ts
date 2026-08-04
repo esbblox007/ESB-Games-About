@@ -97,7 +97,7 @@ export async function getLiveJobs(): Promise<{ jobs: LiveJob[]; configured: bool
   try {
     const rows = await contentSelect<JobRow>("public_careers_jobs", "select=*&order=featured.desc,publish_date.desc", { cache: "no-store" });
     if (rows.length) return { jobs: rows.map(mapRow), configured: true, unavailable: false };
-    const configured = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY));
+    const configured = Boolean((process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL) && (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY));
     const previewEnabled = process.env.NEXT_PUBLIC_CAREERS_PREVIEW === "true" || process.env.NODE_ENV === "development";
     return { jobs: configured || !previewEnabled ? [] : staticJobs.map(staticToLive), configured, unavailable: false };
   } catch {

@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import PageShell from "@/components/PageShell";
 import SupportClient from "@/components/SupportClient";
 import SupportFAQ from "@/components/SupportFAQ";
+import SupportPageFreshness from "@/components/SupportPageFreshness";
 import { ArrowIcon } from "@/components/Icons";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Support",
@@ -23,6 +27,7 @@ const statusUrl = "https://status.esbgames.com";
 export default function SupportPage() {
   return (
     <PageShell>
+      <SupportPageFreshness />
       <section className="support-page-hero">
         <div className="support-page-container">
           <span className="eyebrow">ESB Games Support</span>
@@ -52,18 +57,18 @@ export default function SupportPage() {
             <div className="support-side-stack">
               <article className="support-status-panel">
                 <div><h2>Platform Status</h2><span>● Official status website</span></div>
-                <p><span>Play Platform</span><a href={statusUrl}>View live status</a></p>
-                <p><span>ESB Studio</span><a href={statusUrl}>View live status</a></p>
-                <p><span>Authentication</span><a href={statusUrl}>View live status</a></p>
-                <p><span>Family Centre</span><a href={statusUrl}>View live status</a></p>
-                <p><span>Support services</span><a href={statusUrl}>View live status</a></p>
+                <p><span>Play Platform</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View live status</a></p>
+                <p><span>ESB Studio</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View live status</a></p>
+                <p><span>Authentication</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View live status</a></p>
+                <p><span>Family Centre</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View live status</a></p>
+                <p><span>Support services</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View live status</a></p>
               </article>
               <article className="support-community-panel">
                 <span>◉</span>
                 <div>
                   <h3>ESB Games Status</h3>
                   <p>View current service availability, planned maintenance and incident updates on the dedicated status website.</p>
-                  <a href={statusUrl}>Open the status website <ArrowIcon size={15} /></a>
+                  <a href={statusUrl} target="_blank" rel="noopener noreferrer">Open the status website <ArrowIcon size={15} /></a>
                 </div>
               </article>
             </div>

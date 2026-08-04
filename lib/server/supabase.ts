@@ -5,9 +5,20 @@ export type SupabaseServerConfig = { url: string; serviceKey: string; anonKey?: 
 
 export function getSupabaseServerConfig(): SupabaseServerConfig | null {
   const url = (process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL)?.replace(/\/$/, "");
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SECRET_KEY;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    ?? process.env.SUPABASE_SECRET_KEY
+    ?? process.env.SUPABASE_SERVICE_KEY;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    ?? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+    ?? process.env.SUPABASE_ANON_KEY
+    ?? process.env.SUPABASE_PUBLISHABLE_KEY;
   return url && serviceKey ? { url, serviceKey, anonKey } : null;
+}
+
+function apiKeyHeaders(key: string): Record<string, string> {
+  return key.startsWith("sb_secret_") || key.startsWith("sb_publishable_")
+    ? { apikey: key }
+    : { apikey: key, Authorization: `Bearer ${key}` };
 }
 
 export async function supabaseServiceRequest(path: string, init: RequestInit = {}) {
@@ -16,8 +27,7 @@ export async function supabaseServiceRequest(path: string, init: RequestInit = {
   const response = await fetch(`${config.url}${path}`, {
     ...init,
     headers: {
-      apikey: config.serviceKey,
-      Authorization: `Bearer ${config.serviceKey}`,
+      ...apiKeyHeaders(config.serviceKey),
       Accept: "application/json",
       ...(init.body && !(init.body instanceof FormData) ? { "Content-Type": "application/json" } : {}),
       ...(init.headers ?? {}),
@@ -93,8 +103,7 @@ export async function uploadPrivateObject(input: {
   const response = await fetch(`${config.url}/storage/v1/object/${encodeURIComponent(input.bucket)}/${objectPath}`, {
     method: "POST",
     headers: {
-      apikey: config.serviceKey,
-      Authorization: `Bearer ${config.serviceKey}`,
+      ...apiKeyHeaders(config.serviceKey),
       "Content-Type": input.file.type || "application/octet-stream",
       "x-upsert": "false",
     },
@@ -114,8 +123,7 @@ export async function createSignedObjectUrl(bucket: string, path: string, expire
   const response = await fetch(`${config.url}/storage/v1/object/sign/${encodeURIComponent(bucket)}/${objectPath}`, {
     method: "POST",
     headers: {
-      apikey: config.serviceKey,
-      Authorization: `Bearer ${config.serviceKey}`,
+      ...apiKeyHeaders(config.serviceKey),
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ expiresIn }),

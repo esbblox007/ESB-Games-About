@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ChevronIcon } from "./Icons";
 
 const questions = [
-  ["How do I recover my account?", "Open the main ESB Games login page and choose the password recovery option. Additional account-recovery guidance will be added as the support backend is connected."],
+  ["How do I recover my account?", "Open the main ESB Games login page and choose the password recovery option. Follow the recovery steps shown there. If you still cannot access the account, open a secure Account & Access ticket."],
   ["How will refunds be reviewed?", "Refund eligibility will depend on the purchase type, account activity and applicable consumer rules. The final Billing & Payments workflow will request the relevant transaction details."],
   ["My game is not showing after publishing. What should I check?", "Review the project status, moderation messages and publishing settings available in the creator systems. Public publishing guidance will be expanded as those tools move through testing."],
   ["How will I report another player?", "In-platform report tools are planned for player and experience concerns. The dedicated Safety & Abuse form shown on this page will connect to the Trust & Safety workflow before public launch."],

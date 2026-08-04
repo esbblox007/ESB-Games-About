@@ -1,10 +1,21 @@
 import "server-only";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
-const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SECRET_KEY;
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseUrl = (process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL)?.replace(/\/$/, "");
+const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  ?? process.env.SUPABASE_SECRET_KEY
+  ?? process.env.SUPABASE_SERVICE_KEY;
+const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ?? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+  ?? process.env.SUPABASE_ANON_KEY
+  ?? process.env.SUPABASE_PUBLISHABLE_KEY;
 
 export const contentBackendConfigured = Boolean(supabaseUrl && (serviceKey || anonKey));
+
+function apiKeyHeaders(key: string): Record<string, string> {
+  return key.startsWith("sb_secret_") || key.startsWith("sb_publishable_")
+    ? { apikey: key }
+    : { apikey: key, Authorization: `Bearer ${key}` };
+}
 
 export async function contentSelect<T>(
   table: string,
@@ -15,8 +26,7 @@ export async function contentSelect<T>(
   const key = serviceKey || anonKey!;
   const response = await fetch(`${supabaseUrl}/rest/v1/${table}?${query}`, {
     headers: {
-      apikey: key,
-      Authorization: `Bearer ${key}`,
+      ...apiKeyHeaders(key),
       Accept: "application/json",
     },
     cache: options?.cache,
@@ -44,8 +54,7 @@ export async function contentSelectPage<T>(
   const key = serviceKey || anonKey!;
   const response = await fetch(`${supabaseUrl}/rest/v1/${table}?${query}`, {
     headers: {
-      apikey: key,
-      Authorization: `Bearer ${key}`,
+      ...apiKeyHeaders(key),
       Accept: "application/json",
       Prefer: "count=exact",
       Range: `${from}-${to}`,

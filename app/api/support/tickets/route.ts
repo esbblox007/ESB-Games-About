@@ -1,27 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
+import { buildSupportTicketDescription } from "@/lib/support-intake";
 import { sendEmail } from "@/lib/server/email";
 import { createSupportTicket, SupportRateLimitError, supportCategories, supportNetworkKey, takeSupportRateLimit, uploadSupportAttachments } from "@/lib/server/support";
-import { supabaseInsert, supabaseSelect } from "@/lib/server/supabase";
+import { getSupabaseServerConfig, supabaseInsert, supabaseSelect } from "@/lib/server/supabase";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   try {
+    if (!getSupabaseServerConfig()) {
+      return NextResponse.json({ error: "Online ticket creation is temporarily unavailable. Please try again shortly or contact support@esbgames.com." }, { status: 503 });
+    }
+
     const form = await request.formData();
     if (String(form.get("website") ?? "")) return NextResponse.json({ ok: true }, { status: 202 });
+
     const name = String(form.get("name") ?? "").trim();
     const email = String(form.get("email") ?? "").trim();
     const categoryId = String(form.get("category") ?? "").trim();
     const subject = String(form.get("subject") ?? "").trim();
-    const description = String(form.get("description") ?? "").trim();
     const files = form.getAll("files").filter((value): value is File => value instanceof File && value.size > 0);
-    if (!name || name.length > 120 || !subject || subject.length > 160 || description.length < 10 || description.length > 20000) {
-      return NextResponse.json({ error: "Complete your name, subject and a detailed description of at least 10 characters." }, { status: 400 });
-    }
+
+    if (!name || name.length > 120) return NextResponse.json({ error: "Enter your full name." }, { status: 400 });
+    if (!subject || subject.length > 160) return NextResponse.json({ error: "Enter a clear subject of 160 characters or fewer." }, { status: 400 });
     if (!supportCategories.some((category) => category.id === categoryId)) return NextResponse.json({ error: "Choose a valid support category." }, { status: 400 });
-    if (email && !/^\S+@\S+\.\S+$/.test(email)) return NextResponse.json({ error: "Enter a valid email address." }, { status: 400 });
+    if (!email || !/^\S+@\S+\.\S+$/.test(email)) return NextResponse.json({ error: "Enter a valid email address." }, { status: 400 });
+
+    const description = buildSupportTicketDescription(form, categoryId);
 
     await Promise.all([
       takeSupportRateLimit({ scope: "support-ticket-create-network", key: supportNetworkKey(request), windowSeconds: 3600, maxRequests: 8, blockSeconds: 1800 }),
-      ...(email ? [takeSupportRateLimit({ scope: "support-ticket-create-email", key: email.toLowerCase(), windowSeconds: 3600, maxRequests: 4, blockSeconds: 1800 })] : []),
+      takeSupportRateLimit({ scope: "support-ticket-create-email", key: email.toLowerCase(), windowSeconds: 3600, maxRequests: 4, blockSeconds: 1800 }),
     ]);
 
     const result = await createSupportTicket({ request, name, email, categoryId, subject, description });
@@ -54,8 +63,8 @@ export async function POST(request: NextRequest) {
       to: recipient,
       replyTo: process.env.SUPPORT_REPLY_TO_EMAIL ?? "support@esbgames.com",
       subject: `Your ESB Games support ticket — ${ticketReference}`,
-      text: `Your support ticket ${ticketReference} has been created. Open your private ticket: ${privateUrl}\n\nGuest users will be asked to request a one-time email verification code before viewing the conversation.`,
-      html: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#11182b"><h1>Support ticket created</h1><p>Your reference is <strong>${escapeHtml(ticketReference)}</strong>.</p><p><a href="${escapeHtml(privateUrl)}" style="display:inline-block;padding:12px 18px;background:#7c3aed;color:white;text-decoration:none;border-radius:8px">Open private ticket</a></p>${requiresEmailVerification ? "<p>For your privacy, select <strong>Send verification code</strong> after opening the link. The code expires after three minutes.</p>" : ""}<p>Do not forward this private link.</p></div>`,
+      text: `Your ESB Games support ticket ${ticketReference} has been created.\n\nOpen your private ticket: ${privateUrl}\n\n${requiresEmailVerification ? "After opening the link, request a one-time verification code. The code expires after three minutes.\n\n" : ""}Do not forward the private ticket link or share a verification code.`,
+      html: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#11182b"><h1>Support ticket created</h1><p>Your reference is <strong>${escapeHtml(ticketReference)}</strong>.</p><p><a href="${escapeHtml(privateUrl)}" style="display:inline-block;padding:12px 18px;background:#7c3aed;color:white;text-decoration:none;border-radius:8px">Open private ticket</a></p>${requiresEmailVerification ? "<p>For your privacy, select <strong>Send verification code</strong> after opening the link. The code expires after three minutes.</p>" : ""}<p>Do not forward this private link or share a verification code.</p></div>`,
     }) : { configured: false, sent: false, error: "No email available." };
 
     await supabaseInsert("support_notification_outbox", {
@@ -87,13 +96,22 @@ export async function POST(request: NextRequest) {
       }).catch(() => []);
     }
 
-    return NextResponse.json({ ok: true, ticketReference, privatePath, requiresEmailVerification, emailSent: delivery.sent }, { status: 201 });
+    return NextResponse.json({ ok: true, ticketReference, privatePath, requiresEmailVerification, emailSent: delivery.sent }, { status: 201, headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     if (error instanceof SupportRateLimitError) {
       return NextResponse.json({ error: error.message, retryAfterSeconds: error.retryAfterSeconds }, { status: 429, headers: { "Retry-After": String(error.retryAfterSeconds) } });
     }
-    return NextResponse.json({ error: error instanceof Error ? error.message : "Your support ticket could not be created." }, { status: 503 });
+    const message = error instanceof Error ? error.message : "Your support ticket could not be created.";
+    const status = /complete|enter|choose|valid|too long|required/i.test(message) ? 400 : 503;
+    return NextResponse.json({ error: publicSupportError(message) }, { status });
   }
+}
+
+function publicSupportError(message: string) {
+  if (/Supabase|not configured|service role|connection/i.test(message)) {
+    return "Online ticket creation is temporarily unavailable. Please try again shortly or contact support@esbgames.com.";
+  }
+  return message;
 }
 
 function escapeHtml(value: string) {
