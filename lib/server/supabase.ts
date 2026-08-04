@@ -3,16 +3,40 @@ import { createHash } from "node:crypto";
 
 export type SupabaseServerConfig = { url: string; serviceKey: string; anonKey?: string };
 
+function cleanEnvironmentValue(value: string | undefined) {
+  const cleaned = value?.trim().replace(/^(["'])(.*)\1$/, "$2").trim();
+  return cleaned || undefined;
+}
+
 export function getSupabaseServerConfig(): SupabaseServerConfig | null {
-  const url = (process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL)?.replace(/\/$/, "");
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-    ?? process.env.SUPABASE_SECRET_KEY
-    ?? process.env.SUPABASE_SERVICE_KEY;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    ?? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
-    ?? process.env.SUPABASE_ANON_KEY
-    ?? process.env.SUPABASE_PUBLISHABLE_KEY;
-  return url && serviceKey ? { url, serviceKey, anonKey } : null;
+  const rawUrl = cleanEnvironmentValue(
+    process.env.SUPABASE_URL
+      ?? process.env.NEXT_PUBLIC_SUPABASE_URL
+      ?? process.env.SUPABASE_PROJECT_URL
+      ?? process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL,
+  );
+  const url = rawUrl?.replace(/\/$/, "");
+  const serviceKey = cleanEnvironmentValue(
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+      ?? process.env.SUPABASE_SECRET_KEY
+      ?? process.env.SUPABASE_SERVICE_KEY
+      ?? process.env.SUPABASE_SERVER_KEY,
+  );
+  const anonKey = cleanEnvironmentValue(
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      ?? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+      ?? process.env.SUPABASE_ANON_KEY
+      ?? process.env.SUPABASE_PUBLISHABLE_KEY,
+  );
+
+  if (!url || !serviceKey) return null;
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== "https:" && parsed.hostname !== "localhost") return null;
+  } catch {
+    return null;
+  }
+  return { url, serviceKey, anonKey };
 }
 
 function apiKeyHeaders(key: string): Record<string, string> {

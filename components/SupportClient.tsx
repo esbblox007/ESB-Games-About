@@ -14,20 +14,32 @@ type CreatedTicket = {
 };
 
 type ServiceState = "checking" | "available" | "unavailable";
+type IntakeStep = 1 | 2 | 3;
+
+const steps: ReadonlyArray<{ id: IntakeStep; label: string; description: string }> = [
+  { id: 1, label: "Request", description: "Contact and classification" },
+  { id: 2, label: "Details", description: "Information for the reviewing team" },
+  { id: 3, label: "Evidence", description: "Attachments and confirmation" },
+];
 
 export default function SupportClient() {
   const [open, setOpen] = useState(false);
+  const [step, setStep] = useState<IntakeStep>(1);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [created, setCreated] = useState<CreatedTicket | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [fileError, setFileError] = useState<string | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState("account-access");
   const [serviceState, setServiceState] = useState<ServiceState>("checking");
-  const [serviceMessage, setServiceMessage] = useState<string | null>(null);
   const modalRef = useRef<HTMLElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
-  const selectedCategory = useMemo(() => getSupportCategoryDefinition(selectedCategoryId) ?? supportCategoryDefinitions[0], [selectedCategoryId]);
+  const selectedCategory = useMemo(
+    () => getSupportCategoryDefinition(selectedCategoryId) ?? supportCategoryDefinitions[0],
+    [selectedCategoryId],
+  );
 
   useEffect(() => {
     if (!open) return;
@@ -38,12 +50,22 @@ export default function SupportClient() {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") setOpen(false);
       if (event.key !== "Tab") return;
-      const focusable = Array.from(modalRef.current?.querySelectorAll<HTMLElement>("button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex='-1'])") || []);
+      const focusableNodes = modalRef.current?.querySelectorAll<HTMLElement>(
+        "button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex='-1'])",
+      );
+      const focusable: HTMLElement[] = focusableNodes
+        ? Array.from(focusableNodes).filter((element: HTMLElement) => element.offsetParent !== null)
+        : [];
       if (!focusable.length) return;
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
-      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
 
     window.addEventListener("keydown", onKey);
@@ -56,19 +78,12 @@ export default function SupportClient() {
 
   async function checkSupportService() {
     setServiceState("checking");
-    setServiceMessage(null);
     try {
       const response = await fetch("/api/support/health", { cache: "no-store" });
-      const body = await response.json() as { available?: boolean; message?: string };
-      if (!response.ok || body.available !== true) {
-        setServiceState("unavailable");
-        setServiceMessage(body.message ?? "Online ticket creation is temporarily unavailable.");
-        return;
-      }
-      setServiceState("available");
+      const body = (await response.json()) as { available?: boolean };
+      setServiceState(response.ok && body.available === true ? "available" : "unavailable");
     } catch {
       setServiceState("unavailable");
-      setServiceMessage("Online ticket creation is temporarily unavailable.");
     }
   }
 
@@ -76,31 +91,74 @@ export default function SupportClient() {
     previousFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     setCreated(null);
     setError(null);
+    setFileError(null);
     setSelectedFiles([]);
     setSelectedCategoryId("account-access");
+    setStep(1);
     setOpen(true);
     void checkSupportService();
   }
 
+  function validateStep(stepToValidate: IntakeStep) {
+    const panel = formRef.current?.querySelector<HTMLElement>(`[data-support-step="${stepToValidate}"]`);
+    if (!panel) return true;
+    const controls: Array<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> = Array.from(
+      panel.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>("input, select, textarea"),
+    );
+    for (const control of controls) {
+      if (!control.checkValidity()) {
+        control.reportValidity();
+        control.focus();
+        return false;
+      }
+    }
+    if (stepToValidate === 3 && fileError) return false;
+    return true;
+  }
+
+  function continueTo(nextStep: IntakeStep) {
+    if (!validateStep(step)) return;
+    setError(null);
+    setStep(nextStep);
+    window.setTimeout(() => modalRef.current?.querySelector<HTMLElement>(`[data-support-step="${nextStep}"] input, [data-support-step="${nextStep}"] select, [data-support-step="${nextStep}"] textarea`)?.focus(), 40);
+  }
+
+  function changeFiles(files: File[]) {
+    const limited = files.slice(0, 8);
+    const oversized = limited.find((file: File) => file.size > 100 * 1024 * 1024);
+    if (files.length > 8) {
+      setFileError("You can attach a maximum of eight files to the initial ticket.");
+    } else if (oversized) {
+      setFileError(`${oversized.name} is larger than the 100 MB file limit.`);
+    } else {
+      setFileError(null);
+    }
+    setSelectedFiles(limited);
+  }
+
   async function submitTicket(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (serviceState !== "available") {
-      setError("Online ticket creation is not currently available. Please try again shortly.");
-      return;
-    }
+    if (!validateStep(3)) return;
+
     setSubmitting(true);
     setError(null);
     try {
       const form = new FormData(event.currentTarget);
       selectedFiles.forEach((file) => form.append("files", file));
-      const response = await fetch("/api/support/tickets", { method: "POST", headers: authHeaders(), body: form });
-      const body = await response.json() as CreatedTicket & { error?: string };
+      const response = await fetch("/api/support/tickets", {
+        method: "POST",
+        headers: authHeaders(),
+        body: form,
+      });
+      const body = (await response.json()) as CreatedTicket & { error?: string };
       if (!response.ok) throw new Error(body.error ?? "Your support ticket could not be created.");
       setCreated(body);
       event.currentTarget.reset();
       setSelectedFiles([]);
+      setFileError(null);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Your support ticket could not be created.");
+      void checkSupportService();
     } finally {
       setSubmitting(false);
     }
@@ -132,83 +190,172 @@ export default function SupportClient() {
       </div>
 
       {open && (
-        <div className="modal-backdrop" onMouseDown={() => setOpen(false)}>
-          <section ref={modalRef} className="form-modal support-ticket-modal" role="dialog" aria-modal="true" aria-labelledby="support-ticket-title" onMouseDown={(event) => event.stopPropagation()}>
-            <div className="modal-heading">
+        <div className="modal-backdrop support-modal-backdrop" onMouseDown={() => setOpen(false)}>
+          <section
+            ref={modalRef}
+            className="form-modal support-ticket-modal support-enterprise-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="support-ticket-title"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <header className="support-modal-header">
               <div>
                 <span className="eyebrow">ESB Games Support</span>
-                <h2 id="support-ticket-title">{created ? "Ticket created" : "Start a support conversation"}</h2>
-                {!created && <p className="support-modal-intro">Provide clear, accurate information so the correct team can review your request. Required questions change according to the category you select.</p>}
+                <h2 id="support-ticket-title">{created ? "Your ticket is ready" : "Start a support conversation"}</h2>
+                {!created && <p>Complete the guided request so the correct ESB Games team receives the information needed to investigate and respond.</p>}
               </div>
-              <button ref={closeButtonRef} className="icon-button" aria-label="Close" onClick={() => setOpen(false)}><CloseIcon /></button>
-            </div>
+              <button ref={closeButtonRef} className="icon-button support-modal-close" type="button" aria-label="Close support form" onClick={() => setOpen(false)}><CloseIcon /></button>
+            </header>
 
             {created ? (
-              <div className="support-ticket-created" role="status">
+              <div className="support-ticket-created support-created-enterprise" role="status">
                 <span className="support-success-mark">✓</span>
+                <span className="support-created-label">Ticket reference</span>
                 <h3>{created.ticketReference}</h3>
-                <p>Your ticket has been securely recorded. {created.requiresEmailVerification ? "Use the private link below and request a one-time code sent to your email to enter the conversation." : "It is linked to your signed-in ESB Games account."}</p>
-                {!created.emailSent && created.requiresEmailVerification && <p className="form-alert warning">The confirmation email could not be delivered. Save the private link below now so you do not lose access.</p>}
-                <Link className="button button-primary" href={created.privatePath}>Open private ticket</Link>
-                <p className="support-private-link-note">Do not forward the private ticket link. A ticket reference alone cannot be used to access the conversation.</p>
+                <p>Your support conversation has been securely recorded. {created.requiresEmailVerification ? "Open the private ticket and request the three-minute verification code sent to your email." : "The ticket is linked to your signed-in ESB Games account."}</p>
+                {!created.emailSent && created.requiresEmailVerification && <p className="form-alert warning">The confirmation email could not be delivered. Save the private link now so you do not lose access.</p>}
+                <div className="support-created-actions">
+                  <Link className="button button-primary" href={created.privatePath}>Open private ticket</Link>
+                  <button className="button button-secondary" type="button" onClick={() => setOpen(false)}>Close</button>
+                </div>
+                <p className="support-private-link-note">Keep the private ticket link and any verification code confidential. A ticket reference alone cannot be used to access the conversation.</p>
               </div>
             ) : (
-              <form className="support-intake-form" onSubmit={submitTicket}>
+              <form ref={formRef} className="support-intake-form support-wizard" noValidate onSubmit={submitTicket}>
                 <input name="website" tabIndex={-1} autoComplete="off" className="support-honeypot" aria-hidden="true" />
 
-                <fieldset className="support-form-section">
-                  <legend>Contact details</legend>
-                  <p>We use these details to identify the requester and provide secure access to the conversation.</p>
-                  <div className="form-grid">
-                    <div className="field"><label htmlFor="support-name">Full name</label><input className="input" id="support-name" name="name" autoComplete="name" required maxLength={120} /></div>
-                    <div className="field"><label htmlFor="support-email">Email address</label><input className="input" id="support-email" name="email" type="email" autoComplete="email" required /><small>Guests receive a private ticket link and a three-minute verification code. Signed-in users are linked to their account where possible.</small></div>
-                  </div>
-                </fieldset>
+                <nav className="support-stepper" aria-label="Support ticket progress">
+                  {steps.map((item) => {
+                    const state = item.id === step ? "active" : item.id < step ? "complete" : "upcoming";
+                    return (
+                      <button
+                        key={item.id}
+                        className={`support-step ${state}`}
+                        type="button"
+                        aria-current={item.id === step ? "step" : undefined}
+                        onClick={() => {
+                          if (item.id < step) setStep(item.id);
+                          else if (item.id === step + 1) continueTo(item.id);
+                        }}
+                      >
+                        <span className="support-step-number">{item.id < step ? "✓" : item.id}</span>
+                        <span><strong>{item.label}</strong><small>{item.description}</small></span>
+                      </button>
+                    );
+                  })}
+                </nav>
 
-                <fieldset className="support-form-section">
-                  <legend>Request classification</legend>
-                  <p>Select the closest category. Your answers will be included in the ticket exactly as structured information for the reviewing team.</p>
-                  <div className="form-grid">
-                    <div className="field">
-                      <label htmlFor="support-category">Support category</label>
-                      <select className="input" id="support-category" name="category" value={selectedCategoryId} onChange={(event) => setSelectedCategoryId(event.currentTarget.value)} required>
-                        {supportCategoryDefinitions.map((category) => <option key={category.id} value={category.id}>{category.label}</option>)}
-                      </select>
-                      <small>{selectedCategory.description}</small>
+                <div className="support-wizard-body">
+                  <section className="support-step-panel" data-support-step="1" hidden={step !== 1} aria-labelledby="support-step-one-title">
+                    <div className="support-panel-heading">
+                      <span>Step 1 of 3</span>
+                      <h3 id="support-step-one-title">Tell us who you are and where to route the request</h3>
+                      <p>Guest requests use email verification. Signed-in users are linked to their ESB Games account where possible.</p>
                     </div>
-                    <div className="field"><label htmlFor="support-subject">Short subject</label><input className="input" id="support-subject" name="subject" required maxLength={160} placeholder="Summarise the request in one clear sentence" /></div>
-                  </div>
-                </fieldset>
 
-                <fieldset className="support-form-section">
-                  <legend>{selectedCategory.label} details</legend>
-                  <p>Answer every required question. Do not include passwords, one-time codes, backup codes or full payment-card information.</p>
-                  <div className="form-grid support-dynamic-fields" key={selectedCategory.id}>
-                    {selectedCategory.fields.map((field) => <SupportIntakeField key={field.name} field={field} />)}
-                  </div>
-                </fieldset>
+                    <div className="support-field-group">
+                      <div className="support-group-heading"><strong>Contact details</strong><span>Used only to manage and respond to this ticket.</span></div>
+                      <div className="form-grid support-primary-grid">
+                        <div className="field">
+                          <label htmlFor="support-name">Full name</label>
+                          <input className="input" id="support-name" name="name" autoComplete="name" required maxLength={120} placeholder="Enter your full name" />
+                        </div>
+                        <div className="field">
+                          <label htmlFor="support-email">Email address</label>
+                          <input className="input" id="support-email" name="email" type="email" autoComplete="email" required placeholder="name@example.com" />
+                          <small>Guests receive a private link and an on-demand verification code.</small>
+                        </div>
+                      </div>
+                    </div>
 
-                <fieldset className="support-form-section">
-                  <legend>Evidence and attachments</legend>
-                  <p>Attach files only when they help explain or evidence the issue. Safety evidence may contain upsetting material and is kept private for authorised review.</p>
-                  <div className="field full">
-                    <label htmlFor="support-files">Files <span>(optional)</span></label>
-                    <input className="input support-file-input" id="support-files" type="file" multiple accept="image/*,video/mp4,video/webm,video/quicktime,audio/*,.pdf,.txt,.csv,.json,.zip" onChange={(event) => setSelectedFiles(Array.from(event.currentTarget.files ?? []).slice(0, 8))} />
-                    <small>Up to eight files, 100 MB each. Files remain private and are subject to security scanning and restricted staff access.</small>
-                    {selectedFiles.length > 0 && <ul className="support-file-list">{selectedFiles.map((file) => <li key={`${file.name}-${file.lastModified}`}>{file.name} · {formatBytes(file.size)}</li>)}</ul>}
-                  </div>
-                </fieldset>
+                    <div className="support-field-group">
+                      <div className="support-group-heading"><strong>Request classification</strong><span>Select the closest category so it reaches the correct team.</span></div>
+                      <div className="form-grid support-primary-grid">
+                        <div className="field">
+                          <label htmlFor="support-category">Support category</label>
+                          <select className="input" id="support-category" name="category" value={selectedCategoryId} onChange={(event) => setSelectedCategoryId(event.currentTarget.value)} required>
+                            {supportCategoryDefinitions.map((category) => <option key={category.id} value={category.id}>{category.label}</option>)}
+                          </select>
+                          <small>{selectedCategory.description}</small>
+                        </div>
+                        <div className="field">
+                          <label htmlFor="support-subject">Subject</label>
+                          <input className="input" id="support-subject" name="subject" required maxLength={160} placeholder="Summarise the request in one clear sentence" />
+                        </div>
+                      </div>
+                    </div>
+                  </section>
 
-                <label className="support-consent"><input type="checkbox" required /> <span>I confirm that the information is accurate to the best of my knowledge and understand that my ticket and attachments will be stored securely and reviewed by authorised ESB Games staff to investigate and respond.</span></label>
+                  <section className="support-step-panel" data-support-step="2" hidden={step !== 2} aria-labelledby="support-step-two-title">
+                    <div className="support-panel-heading">
+                      <span>Step 2 of 3</span>
+                      <h3 id="support-step-two-title">Provide the information the reviewing team needs</h3>
+                      <p>Questions are tailored to <strong>{selectedCategory.label}</strong>. Do not include passwords, one-time codes, backup codes or full payment-card information.</p>
+                    </div>
+                    <div className="form-grid support-dynamic-fields support-detail-grid" key={selectedCategory.id}>
+                      {selectedCategory.fields.map((field) => <SupportIntakeField key={field.name} field={field} />)}
+                    </div>
+                  </section>
 
-                {serviceState === "checking" && <div className="form-alert neutral" role="status">Checking the secure support service…</div>}
-                {serviceState === "unavailable" && <div className="form-alert error" role="alert">{serviceMessage ?? "Online ticket creation is temporarily unavailable."} Please try again shortly or contact <a href="mailto:support@esbgames.com">support@esbgames.com</a>.</div>}
-                {error && <div className="form-alert error" role="alert">{error}</div>}
+                  <section className="support-step-panel" data-support-step="3" hidden={step !== 3} aria-labelledby="support-step-three-title">
+                    <div className="support-panel-heading">
+                      <span>Step 3 of 3</span>
+                      <h3 id="support-step-three-title">Add evidence and confirm your request</h3>
+                      <p>Attachments are private and intended only for authorised ESB Games staff reviewing the ticket.</p>
+                    </div>
 
-                <div className="modal-actions">
-                  <button className="button button-primary" disabled={submitting || serviceState !== "available"}>{submitting ? "Creating secure ticket…" : "Create private ticket"}</button>
-                  <button className="button button-secondary" type="button" onClick={() => setOpen(false)}>Cancel</button>
+                    <div className="support-upload-card">
+                      <div className="support-upload-copy">
+                        <span className="support-upload-icon" aria-hidden="true">↑</span>
+                        <div><strong>Supporting evidence</strong><p>Screenshots, videos, audio, PDFs, text logs and ZIP files can be attached when relevant.</p></div>
+                      </div>
+                      <label className="button button-secondary support-file-button" htmlFor="support-files">Choose files</label>
+                      <input className="support-native-file" id="support-files" type="file" multiple accept="image/*,video/mp4,video/webm,video/quicktime,audio/*,.pdf,.txt,.csv,.json,.zip" onChange={(event) => changeFiles(Array.from(event.currentTarget.files ?? []))} />
+                      <small>Maximum eight files, up to 100 MB each. Potentially sensitive evidence is stored privately and access-restricted.</small>
+                    </div>
+
+                    {selectedFiles.length > 0 && (
+                      <ul className="support-file-list support-file-list-enterprise">
+                        {selectedFiles.map((file) => (
+                          <li key={`${file.name}-${file.lastModified}`}>
+                            <span><strong>{file.name}</strong><small>{file.type || "File"}</small></span>
+                            <span>{formatBytes(file.size)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {fileError && <div className="form-alert error" role="alert">{fileError}</div>}
+
+                    <div className="support-review-card">
+                      <div><span>Category</span><strong>{selectedCategory.label}</strong></div>
+                      <div><span>Attachments</span><strong>{selectedFiles.length || "None"}</strong></div>
+                      <div><span>Access</span><strong>Private ticket</strong></div>
+                    </div>
+
+                    <label className="support-consent support-enterprise-consent">
+                      <input type="checkbox" required />
+                      <span><strong>Confirmation</strong>I confirm that the information is accurate to the best of my knowledge and understand that the ticket and attachments will be securely stored and reviewed by authorised ESB Games staff.</span>
+                    </label>
+
+                    {error && <div className="form-alert error" role="alert">{error}</div>}
+                  </section>
                 </div>
+
+                <footer className="support-wizard-footer">
+                  <div className={`support-service-indicator ${serviceState}`} role="status" aria-live="polite">
+                    <span aria-hidden="true" />
+                    {serviceState === "available" ? "Secure submission service ready" : serviceState === "checking" ? "Checking secure submission service" : "Connection will be confirmed when you submit"}
+                  </div>
+                  <div className="support-wizard-actions">
+                    {step > 1 && <button className="button button-secondary" type="button" onClick={() => setStep((step - 1) as IntakeStep)}>Back</button>}
+                    {step < 3 ? (
+                      <button className="button button-primary" type="button" onClick={() => continueTo((step + 1) as IntakeStep)}>Continue</button>
+                    ) : (
+                      <button className="button button-primary" type="submit" disabled={submitting}>{submitting ? "Creating secure ticket…" : "Create private ticket"}</button>
+                    )}
+                  </div>
+                </footer>
               </form>
             )}
           </section>
@@ -223,7 +370,7 @@ function SupportIntakeField({ field }: { field: SupportField }) {
   const className = `field${field.fullWidth ? " full" : ""}`;
   return (
     <div className={className}>
-      <label htmlFor={id}>{field.label}{!field.required && <span> (optional)</span>}</label>
+      <label htmlFor={id}>{field.label}{!field.required && <span>Optional</span>}</label>
       {field.type === "textarea" ? (
         <textarea className="input" id={id} name={field.name} required={field.required} maxLength={field.maxLength} placeholder={field.placeholder} />
       ) : field.type === "select" ? (

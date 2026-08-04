@@ -5,6 +5,7 @@ import { createSupportTicket, SupportRateLimitError, supportCategories, supportN
 import { getSupabaseServerConfig, supabaseInsert, supabaseSelect } from "@/lib/server/supabase";
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
   try {
@@ -102,8 +103,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message, retryAfterSeconds: error.retryAfterSeconds }, { status: 429, headers: { "Retry-After": String(error.retryAfterSeconds) } });
     }
     const message = error instanceof Error ? error.message : "Your support ticket could not be created.";
+    console.error("[support-ticket-create] Ticket creation failed", error);
     const status = /complete|enter|choose|valid|too long|required/i.test(message) ? 400 : 503;
-    return NextResponse.json({ error: publicSupportError(message) }, { status });
+    return NextResponse.json(
+      { error: publicSupportError(message) },
+      { status, headers: { "Cache-Control": "no-store" } },
+    );
   }
 }
 
