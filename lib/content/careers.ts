@@ -2,8 +2,8 @@ export type Job = {
   slug: string;
   title: string;
   departments: string[];
-  location: "Remote";
-  type: "Full-time";
+  location: string;
+  type: string;
   reportsTo: string;
   summary: string;
   responsibilities: string[];

@@ -18,7 +18,7 @@ export function getSupabaseBrowserAccessToken() {
   return null;
 }
 
-export function authHeaders() {
+export function authHeaders(): Record<string, string> {
   const token = getSupabaseBrowserAccessToken();
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
