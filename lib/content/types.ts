@@ -51,6 +51,8 @@ export interface NewsArticle {
   seoDescription?: string;
   socialImage?: string;
   canonicalUrl?: string;
+  indexable: boolean;
+  sitemap: boolean;
   publishedAt: string;
   updatedAt?: string;
   relatedSlugs: string[];

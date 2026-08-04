@@ -1,11 +1,32 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { authHeaders } from "@/lib/client-auth";
 import { BookIcon, CloseIcon, SearchIcon, TicketIcon } from "./Icons";
+
+const categories = [
+  ["account-access", "Account & Access"],
+  ["billing-payments", "Billing & Payments"],
+  ["creator-developer", "Creator & Developer Support"],
+  ["safety-abuse", "Safety & Abuse"],
+  ["technical-issues", "Technical Issues"],
+  ["something-else", "Something Else"],
+] as const;
+
+type CreatedTicket = {
+  ticketReference: string;
+  privatePath: string;
+  requiresEmailVerification: boolean;
+  emailSent: boolean;
+};
 
 export default function SupportClient() {
   const [open, setOpen] = useState(false);
-  const [trackingMessage, setTrackingMessage] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [created, setCreated] = useState<CreatedTicket | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const modalRef = useRef<HTMLElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -37,12 +58,30 @@ export default function SupportClient() {
 
   function openTicketForm() {
     previousFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    setCreated(null);
+    setError(null);
+    setSelectedFiles([]);
     setOpen(true);
   }
 
-  function trackTicket(event: FormEvent<HTMLFormElement>) {
+  async function submitTicket(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setTrackingMessage("Ticket tracking will become available when the support backend is connected.");
+    setSubmitting(true);
+    setError(null);
+    try {
+      const form = new FormData(event.currentTarget);
+      selectedFiles.forEach((file) => form.append("files", file));
+      const response = await fetch("/api/support/tickets", { method: "POST", headers: authHeaders(), body: form });
+      const body = await response.json() as CreatedTicket & { error?: string };
+      if (!response.ok) throw new Error(body.error ?? "Your support ticket could not be created.");
+      setCreated(body);
+      event.currentTarget.reset();
+      setSelectedFiles([]);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Your support ticket could not be created.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -58,47 +97,63 @@ export default function SupportClient() {
         <article className="card support-card" id="submit-ticket">
           <span className="card-icon cyan"><TicketIcon /></span>
           <h3>Submit a Ticket</h3>
-          <p>Can&apos;t find an answer? Preview the request form being prepared for the ESB Games support team.</p>
+          <p>Start a private conversation with the ESB Games support team and attach supporting evidence.</p>
           <button className="card-link support-link-button" type="button" onClick={openTicketForm}>Open a ticket →</button>
         </article>
 
         <article className="card support-card">
           <span className="card-icon green"><SearchIcon /></span>
-          <h3>Track a Ticket</h3>
-          <p>Ticket tracking will be available once the support backend has been connected.</p>
-          <form className="track-form" onSubmit={trackTicket}>
-            <input className="input" placeholder="ESB-XXXXXX" aria-label="Ticket ID" />
-            <button className="button button-primary" type="submit">Go</button>
-          </form>
+          <h3>View Your Tickets</h3>
+          <p>Signed-in users can access linked tickets from their ESB Games account. Guests use the private link sent by email.</p>
+          <a className="card-link" href="https://esbgames.com/login">Sign in to ESB Games →</a>
         </article>
       </div>
 
-      {trackingMessage && <div className="success-box support-preview-message" role="status">{trackingMessage}</div>}
-
       {open && (
         <div className="modal-backdrop" onMouseDown={() => setOpen(false)}>
-          <section ref={modalRef} className="form-modal" role="dialog" aria-modal="true" aria-labelledby="support-ticket-title" onMouseDown={(event) => event.stopPropagation()}>
+          <section ref={modalRef} className="form-modal support-ticket-modal" role="dialog" aria-modal="true" aria-labelledby="support-ticket-title" onMouseDown={(event) => event.stopPropagation()}>
             <div className="modal-heading">
-              <div><span className="eyebrow">ESB Games Support</span><h2 id="support-ticket-title">Submit a ticket</h2></div>
+              <div><span className="eyebrow">ESB Games Support</span><h2 id="support-ticket-title">{created ? "Ticket created" : "Start a support conversation"}</h2></div>
               <button ref={closeButtonRef} className="icon-button" aria-label="Close" onClick={() => setOpen(false)}><CloseIcon /></button>
             </div>
 
-            <div className="support-modal-warning">
-              <strong>Frontend preview</strong>
-              <p>This form is not connected to the support backend yet. Information entered here is not sent or stored.</p>
-            </div>
-
-            <form className="form-grid" onSubmit={(event) => event.preventDefault()}>
-              <div className="field"><label htmlFor="support-name">Name</label><input className="input" id="support-name" name="name" autoComplete="name" /></div>
-              <div className="field"><label htmlFor="support-email">Email address</label><input className="input" id="support-email" name="email" type="email" autoComplete="email" /></div>
-              <div className="field"><label htmlFor="support-category">Category</label><select className="input" id="support-category" name="category" defaultValue="Account & Access"><option>Account & Access</option><option>Billing & Payments</option><option>Creator & Developer Support</option><option>Safety & Abuse</option><option>Technical Issues</option><option>Something Else</option></select></div>
-              <div className="field"><label htmlFor="support-subject">Subject</label><input className="input" id="support-subject" name="subject" maxLength={120} /></div>
-              <div className="field full"><label htmlFor="support-message">How can we help?</label><textarea className="input" id="support-message" name="message" maxLength={5000} placeholder="Do not include passwords or full payment-card information." /></div>
-              <div className="field full support-form-actions"><button className="button button-primary" type="submit" disabled aria-disabled="true">Online submissions opening soon</button><button className="button button-secondary" type="button" onClick={() => setOpen(false)}>Close</button></div>
-            </form>
+            {created ? (
+              <div className="support-ticket-created" role="status">
+                <span className="support-success-mark">✓</span>
+                <h3>{created.ticketReference}</h3>
+                <p>Your ticket has been securely recorded. {created.requiresEmailVerification ? "Use the private link below and request a one-time code sent to your email to enter the conversation." : "It is linked to your signed-in ESB Games account."}</p>
+                {!created.emailSent && created.requiresEmailVerification && <p className="form-alert warning">The confirmation email could not be delivered. Save the private link below now so you do not lose access.</p>}
+                <Link className="button button-primary" href={created.privatePath}>Open private ticket</Link>
+                <p className="support-private-link-note">Do not forward the private ticket link. A ticket reference alone cannot be used to access the conversation.</p>
+              </div>
+            ) : (
+              <form className="form-grid" onSubmit={submitTicket}>
+                <input name="website" tabIndex={-1} autoComplete="off" className="support-honeypot" aria-hidden="true" />
+                <div className="field"><label htmlFor="support-name">Name</label><input className="input" id="support-name" name="name" autoComplete="name" required maxLength={120} /></div>
+                <div className="field"><label htmlFor="support-email">Email address</label><input className="input" id="support-email" name="email" type="email" autoComplete="email" required /><small>Required for guest verification. Signed-in users are linked to their account.</small></div>
+                <div className="field"><label htmlFor="support-category">Category</label><select className="input" id="support-category" name="category" defaultValue="account-access" required>{categories.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></div>
+                <div className="field"><label htmlFor="support-subject">Subject</label><input className="input" id="support-subject" name="subject" required maxLength={160} /></div>
+                <div className="field full"><label htmlFor="support-description">What happened?</label><textarea className="input" id="support-description" name="description" required minLength={10} maxLength={20000} placeholder="Explain what happened, when it happened, and what help you need. Do not include passwords or full payment-card information." /></div>
+                <div className="field full">
+                  <label htmlFor="support-files">Evidence and attachments <span>(optional)</span></label>
+                  <input className="input support-file-input" id="support-files" type="file" multiple accept="image/*,video/mp4,video/webm,video/quicktime,audio/*,.pdf,.txt,.csv,.json,.zip" onChange={(event) => setSelectedFiles(Array.from(event.currentTarget.files ?? []).slice(0, 8))} />
+                  <small>Up to eight files, 100 MB each. Safety evidence may contain upsetting material and is kept private for authorised review.</small>
+                  {selectedFiles.length > 0 && <ul className="support-file-list">{selectedFiles.map((file) => <li key={`${file.name}-${file.lastModified}`}>{file.name} · {formatBytes(file.size)}</li>)}</ul>}
+                </div>
+                <label className="support-consent full"><input type="checkbox" required /> <span>I understand that my ticket and attachments will be stored securely and viewed by authorised ESB Games staff to investigate and respond.</span></label>
+                {error && <div className="form-alert error full" role="alert">{error}</div>}
+                <div className="field full support-form-actions"><button className="button button-primary" type="submit" disabled={submitting}>{submitting ? "Creating ticket…" : "Create private ticket"}</button><button className="button button-secondary" type="button" onClick={() => setOpen(false)}>Cancel</button></div>
+              </form>
+            )}
           </section>
         </div>
       )}
     </>
   );
+}
+
+function formatBytes(bytes: number) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 }

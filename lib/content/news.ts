@@ -22,6 +22,8 @@ interface ArticleRow {
   seo_description?: string | null;
   social_image?: string | null;
   canonical_url?: string | null;
+  indexable?: boolean | null;
+  sitemap?: boolean | null;
   published_at?: string | null;
   updated_at?: string | null;
   related_slugs?: string[] | null;
@@ -155,6 +157,8 @@ function mapRow(row: ArticleRow): NewsArticle {
     seoDescription: row.seo_description || undefined,
     socialImage: cleanUrl(row.social_image),
     canonicalUrl: cleanUrl(row.canonical_url),
+    indexable: row.indexable !== false,
+    sitemap: row.sitemap !== false,
     publishedAt: row.published_at || new Date(0).toISOString(),
     updatedAt: row.updated_at || undefined,
     relatedSlugs: Array.isArray(row.related_slugs) ? row.related_slugs : [],
@@ -292,9 +296,9 @@ export async function getPublishedArticleIndex(locale = "en"): Promise<Array<{ s
   }
   try {
     const now = encodeURIComponent(new Date().toISOString());
-    const rows = await contentSelect<Pick<ArticleRow, "slug" | "published_at" | "updated_at" | "featured">>(
+    const rows = await contentSelect<Pick<ArticleRow, "slug" | "published_at" | "updated_at" | "featured" | "sitemap">>(
       "cms_articles",
-      ["select=slug,published_at,updated_at,featured", "publication_state=eq.Published", "visibility=eq.Public", `published_at=lte.${now}`, `locale=eq.${encodeURIComponent(locale)}`, "order=published_at.desc", "limit=500"].join("&"),
+      ["select=slug,published_at,updated_at,featured,sitemap", "publication_state=eq.Published", "visibility=eq.Public", "sitemap=eq.true", `published_at=lte.${now}`, `locale=eq.${encodeURIComponent(locale)}`, "order=published_at.desc", "limit=500"].join("&"),
       { revalidate: 300, tags: ["news-index"] },
     );
     if (rows.length === 0 && locale !== "en") return getPublishedArticleIndex("en");

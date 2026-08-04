@@ -1,8 +1,8 @@
 create extension if not exists pgcrypto;
 
 -- Optional backend schema for the ESB Games About website.
--- Support and Careers are intentionally frontend-only in this release and do not create tables.
 -- Review existing Production tables before running any statement.
+-- Apply the integration migrations from the supplied package for News, Support and Careers.
 
 -- About website newsletter subscriptions
 create table if not exists public.newsletter_subscriptions (
@@ -19,46 +19,10 @@ create index if not exists newsletter_subscriptions_status_idx on public.newslet
 create index if not exists newsletter_subscriptions_subscribed_at_idx on public.newsletter_subscriptions (subscribed_at desc);
 alter table public.newsletter_subscriptions enable row level security;
 
--- Backend-managed news and blog content. The body uses the safe block schema
--- implemented in lib/content/types.ts; arbitrary HTML is intentionally avoided.
-create table if not exists public.cms_articles (
-  id uuid primary key default gen_random_uuid(),
-  title text not null,
-  slug text not null,
-  subtitle text,
-  excerpt text not null,
-  body jsonb not null default '[]'::jsonb,
-  cover_image text,
-  cover_image_alt text,
-  cover_video text,
-  author text not null default 'ESB Games Editorial',
-  category text not null,
-  tags text[] not null default '{}',
-  publication_state text not null default 'Draft' check (publication_state in ('Draft','In Review','Awaiting Approval','Scheduled','Published','Archived','Unpublished','Failed')),
-  featured boolean not null default false,
-  seo_title text,
-  seo_description text,
-  social_image text,
-  canonical_url text,
-  published_at timestamptz,
-  scheduled_for timestamptz,
-  updated_at timestamptz not null default now(),
-  related_slugs text[] not null default '{}',
-  locale text not null default 'en',
-  translation_group_id uuid,
-  reading_time integer not null default 1,
-  visibility text not null default 'Public',
-  created_by uuid,
-  approved_by uuid,
-  created_at timestamptz not null default now(),
-  unique (slug, locale)
-);
-create index if not exists cms_articles_publication_idx on public.cms_articles (publication_state, published_at desc);
-create index if not exists cms_articles_category_idx on public.cms_articles (category);
-create index if not exists cms_articles_locale_idx on public.cms_articles (locale);
-create index if not exists cms_articles_tags_idx on public.cms_articles using gin (tags);
-create index if not exists cms_articles_search_idx on public.cms_articles using gin (to_tsvector('english', coalesce(title,'') || ' ' || coalesce(excerpt,'') || ' ' || coalesce(subtitle,'')));
-alter table public.cms_articles enable row level security;
+-- News, Support and Careers are now connected through the ordered migrations
+-- supplied in Supabase-Migrations. Do not create a separate cms_articles table
+-- from this optional file; the integrated system creates a public-safe view over
+-- the Backend content_records table.
 
 -- Backend-managed official product release records. A missing file_url is an
 -- honest unavailable state and must never be presented as a completed download.

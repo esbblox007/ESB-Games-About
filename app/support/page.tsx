@@ -6,7 +6,7 @@ import { ArrowIcon } from "@/components/Icons";
 
 export const metadata: Metadata = {
   title: "Support",
-  description: "Browse ESB Games help resources, preview the support form and visit the official service status website.",
+  description: "Browse ESB Games help resources, start a private support conversation and visit the official service status website.",
 };
 
 const quickHelpLinks = [
@@ -27,7 +27,7 @@ export default function SupportPage() {
         <div className="support-page-container">
           <span className="eyebrow">ESB Games Support</span>
           <h1>How can we <span className="gradient-text">help?</span></h1>
-          <p>Support for players, parents and creators. Browse help options, preview the support form or check the official service status website.</p>
+          <p>Support for players, parents and creators. Browse help options, start a private support conversation or check the official service status website.</p>
           <div className="support-page-trust"><span>◷ Help organised by topic</span><span>● Safety concerns prioritised</span><span>◎ Official service updates</span></div>
         </div>
       </section>

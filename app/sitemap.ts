@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getPublishedArticleIndex } from "@/lib/content/news";
 import { supportArticles } from "@/lib/content/support";
-import { jobs } from "@/lib/content/careers";
+import { getLiveJobs } from "@/lib/content/careers-live";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://about.esbgames.com";
@@ -24,7 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: path === "" ? 1 : path === "/news" || path === "/download" ? 0.9 : 0.8,
   }));
 
-  const news = await getPublishedArticleIndex();
+  const [news, careers] = await Promise.all([getPublishedArticleIndex(), getLiveJobs()]);
   const articleEntries: MetadataRoute.Sitemap = news.map((article) => ({
     url: `${base}/news/${article.slug}`,
     lastModified: new Date(article.updatedAt || article.publishedAt),
@@ -39,7 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.65,
   }));
 
-  const careerEntries: MetadataRoute.Sitemap = jobs.map((job) => ({
+  const careerEntries: MetadataRoute.Sitemap = careers.jobs.map((job) => ({
     url: `${base}/careers/${job.slug}`,
     lastModified: new Date(),
     changeFrequency: "weekly",

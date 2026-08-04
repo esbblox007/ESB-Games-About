@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import PageShell from "@/components/PageShell";
 import CareersJobs from "@/components/CareersJobs";
 import { GlobeIcon, HeartIcon, SearchIcon, StarIcon, UsersIcon } from "@/components/Icons";
+import { getLiveJobs } from "@/lib/content/careers-live";
 
 export const metadata: Metadata = {
   title: "Careers",
@@ -31,7 +32,8 @@ const cultureCards = [
   ["Give back", "Support creators, players and communities beyond the products we ship.", "career-culture-four"],
 ] as const;
 
-export default function CareersPage() {
+export default async function CareersPage() {
+  const live = await getLiveJobs();
   return (
     <PageShell>
       <section className="career-hero">
@@ -62,7 +64,7 @@ export default function CareersPage() {
       <section className="career-section" id="open-roles">
         <div className="career-container">
           <header className="career-section-heading career-jobs-title"><div><span className="eyebrow">Open opportunities</span><h2>Find your <span className="gradient-text">seat.</span></h2></div><p>Choose a department or location to explore current opportunities.</p></header>
-          <CareersJobs />
+          <CareersJobs jobs={live.jobs} unavailable={live.unavailable} />
         </div>
       </section>
 
