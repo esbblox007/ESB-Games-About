@@ -6,7 +6,7 @@ import { ArrowIcon } from "@/components/Icons";
 
 export const metadata: Metadata = {
   title: "Support",
-  description: "Browse ESB Games help resources and preview the support routes being prepared for launch.",
+  description: "Browse ESB Games help resources, preview the support form and visit the official service status website.",
 };
 
 const quickHelpLinks = [
@@ -18,6 +18,8 @@ const quickHelpLinks = [
   ["Creator payout guide", "/support/help/creator-payout-guide"],
 ] as const;
 
+const statusUrl = "https://status.esbgames.com";
+
 export default function SupportPage() {
   return (
     <PageShell>
@@ -25,8 +27,8 @@ export default function SupportPage() {
         <div className="support-page-container">
           <span className="eyebrow">ESB Games Support</span>
           <h1>How can we <span className="gradient-text">help?</span></h1>
-          <p>Explore help articles, preview the support forms being prepared for launch, or check the current ESB Games service status.</p>
-          <div className="support-page-trust"><span>Structured support categories</span><span>Safety concerns prioritised</span><span>Backend connection in progress</span></div>
+          <p>Support for players, parents and creators. Browse help options, preview the support form or check the official service status website.</p>
+          <div className="support-page-trust"><span>◷ Help organised by topic</span><span>● Safety concerns prioritised</span><span>◎ Official service updates</span></div>
         </div>
       </section>
 
@@ -34,23 +36,37 @@ export default function SupportPage() {
         <div className="support-page-container">
           <SupportClient />
 
-          <div className="support-info-grid support-info-grid-clean" id="quick-help">
+          <div className="support-info-grid" id="quick-help">
             <article className="support-quick-panel">
               <h2>Quick Help</h2>
-              <p>These guides explain planned and available account, billing, safety and creator processes.</p>
               <div className="support-quick-links" role="list">
                 {quickHelpLinks.map(([label, href]) => (
-                  <a key={label} href={href} role="listitem" className="support-quick-link"><span>{label}</span><ArrowIcon size={16} /></a>
+                  <a key={label} href={href} role="listitem" className="support-quick-link">
+                    <span>{label}</span>
+                    <ArrowIcon size={16} />
+                  </a>
                 ))}
               </div>
             </article>
 
-            <aside className="support-status-link-panel">
-              <span className="eyebrow">Live service information</span>
-              <h2>Check the official status page.</h2>
-              <p>Service availability should come from the dedicated ESB Games status system rather than hard-coded claims on this website.</p>
-              <a className="button button-secondary" href="https://status.esbgames.com">Open status.esbgames.com <ArrowIcon size={15} /></a>
-            </aside>
+            <div className="support-side-stack">
+              <article className="support-status-panel">
+                <div><h2>Platform Status</h2><span>● Official status website</span></div>
+                <p><span>Play Platform</span><a href={statusUrl}>View live status</a></p>
+                <p><span>ESB Studio</span><a href={statusUrl}>View live status</a></p>
+                <p><span>Authentication</span><a href={statusUrl}>View live status</a></p>
+                <p><span>Family Centre</span><a href={statusUrl}>View live status</a></p>
+                <p><span>Support services</span><a href={statusUrl}>View live status</a></p>
+              </article>
+              <article className="support-community-panel">
+                <span>◉</span>
+                <div>
+                  <h3>ESB Games Status</h3>
+                  <p>View current service availability, planned maintenance and incident updates on the dedicated status website.</p>
+                  <a href={statusUrl}>Open the status website <ArrowIcon size={15} /></a>
+                </div>
+              </article>
+            </div>
           </div>
         </div>
       </section>

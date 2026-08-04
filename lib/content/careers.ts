@@ -20,7 +20,7 @@ export const jobs: Job[] = [
     departments: ["Executive Leadership"],
     location: "Remote",
     type: "Full-time",
-    reportsTo: "Managing Director / Chief Executive Officer",
+    reportsTo: "Managing Director",
     summary: "Lead financial planning, budgeting, forecasting and sustainable growth across ESB Games.",
     responsibilities: [
       "Own company budgeting, forecasting and financial planning.",
@@ -41,7 +41,7 @@ export const jobs: Job[] = [
     departments: ["Executive Leadership", "Engineering"],
     location: "Remote",
     type: "Full-time",
-    reportsTo: "Chief Executive Officer",
+    reportsTo: "Chief Operating Officer",
     summary: "Define the technology strategy for the ESB Games ecosystem across platform, tooling, infrastructure and security.",
     responsibilities: [
       "Lead platform engineering direction and architecture.",
@@ -62,7 +62,7 @@ export const jobs: Job[] = [
     departments: ["Executive Leadership"],
     location: "Remote",
     type: "Full-time",
-    reportsTo: "Chief Executive Officer",
+    reportsTo: "Managing Director",
     summary: "Oversee legal strategy, company compliance and the governance needed to support responsible growth.",
     responsibilities: [
       "Support legal operations, policy review and company governance.",
@@ -83,7 +83,7 @@ export const jobs: Job[] = [
     departments: ["Executive Leadership", "Product"],
     location: "Remote",
     type: "Full-time",
-    reportsTo: "Managing Director / Chief Executive Officer",
+    reportsTo: "Chief Operating Officer",
     summary: "Set the product vision across play, create, connect and family experiences in the ESB Games ecosystem.",
     responsibilities: [
       "Own product direction, prioritisation and roadmap quality.",
@@ -104,7 +104,7 @@ export const jobs: Job[] = [
     departments: ["Trust & Safety"],
     location: "Remote",
     type: "Full-time",
-    reportsTo: "Managing Director / Chief Executive Officer",
+    reportsTo: "Managing Director",
     summary: "Lead moderation, investigations, safety programmes and platform integrity across ESB Games.",
     responsibilities: [
       "Define safety strategy, enforcement standards and escalation routes.",
@@ -190,7 +190,7 @@ export const jobs: Job[] = [
     departments: ["Marketing"],
     location: "Remote",
     type: "Full-time",
-    reportsTo: "Managing Director / Chief Executive Officer",
+    reportsTo: "Chief Operating Officer",
     summary: "Shape the public voice of ESB Games across launch marketing, community growth and creator outreach.",
     responsibilities: [
       "Lead content planning, channel strategy and campaign execution.",
@@ -232,7 +232,7 @@ export const jobs: Job[] = [
     departments: ["Operations"],
     location: "Remote",
     type: "Full-time",
-    reportsTo: "Managing Director / Chief Executive Officer",
+    reportsTo: "Chief Operating Officer",
     summary: "Build strong internal processes, cross-functional coordination and execution discipline across ESB Games.",
     responsibilities: [
       "Coordinate operational planning across teams.",

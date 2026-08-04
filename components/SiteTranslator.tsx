@@ -12,7 +12,18 @@ declare global {
 
 const supportedLanguages = languages.map((language) => language.google).join(",");
 
+function resetGoogleTranslatePageOffset() {
+  document.body.style.setProperty("top", "0px", "important");
+  document.body.style.setProperty("margin-top", "0px", "important");
+  document.documentElement.style.setProperty("margin-top", "0px", "important");
+  document.querySelectorAll<HTMLElement>("body > .skiptranslate:not(.google-translate-host), .goog-te-banner-frame").forEach((element) => {
+    element.style.setProperty("display", "none", "important");
+    element.style.setProperty("height", "0px", "important");
+  });
+}
+
 function applySelectedLanguage() {
+  resetGoogleTranslatePageOffset();
   const preferredLocale = resolvePreferredLocale();
   const language = languages.find((item) => item.locale === preferredLocale) || languages[0];
   document.documentElement.lang = language.locale;
@@ -38,7 +49,10 @@ function initialiseTranslator() {
 
 export default function SiteTranslator() {
   useEffect(() => {
+    resetGoogleTranslatePageOffset();
     applySelectedLanguage();
+    const offsetObserver = new MutationObserver(resetGoogleTranslatePageOffset);
+    offsetObserver.observe(document.body, { childList: true, subtree: false, attributes: true, attributeFilter: ["style"] });
     window.googleTranslateElementInit = initialiseTranslator;
     const onLanguageChange = () => applySelectedLanguage();
     window.addEventListener("esb-language-change" as keyof WindowEventMap, onLanguageChange as EventListener);
@@ -53,7 +67,10 @@ export default function SiteTranslator() {
       document.body.appendChild(script);
     }
 
-    return () => window.removeEventListener("esb-language-change" as keyof WindowEventMap, onLanguageChange as EventListener);
+    return () => {
+      offsetObserver.disconnect();
+      window.removeEventListener("esb-language-change" as keyof WindowEventMap, onLanguageChange as EventListener);
+    };
   }, []);
 
   return <div id="google_translate_element" className="google-translate-host notranslate" translate="no" aria-hidden="true" />;

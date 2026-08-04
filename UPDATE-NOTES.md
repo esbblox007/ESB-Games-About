@@ -18,3 +18,12 @@ This package removes unsupported public claims and prepares the About website fo
 ## Backend status
 
 Support and Careers are intentionally frontend-only in this package. No support ticket or job application is submitted, stored or assigned a reference. Their components are structured for a later Supabase and ESB Games Backend connection.
+
+## Follow-up layout corrections
+
+- Locked the desktop and mobile header to a consistent height and added protection against Google Translate pushing the page downward.
+- Restored the preferred three-card Support layout while keeping ticket submission and tracking safely frontend-only.
+- Replaced the former community/Discord prompt with the official `status.esbgames.com` website.
+- Fixed overlapping Careers result text and the role-page breadcrumb/department label.
+- Updated reporting lines so vacancies no longer report to the Chief Executive Officer; executive and operational roles now report to the Managing Director or Chief Operating Officer as appropriate.
+- Reworked the Parental Controls page into wider, separated sections with three-column feature cards and more vertical breathing room.

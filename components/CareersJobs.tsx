@@ -42,7 +42,7 @@ export default function CareersJobs() {
 
       <div className="career-job-results">
         <div className="career-job-results-head">
-          <span>{filtered.length} {filtered.length === 1 ? "role" : "roles"} open</span>
+          <strong>{filtered.length} {filtered.length === 1 ? "role" : "roles"} open</strong>
           <small>Select a role to view the full description and application form.</small>
         </div>
 

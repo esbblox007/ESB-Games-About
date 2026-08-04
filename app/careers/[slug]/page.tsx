@@ -24,11 +24,13 @@ export default async function CareerRolePage({ params }: { params: Promise<{ slu
 
   return (
     <PageShell>
-      <main className="career-role-page">
+      <div className="career-role-page">
         <section className="career-role-hero">
           <div className="career-container">
-            <Link href="/careers#open-roles" className="career-role-back"><ArrowIcon size={15} /> Back to all roles</Link>
-            <span className="eyebrow">Careers at ESB Games · {job.departments[0]}</span>
+            <div className="career-role-navigation">
+              <Link href="/careers#open-roles" className="career-role-back"><ArrowIcon size={15} /> Back to all roles</Link>
+              <span className="eyebrow">Careers at ESB Games · {job.departments[0]}</span>
+            </div>
             <h1>{job.title}</h1>
             <p>{job.summary}</p>
             <div className="career-role-meta">
@@ -65,7 +67,7 @@ export default async function CareerRolePage({ params }: { params: Promise<{ slu
         </section>
 
         <div className="career-container"><CareerApplicationForm job={job} /></div>
-      </main>
+      </div>
     </PageShell>
   );
 }
