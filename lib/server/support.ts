@@ -112,6 +112,17 @@ function normaliseRpcObject(value: unknown, operation: string): Record<string, u
   return result as Record<string, unknown>;
 }
 
+export type CreatedSupportTicket = {
+  ticketId: string;
+  ticketReference: string;
+  accessToken: string;
+  requesterEmail: string;
+  requesterAccountId: string | null;
+  status: string;
+  requiresEmailVerification: boolean;
+  pipelineVersion: number;
+};
+
 export async function createSupportTicket(input: {
   request: NextRequest;
   name: string;
@@ -119,7 +130,7 @@ export async function createSupportTicket(input: {
   categoryId: string;
   subject: string;
   description: string;
-}) {
+}): Promise<CreatedSupportTicket> {
   const account = await verifySupabaseAccessToken(input.request.headers.get("authorization"));
   const displayName = account
     ? String(account.userMetadata.display_name ?? account.userMetadata.full_name ?? account.userMetadata.username ?? input.name).trim()
@@ -143,7 +154,30 @@ export async function createSupportTicket(input: {
     p_access_token_hash: sha256(accessToken),
   });
   const result = normaliseRpcObject(rawResult, "support ticket creation");
-  return { ...result, accessToken };
+  const ticketId = String(result.ticketId ?? "").trim();
+  const ticketReference = String(result.ticketReference ?? "").trim();
+  const requesterEmail = String(result.requesterEmail ?? email).trim().toLowerCase();
+  const requesterAccountId = result.requesterAccountId
+    ? String(result.requesterAccountId)
+    : null;
+  const status = String(result.status ?? "").trim();
+  const requiresEmailVerification = result.requiresEmailVerification === true;
+  const parsedPipelineVersion = Number(result.pipelineVersion ?? 3);
+
+  if (!ticketId || !ticketReference) {
+    throw new Error("The support ticket creation service returned an incomplete ticket record.");
+  }
+
+  return {
+    ticketId,
+    ticketReference,
+    accessToken,
+    requesterEmail,
+    requesterAccountId,
+    status,
+    requiresEmailVerification,
+    pipelineVersion: Number.isFinite(parsedPipelineVersion) ? parsedPipelineVersion : 3,
+  };
 }
 
 export async function getTicketByAccessToken(accessToken: string) {

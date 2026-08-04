@@ -15,6 +15,17 @@ import { getSupabaseServerConfig, supabaseInsert, supabaseSelect } from "@/lib/s
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
+type CreatedTicketResult = {
+  ticketId: string;
+  ticketReference: string;
+  accessToken: string;
+  requesterEmail: string;
+  requesterAccountId: string | null;
+  status: string;
+  requiresEmailVerification: boolean;
+  pipelineVersion: number;
+};
+
 type SubmissionStage =
   | "configuration"
   | "parse_request"
@@ -76,7 +87,17 @@ export async function POST(request: NextRequest) {
     });
 
     stage = "create_ticket";
-    const result = await createSupportTicket({ request, name, email, categoryId, subject, description });
+    // Keep the route independently typed as well as the server helper. This
+    // prevents stale or partially replaced helper files from causing Next.js
+    // to infer the response as only `{ accessToken: string }`.
+    const result = (await createSupportTicket({
+      request,
+      name,
+      email,
+      categoryId,
+      subject,
+      description,
+    })) as CreatedTicketResult;
     const ticketId = String(result.ticketId ?? "");
     const ticketReference = String(result.ticketReference ?? "");
     const accessToken = String(result.accessToken ?? "");
