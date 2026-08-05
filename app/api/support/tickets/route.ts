@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { buildSupportTicketDescription } from "@/lib/support-intake";
-import { sendEmail } from "@/lib/server/email";
+import { extractEmailAddress, sendEmail, supportReplyTo, supportSender } from "@/lib/server/email";
 import {
   createSupportTicket,
   SupportRateLimitError,
@@ -134,16 +134,30 @@ export async function POST(request: NextRequest) {
     stage = "send_confirmation";
     const delivery = recipient
       ? await sendEmail({
-          from: process.env.SUPPORT_FROM_EMAIL ?? "ESB Games Support <support@esbgames.com>",
+          from: supportSender(),
           to: recipient,
-          replyTo: process.env.SUPPORT_REPLY_TO_EMAIL ?? "support@esbgames.com",
+          replyTo: supportReplyTo(),
           subject: `Your ESB Games support ticket — ${ticketReference}`,
           text: `Your ESB Games support ticket ${ticketReference} has been created.\n\nOpen your private ticket: ${privateUrl}\n\n${requiresEmailVerification ? "After opening the link, request a one-time verification code. The code expires after three minutes.\n\n" : ""}Do not forward the private ticket link or share a verification code.`,
           html: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#11182b"><h1>Support ticket created</h1><p>Your reference is <strong>${escapeHtml(ticketReference)}</strong>.</p><p><a href="${escapeHtml(privateUrl)}" style="display:inline-block;padding:12px 18px;background:#7c3aed;color:white;text-decoration:none;border-radius:8px">Open private ticket</a></p>${requiresEmailVerification ? "<p>For your privacy, select <strong>Send verification code</strong> after opening the link. The code expires after three minutes.</p>" : ""}<p>Do not forward this private link or share a verification code.</p></div>`,
         })
-      : { configured: false, sent: false, error: "No email available." };
+      : { configured: false, sent: false, id: undefined, statusCode: undefined, errorCode: "no_recipient", error: "No email available.", requestReference: `ESB-EMAIL-${randomUUID().slice(0, 8).toUpperCase()}` };
 
     stage = "queue_notifications";
+    if (recipient) {
+      await supabaseInsert("support_email_delivery_events", {
+        ticket_id: ticketId,
+        provider: "Resend",
+        purpose: "Ticket Created",
+        recipient_email: recipient,
+        sender_email: extractEmailAddress(supportSender()) || supportSender(),
+        provider_message_id: delivery.id ?? null,
+        delivery_state: delivery.sent ? "Sent" : "Failed",
+        error_code: delivery.errorCode ?? null,
+        error_message: delivery.error?.slice(0, 1000) ?? null,
+        request_reference: delivery.requestReference,
+      }).catch((auditError) => console.error("[support-ticket-create] Email audit insert failed", { incidentReference, auditError }));
+    }
     await supabaseInsert("support_notification_outbox", {
       ticket_id: ticketId,
       channel: "Email",
