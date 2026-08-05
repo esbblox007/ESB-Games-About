@@ -20,12 +20,12 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       p_user_agent_hash: sha256(request.headers.get("user-agent") ?? "unknown"),
       p_ip_hash: sha256(request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown"),
     });
-    const response = NextResponse.json({ ok: true, ticketReference: result.ticketReference });
+    const response = NextResponse.json({ ok: true, ticketReference: result.ticketReference }, { headers: { "Cache-Control": "no-store" } });
     response.cookies.set(SUPPORT_GUEST_COOKIE, sessionToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      path: "/support",
+      path: "/",
       maxAge: 14 * 24 * 60 * 60,
     });
     return response;

@@ -34,6 +34,7 @@ export default function SupportTicketClient({ accessToken }: { accessToken: stri
       if (response.status === 401) {
         setVerificationRequired(true);
         setData(null);
+        setError(null);
         return;
       }
       if (!response.ok) throw new Error(body.error ?? "The ticket could not be loaded.");
@@ -93,7 +94,9 @@ export default function SupportTicketClient({ accessToken }: { accessToken: stri
       if (!response.ok) throw new Error(body.error ?? "The code could not be verified.");
       setCode("");
       setCodeSent(false);
+      setCountdown(0);
       setDeliveryReference(null);
+      setVerificationRequired(false);
       await load();
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "The code could not be verified.");
@@ -227,27 +230,29 @@ function VerificationWorkspace(input: {
       <header className="support-customer-commandbar"><div className="support-case-brand"><span>ESB</span><div><small>ESB GAMES SUPPORT</small><strong>Private case access</strong></div></div><div className="support-case-command-actions"><span className="support-secure-state"><i /> Protected by email verification</span><a href="/support">Support centre</a></div></header>
       <div className="support-verification-layout">
         <main className="support-verification-primary">
-          <span className="support-verification-icon">⌁</span>
-          <span className="eyebrow">IDENTITY VERIFICATION</span>
-          <h1>Securely access your support case.</h1>
-          <p className="support-verification-lead">This private link identifies the case. A short-lived one-time code confirms that you control the email address used when the request was created.</p>
+          <div className="support-verification-stack">
+            <span className="support-verification-icon">⌁</span>
+            <span className="eyebrow">IDENTITY VERIFICATION</span>
+            <h1>Verify your email to open this private support case.</h1>
+            <p className="support-verification-lead">This private link already identifies the case. To protect the conversation, we also send a short-lived one-time code to the email address used when the support request was created.</p>
 
-          {!input.codeSent ? <div className="support-verification-action">
-            <div><strong>Send a one-time access code</strong><p>The code will expire after three minutes and cannot be reused.</p></div>
-            <button className="button button-primary" disabled={input.busy} onClick={input.onRequestCode}>{input.busy ? "Requesting code…" : "Send verification code"}</button>
-          </div> : <form onSubmit={input.onVerifyCode} className="support-enterprise-code-form">
-            <div className="support-code-delivery"><span>✓</span><div><strong>Code sent to {input.maskedEmail ?? "your email address"}</strong><p>Check your inbox and spam folder. Delivery can take up to one minute.</p></div></div>
-            <label htmlFor="support-code">Enter your six-digit code</label>
-            <input id="support-code" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} value={input.code} onChange={(event: ChangeEvent<HTMLInputElement>) => input.onCodeChange(event.target.value.replace(/\D/g, "").slice(0, 6))} placeholder="000000" required autoFocus />
-            <div className="support-code-controls"><button className="button button-primary" disabled={input.busy || input.code.length !== 6}>{input.busy ? "Verifying…" : "Open private case"}</button><button className="button button-secondary" type="button" disabled={input.busy || input.countdown > 120} onClick={input.onRequestCode}>Send another code</button></div>
-            <div className="support-code-timer"><span className={input.countdown <= 30 ? "ending" : ""}>{input.countdown > 0 ? `Code expires in ${time}` : "Code expired"}</span>{input.deliveryReference && <small>Delivery reference: {input.deliveryReference}</small>}</div>
-          </form>}
-          {input.error && <div className="form-alert error support-verification-error" role="alert">{input.error}</div>}
+            {!input.codeSent ? <div className="support-verification-action">
+              <div><strong>Send a one-time access code</strong><p>The code expires after three minutes and can only be used once.</p></div>
+              <button className="button button-primary" disabled={input.busy} onClick={input.onRequestCode}>{input.busy ? "Requesting code…" : "Send verification code"}</button>
+            </div> : <form onSubmit={input.onVerifyCode} className="support-enterprise-code-form">
+              <div className="support-code-delivery"><span>✓</span><div><strong>Code sent to {input.maskedEmail ?? "your email address"}</strong><p>Check your inbox and spam folder, then enter the six-digit code below to continue.</p></div></div>
+              <label htmlFor="support-code">Enter your six-digit verification code</label>
+              <input id="support-code" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} value={input.code} onChange={(event: ChangeEvent<HTMLInputElement>) => input.onCodeChange(event.target.value.replace(/\D/g, "").slice(0, 6))} placeholder="000000" required autoFocus />
+              <div className="support-code-controls"><button className="button button-primary" disabled={input.busy || input.code.length !== 6}>{input.busy ? "Verifying…" : "Open private case"}</button><button className="button button-secondary" type="button" disabled={input.busy || input.countdown > 120} onClick={input.onRequestCode}>Send another code</button></div>
+              <div className="support-code-timer"><span className={input.countdown <= 30 ? "ending" : ""}>{input.countdown > 0 ? `Code expires in ${time}` : "Code expired"}</span>{input.deliveryReference && <small>Delivery reference: {input.deliveryReference}</small>}</div>
+            </form>}
+            {input.error && <div className="form-alert error support-verification-error" role="alert">{input.error}</div>}
+          </div>
         </main>
 
         <aside className="support-verification-aside">
           <span className="support-case-label">SECURE ACCESS PROCESS</span>
-          <ol><li className="active"><span>1</span><div><strong>Request code</strong><p>We send a single-use code to the ticket email.</p></div></li><li className={input.codeSent ? "active" : ""}><span>2</span><div><strong>Confirm identity</strong><p>Enter the six-digit code before it expires.</p></div></li><li><span>3</span><div><strong>Open conversation</strong><p>Read and reply within a ticket-specific secure session.</p></div></li></ol>
+          <ol><li className="active"><span>1</span><div><strong>Request code</strong><p>We send a single-use code to the ticket email.</p></div></li><li className={input.codeSent ? "active" : ""}><span>2</span><div><strong>Confirm identity</strong><p>Enter the code before it expires to verify ownership of the inbox.</p></div></li><li className={input.codeSent && input.code.length === 6 ? "active" : ""}><span>3</span><div><strong>Open conversation</strong><p>Read and reply inside a private, ticket-specific secure session.</p></div></li></ol>
           <div className="support-verification-security"><strong>Your security matters</strong><p>ESB Games staff will never ask for your password, full payment-card details or this verification code.</p></div>
           <div className="support-verification-help"><strong>Unable to receive the email?</strong><p>Confirm that you are checking the same email address used to submit the case. You can also contact <a href="mailto:support@esbgames.com">support@esbgames.com</a>.</p></div>
         </aside>
