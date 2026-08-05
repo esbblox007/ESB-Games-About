@@ -47,23 +47,26 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     const from = supportSender();
     const replyTo = supportReplyTo();
+    const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? request.nextUrl.origin).replace(/\/$/, "");
+    const privateUrl = `${siteUrl}/support/ticket/${encodeURIComponent(accessToken)}`;
     const delivery = await sendEmail({
       from,
       to: ticket.requester_email,
       replyTo,
-      subject: `${code} · ESB Games Support verification`,
+      subject: `${code} · Your ESB Games support ticket ${ticket.ticket_reference}`,
       text: [
         "ESB Games Support",
+        "",
+        `Your support ticket ${ticket.ticket_reference} has been created.`,
+        `Open your private ticket: ${privateUrl}`,
         "",
         `Your one-time verification code is ${code}.`,
         "It expires in three minutes and can only be used once.",
         "",
-        `Ticket reference: ${ticket.ticket_reference}`,
-        "Never share this code with anyone, including ESB Games staff.",
-        "",
-        "You received this email because somebody requested access to a private ESB Games support ticket using this address.",
+        "Never share the private link or verification code with anyone, including ESB Games staff.",
+        "If you did not create this request, contact support@esbgames.com.",
       ].join("\n"),
-      html: verificationEmailHtml({ code, ticketReference: ticket.ticket_reference }),
+      html: verificationEmailHtml({ code, ticketReference: ticket.ticket_reference, privateUrl }),
     });
 
     await supabaseInsert("support_email_delivery_events", {
@@ -130,7 +133,7 @@ function maskEmail(email: string) {
   return `${name.slice(0, 2)}${"•".repeat(Math.max(2, name.length - 2))}@${domain}`;
 }
 
-function verificationEmailHtml(input: { code: string; ticketReference: string }) {
+function verificationEmailHtml(input: { code: string; ticketReference: string; privateUrl: string }) {
   return `<!doctype html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
@@ -143,11 +146,12 @@ function verificationEmailHtml(input: { code: string; ticketReference: string })
           <div style="margin-top:8px;font-size:13px;color:#8ea0c2">Private ticket access · ${escapeHtml(input.ticketReference)}</div>
         </td></tr>
         <tr><td style="padding:38px 30px">
-          <h1 style="margin:0 0 14px;font-size:30px;line-height:1.15;color:#ffffff">Verify your email address</h1>
-          <p style="margin:0;color:#aab7d2;font-size:16px;line-height:1.65">Enter the one-time code below on the secure ESB Games Support page.</p>
+          <h1 style="margin:0 0 14px;font-size:30px;line-height:1.15;color:#ffffff">Your support ticket has been created.</h1>
+          <p style="margin:0;color:#aab7d2;font-size:16px;line-height:1.65">Use the secure link and one-time code below to open your private conversation.</p>
+          <p style="margin:22px 0 0"><a href="${escapeHtml(input.privateUrl)}" style="display:inline-block;padding:12px 18px;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#c026d3);color:#fff;text-decoration:none;font-weight:800">Open private ticket</a></p>
           <div style="margin:28px 0;padding:22px;border:1px solid #5840a2;border-radius:14px;background:#11132c;text-align:center;font-size:38px;font-weight:900;letter-spacing:.24em;color:#ffffff">${escapeHtml(input.code)}</div>
           <p style="margin:0 0 8px;color:#d6dcf0;font-size:14px;line-height:1.6"><strong>This code expires in three minutes</strong> and can only be used once.</p>
-          <p style="margin:0;color:#8798b9;font-size:13px;line-height:1.6">Never share this code with anyone, including ESB Games staff. If you did not request it, you can safely ignore this email.</p>
+          <p style="margin:0;color:#8798b9;font-size:13px;line-height:1.6">Never share the private link or verification code with anyone, including ESB Games staff. If you did not create this request, contact support@esbgames.com.</p>
         </td></tr>
         <tr><td style="padding:20px 30px;border-top:1px solid #222d49;color:#7384a6;font-size:12px;line-height:1.6">ESB Games Support · Secure customer communications</td></tr>
       </table>

@@ -132,19 +132,31 @@ export async function POST(request: NextRequest) {
     const recipient = requesterEmail;
 
     stage = "send_confirmation";
-    const delivery = recipient
-      ? await sendEmail({
-          from: supportSender(),
-          to: recipient,
-          replyTo: supportReplyTo(),
-          subject: `Your ESB Games support ticket — ${ticketReference}`,
-          text: `Your ESB Games support ticket ${ticketReference} has been created.\n\nOpen your private ticket: ${privateUrl}\n\n${requiresEmailVerification ? "After opening the link, request a one-time verification code. The code expires after three minutes.\n\n" : ""}Do not forward the private ticket link or share a verification code.`,
-          html: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#11182b"><h1>Support ticket created</h1><p>Your reference is <strong>${escapeHtml(ticketReference)}</strong>.</p><p><a href="${escapeHtml(privateUrl)}" style="display:inline-block;padding:12px 18px;background:#7c3aed;color:white;text-decoration:none;border-radius:8px">Open private ticket</a></p>${requiresEmailVerification ? "<p>For your privacy, select <strong>Send verification code</strong> after opening the link. The code expires after three minutes.</p>" : ""}<p>Do not forward this private link or share a verification code.</p></div>`,
-        })
-      : { configured: false, sent: false, id: undefined, statusCode: undefined, errorCode: "no_recipient", error: "No email available.", requestReference: `ESB-EMAIL-${randomUUID().slice(0, 8).toUpperCase()}` };
+    // Guest tickets use one combined, on-demand verification email. This avoids
+    // sending a separate creation email immediately followed by a code email.
+    const delivery = requiresEmailVerification
+      ? {
+          configured: true,
+          sent: false,
+          id: undefined,
+          statusCode: undefined,
+          errorCode: "verification_on_demand",
+          error: null,
+          requestReference: `ESB-EMAIL-${randomUUID().slice(0, 8).toUpperCase()}`,
+        }
+      : recipient
+        ? await sendEmail({
+            from: supportSender(),
+            to: recipient,
+            replyTo: supportReplyTo(),
+            subject: `Your ESB Games support ticket — ${ticketReference}`,
+            text: `Your ESB Games support ticket ${ticketReference} has been created.\n\nOpen your private ticket: ${privateUrl}\n\nDo not forward the private ticket link.`,
+            html: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#11182b"><h1>Support ticket created</h1><p>Your reference is <strong>${escapeHtml(ticketReference)}</strong>.</p><p><a href="${escapeHtml(privateUrl)}" style="display:inline-block;padding:12px 18px;background:#7c3aed;color:white;text-decoration:none;border-radius:8px">Open private ticket</a></p><p>Do not forward this private link.</p></div>`,
+          })
+        : { configured: false, sent: false, id: undefined, statusCode: undefined, errorCode: "no_recipient", error: "No email available.", requestReference: `ESB-EMAIL-${randomUUID().slice(0, 8).toUpperCase()}` };
 
     stage = "queue_notifications";
-    if (recipient) {
+    if (recipient && !requiresEmailVerification) {
       await supabaseInsert("support_email_delivery_events", {
         ticket_id: ticketId,
         provider: "Resend",
@@ -158,17 +170,19 @@ export async function POST(request: NextRequest) {
         request_reference: delivery.requestReference,
       }).catch((auditError) => console.error("[support-ticket-create] Email audit insert failed", { incidentReference, auditError }));
     }
-    await supabaseInsert("support_notification_outbox", {
-      ticket_id: ticketId,
-      channel: "Email",
-      recipient: recipient || "linked-account",
-      template_key: "support_ticket_created",
-      payload: { ticketReference, privatePath },
-      status: delivery.sent ? "Sent" : "Queued",
-      attempts: delivery.sent ? 1 : 0,
-      sent_at: delivery.sent ? new Date().toISOString() : null,
-      last_error: delivery.error ?? null,
-    }).catch((error) => console.error("[support-ticket-create] Notification outbox insert failed", { incidentReference, error }));
+    if (!requiresEmailVerification) {
+      await supabaseInsert("support_notification_outbox", {
+        ticket_id: ticketId,
+        channel: "Email",
+        recipient: recipient || "linked-account",
+        template_key: "support_ticket_created",
+        payload: { ticketReference, privatePath, verificationOnDemand: false },
+        status: delivery.sent ? "Sent" : "Queued",
+        attempts: delivery.sent ? 1 : 0,
+        sent_at: delivery.sent ? new Date().toISOString() : null,
+        last_error: requiresEmailVerification ? null : delivery.error ?? null,
+      }).catch((error) => console.error("[support-ticket-create] Notification outbox insert failed", { incidentReference, error }));
+    }
 
     if (requesterAccountId) {
       await supabaseInsert("public_site_notification_outbox", {
@@ -189,7 +203,7 @@ export async function POST(request: NextRequest) {
 
     stage = "complete";
     return NextResponse.json(
-      { ok: true, ticketReference, privatePath, requiresEmailVerification, emailSent: delivery.sent, pipelineVersion: 3 },
+      { ok: true, ticketReference, privatePath, requiresEmailVerification, emailSent: delivery.sent, verificationEmailOnDemand: requiresEmailVerification, pipelineVersion: 3 },
       { status: 201, headers: noStoreHeaders() },
     );
   } catch (error) {

@@ -11,6 +11,7 @@ type CreatedTicket = {
   privatePath: string;
   requiresEmailVerification: boolean;
   emailSent: boolean;
+  verificationEmailOnDemand?: boolean;
 };
 
 type ServiceState = "checking" | "available" | "unavailable";
@@ -217,7 +218,7 @@ export default function SupportClient() {
                 <span className="support-created-label">Ticket reference</span>
                 <h3>{created.ticketReference}</h3>
                 <p>Your support conversation has been securely recorded. {created.requiresEmailVerification ? "Open the private ticket and request the three-minute verification code sent to your email." : "The ticket is linked to your signed-in ESB Games account."}</p>
-                {!created.emailSent && created.requiresEmailVerification && <p className="form-alert warning">The confirmation email could not be delivered. Save the private link now so you do not lose access.</p>}
+                {created.requiresEmailVerification && created.verificationEmailOnDemand && <p className="form-alert info">For security, the combined confirmation and verification email is sent only after you open the private ticket and request a code.</p>}
                 <div className="support-created-actions">
                   <Link className="button button-primary" href={created.privatePath}>Open private ticket</Link>
                   <button className="button button-secondary" type="button" onClick={() => setOpen(false)}>Close</button>
