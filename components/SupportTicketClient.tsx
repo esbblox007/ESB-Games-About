@@ -23,14 +23,22 @@ export default function SupportTicketClient({ accessToken }: { accessToken: stri
   const [files, setFiles] = useState<File[]>([]);
   const [countdown, setCountdown] = useState(0);
   const [deliveryReference, setDeliveryReference] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<{ src: string; name: string } | null>(null);
   const messageCountRef = useRef(0);
   const endRef = useRef<HTMLDivElement | null>(null);
+  const autoRequestedRef = useRef(false);
 
   const endpoint = `/api/support/tickets/${encodeURIComponent(accessToken)}`;
+  async function readJsonSafely<T extends Record<string, unknown>>(response: Response): Promise<T> {
+    const raw = await response.text();
+    if (!raw.trim()) return {} as T;
+    try { return JSON.parse(raw) as T; }
+    catch { throw new Error(response.ok ? "The support service returned an unreadable response." : `The support service failed (${response.status}). Please try again.`); }
+  }
   const load = useCallback(async (announce = false) => {
     try {
       const response = await fetch(endpoint, { headers: authHeaders(), cache: "no-store" });
-      const body = await response.json() as TicketData & { error?: string; verificationRequired?: boolean };
+      const body = await readJsonSafely<TicketData & { error?: string; verificationRequired?: boolean }>(response);
       if (response.status === 401) {
         setVerificationRequired(true);
         setData(null);
@@ -51,8 +59,12 @@ export default function SupportTicketClient({ accessToken }: { accessToken: stri
   useEffect(() => { void load(); }, [load]);
   useEffect(() => {
     if (!data) return;
-    const timer = window.setInterval(() => void load(true), 15000);
-    return () => window.clearInterval(timer);
+    const poll = () => { if (!document.hidden) void load(true); };
+    const timer = window.setInterval(poll, 15000);
+    const onVisibility = () => { if (!document.hidden) void load(true); };
+    document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("focus", onVisibility);
+    return () => { window.clearInterval(timer); document.removeEventListener("visibilitychange", onVisibility); window.removeEventListener("focus", onVisibility); };
   }, [data, load]);
   useEffect(() => {
     if (countdown <= 0) return;
@@ -66,7 +78,7 @@ export default function SupportTicketClient({ accessToken }: { accessToken: stri
     setError(null);
     try {
       const response = await fetch(`${endpoint}/request-code`, { method: "POST", cache: "no-store" });
-      const body = await response.json() as CodeResponse;
+      const body = await readJsonSafely<CodeResponse>(response);
       if (!response.ok) throw new Error(body.error ?? "The verification code could not be sent.");
       setCodeSent(true);
       setMaskedEmail(body.maskedEmail ?? null);
@@ -79,6 +91,12 @@ export default function SupportTicketClient({ accessToken }: { accessToken: stri
     }
   }
 
+  useEffect(() => {
+    if (!verificationRequired || codeSent || busy || autoRequestedRef.current) return;
+    autoRequestedRef.current = true;
+    void requestCode();
+  }, [verificationRequired, codeSent]);
+
   async function verifyCode(event: FormEvent) {
     event.preventDefault();
     setBusy(true);
@@ -90,13 +108,14 @@ export default function SupportTicketClient({ accessToken }: { accessToken: stri
         body: JSON.stringify({ code }),
         cache: "no-store",
       });
-      const body = await response.json() as { error?: string };
+      const body = await readJsonSafely<{ error?: string }>(response);
       if (!response.ok) throw new Error(body.error ?? "The code could not be verified.");
       setCode("");
       setCodeSent(false);
       setCountdown(0);
       setDeliveryReference(null);
       setVerificationRequired(false);
+      autoRequestedRef.current = false;
       await load();
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "The code could not be verified.");
@@ -114,7 +133,7 @@ export default function SupportTicketClient({ accessToken }: { accessToken: stri
       const form = new FormData(formElement);
       files.forEach((file) => form.append("files", file));
       const response = await fetch(endpoint, { method: "POST", headers: authHeaders(), body: form });
-      const body = await response.json() as { error?: string };
+      const body = await readJsonSafely<{ error?: string }>(response);
       if (!response.ok) throw new Error(body.error ?? "The reply could not be sent.");
       formElement.reset();
       setFiles([]);
@@ -193,7 +212,7 @@ export default function SupportTicketClient({ accessToken }: { accessToken: stri
             {data.messages.map((message) => <article key={message.id} className={`support-customer-message ${message.senderType.toLowerCase()}`}>
               <div className="support-message-avatar">{message.senderType === "Staff" ? "ESB" : initials(message.senderName)}</div>
               <div className="support-message-content"><header><div><strong>{message.senderName}</strong><span>{message.senderType === "Staff" ? "ESB Games Support" : message.senderType === "System" ? "Case system" : "Customer"}</span></div><time dateTime={message.createdAt}>{formatDate(message.createdAt)}</time></header><p>{message.body}</p>
-                {message.attachments.length > 0 && <div className="support-customer-files">{message.attachments.map((attachment) => <button key={attachment.id} type="button" onClick={() => openAttachment(attachment)}><span>↗</span><div><strong>{attachment.name}</strong><small>{formatBytes(attachment.size)} · {attachment.scanState}{attachment.sensitive ? " · Restricted evidence" : ""}</small></div></button>)}</div>}
+                {message.attachments.length > 0 && <div className="support-customer-files support-customer-message-attachments">{message.attachments.map((attachment) => <CustomerAttachment key={attachment.id} attachment={attachment} onDownload={() => openAttachment(attachment)} onPreview={(src) => setImagePreview({ src, name: attachment.name })} />)}</div>}
               </div>
             </article>)}
             <div ref={endRef} />
@@ -201,15 +220,51 @@ export default function SupportTicketClient({ accessToken }: { accessToken: stri
 
           {canReply ? <form className="support-customer-composer" onSubmit={sendMessage}>
             <div className="support-composer-heading"><div><strong>Reply to ESB Games Support</strong><span>Your message will be added to the private case.</span></div><span>20,000 characters maximum</span></div>
-            <textarea id="support-reply" name="body" maxLength={20000} placeholder="Write a clear reply, include any requested information, or provide an update…" />
-            {files.length > 0 && <ul className="support-selected-files">{files.map((file) => <li key={`${file.name}-${file.lastModified}`}><span>{file.name}</span><small>{formatBytes(file.size)}</small></li>)}</ul>}
-            <div className="support-customer-composer-actions"><label><span>＋</span> Add evidence<input type="file" multiple accept="image/*,video/mp4,video/webm,video/quicktime,audio/*,.pdf,.txt,.csv,.json,.zip" onChange={(event: ChangeEvent<HTMLInputElement>) => setFiles(Array.from(event.currentTarget.files ?? []).slice(0, 8))} /></label><small>Up to 8 private files · 100 MB each</small><button className="button button-primary" disabled={busy}>{busy ? "Sending securely…" : "Send secure reply"}</button></div>
+            <textarea id="support-reply" name="body" maxLength={20000} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); event.currentTarget.form?.requestSubmit(); } }} placeholder="Write a clear reply, include any requested information, or provide an update…" />
+            {files.length > 0 && <CustomerSelectedFilePreview files={files} onRemove={(index) => setFiles((current) => current.filter((_, fileIndex) => fileIndex !== index))} />}
+            <div className="support-customer-composer-actions"><label><span>＋</span> Add evidence<input type="file" multiple accept="image/*,video/mp4,video/webm,video/quicktime,audio/*,.pdf,.txt,.csv,.json,.zip" onChange={(event: ChangeEvent<HTMLInputElement>) => { const incoming = Array.from(event.currentTarget.files ?? []); setFiles((current) => [...current, ...incoming].filter((file, index, all) => all.findIndex((item) => item.name === file.name && item.size === file.size && item.lastModified === file.lastModified) === index).slice(0, 8)); event.currentTarget.value = ""; }} /></label><small>Up to 8 private files · 100 MB each · Enter to send · Shift+Enter for a new line</small><button className="button button-primary" disabled={busy}>{busy ? "Sending securely…" : "Send secure reply"}</button></div>
           </form> : <div className="support-customer-closed"><strong>This case is {data.ticket.status.toLowerCase()}.</strong><p>Contact Support Operations with the reference above if you believe further review is required.</p></div>}
           {error && <div className="form-alert error support-inline-error" role="alert">{error}</div>}
+          {imagePreview && <div className="support-image-lightbox" role="dialog" aria-modal="true" aria-label={`Preview ${imagePreview.name}`} onClick={() => setImagePreview(null)}><button type="button" className="support-image-lightbox-close" onClick={() => setImagePreview(null)} aria-label="Close image preview">×</button><div onClick={(event) => event.stopPropagation()}><img src={imagePreview.src} alt={imagePreview.name}/><span>{imagePreview.name}</span></div></div>}
         </main>
       </div>
     </div>
   </section>;
+}
+
+function CustomerSelectedFilePreview({ files, onRemove }: { files: File[]; onRemove: (index: number) => void }) {
+  const [urls, setUrls] = useState<(string | null)[]>([]);
+  useEffect(() => {
+    const next = files.map((file) => file.type.startsWith("image/") ? URL.createObjectURL(file) : null);
+    setUrls(next);
+    return () => next.forEach((url) => { if (url) URL.revokeObjectURL(url); });
+  }, [files]);
+  return <div className="support-customer-selected-attachments">{files.map((file, index) => <div className="support-customer-selected-attachment" key={`${file.name}-${file.lastModified}-${index}`}>{urls[index] ? <img src={urls[index] ?? undefined} alt=""/> : <span>＋</span>}<div><strong>{file.name}</strong><small>{formatBytes(file.size)} · Ready to send</small></div><button type="button" onClick={() => onRemove(index)} aria-label={`Remove ${file.name}`}>×</button></div>)}</div>;
+}
+
+function CustomerAttachment({ attachment, onDownload, onPreview }: { attachment: Attachment; onDownload: () => void; onPreview: (src: string) => void }) {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewFailed, setPreviewFailed] = useState(false);
+  useEffect(() => {
+    if (!attachment.type.startsWith("image/")) return;
+    let alive = true;
+    let url: string | null = null;
+    void (async () => {
+      try {
+        const response = await fetch(attachment.href, { headers: authHeaders(), redirect: "follow", cache: "no-store" });
+        if (!response.ok) throw new Error("Preview unavailable");
+        const blob = await response.blob();
+        url = URL.createObjectURL(blob);
+        if (alive) setPreviewUrl(url);
+      } catch { if (alive) setPreviewFailed(true); }
+    })();
+    return () => { alive = false; if (url) URL.revokeObjectURL(url); };
+  }, [attachment.href, attachment.type]);
+
+  if (attachment.type.startsWith("image/") && previewUrl && !previewFailed) {
+    return <button className="support-customer-inline-image" type="button" onClick={() => onPreview(previewUrl)} title={`Preview ${attachment.name}`}><img src={previewUrl} alt={attachment.name}/><span><strong>{attachment.name}</strong><small>{formatBytes(attachment.size)} · {attachment.scanState}</small></span></button>;
+  }
+  return <button className="support-customer-file-card" type="button" onClick={onDownload}><span>↗</span><div><strong>{attachment.name}</strong><small>{formatBytes(attachment.size)} · {attachment.scanState}{attachment.sensitive ? " · Restricted evidence" : ""}</small></div></button>;
 }
 
 function VerificationWorkspace(input: {

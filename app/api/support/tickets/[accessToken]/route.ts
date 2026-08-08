@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { addPublicTicketMessage, authoriseTicketRequest, getTicketConversation, SupportRateLimitError, supportNetworkKey, takeSupportRateLimit } from "@/lib/server/support";
-import { supabaseUpdate } from "@/lib/server/supabase";
+import { supabaseRpc } from "@/lib/server/supabase";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ accessToken: string }> }) {
   try {
@@ -8,7 +8,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const access = await authoriseTicketRequest(request, accessToken);
     if (!access) return NextResponse.json({ error: "Verify your email or sign in to view this ticket.", verificationRequired: true }, { status: 401 });
     const conversation = await getTicketConversation(access.ticket.id);
-    await supabaseUpdate("support_tickets", `id=eq.${encodeURIComponent(access.ticket.id)}`, { user_last_read_at: new Date().toISOString(), unread_by_user: 0 }).catch(() => []);
+    await supabaseRpc("support_touch_ticket_view_v1", { p_ticket_id: access.ticket.id }).catch(() => null);
     return NextResponse.json({
       ticket: {
         reference: access.ticket.ticket_reference,

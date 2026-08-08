@@ -13,7 +13,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       takeSupportRateLimit({ scope: "support-code-verify-network", key: supportNetworkKey(request), windowSeconds: 600, maxRequests: 30, blockSeconds: 1800 }),
     ]);
     const sessionToken = generateGuestSessionToken();
-    const result = await supabaseRpc<Record<string, unknown>>("support_verify_guest_code", {
+    const result = await supabaseRpc<Record<string, unknown>>("support_verify_guest_code_v2", {
       p_access_token_hash: sha256(accessToken),
       p_code_hash: sha256(code),
       p_session_token_hash: sha256(sessionToken),

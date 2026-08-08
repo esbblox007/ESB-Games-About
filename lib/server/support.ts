@@ -181,8 +181,19 @@ export async function createSupportTicket(input: {
 }
 
 export async function getTicketByAccessToken(accessToken: string) {
-  const rows = await supabaseSelect<SupportTicketRow>("support_tickets", `select=*&access_token_hash=eq.${encodeURIComponent(sha256(accessToken))}&limit=1`);
-  return rows[0] ?? null;
+  const tokenHash = sha256(accessToken);
+  const rows = await supabaseSelect<SupportTicketRow>("support_tickets", `select=*&access_token_hash=eq.${encodeURIComponent(tokenHash)}&limit=1`);
+  if (rows[0]) return rows[0];
+
+  const aliases = await supabaseSelect<{ id: string; ticket_id: string; expires_at: string | null; revoked_at: string | null }>(
+    "support_ticket_access_tokens",
+    `select=id,ticket_id,expires_at,revoked_at&token_hash=eq.${encodeURIComponent(tokenHash)}&limit=1`,
+  ).catch(() => []);
+  const alias = aliases[0];
+  if (!alias || alias.revoked_at || (alias.expires_at && new Date(alias.expires_at).getTime() <= Date.now())) return null;
+  const tickets = await supabaseSelect<SupportTicketRow>("support_tickets", `select=*&id=eq.${encodeURIComponent(alias.ticket_id)}&limit=1`);
+  if (tickets[0]) await supabaseUpdate("support_ticket_access_tokens", `id=eq.${encodeURIComponent(alias.id)}`, { last_accessed_at: new Date().toISOString() }).catch(() => []);
+  return tickets[0] ?? null;
 }
 
 export async function authoriseTicketRequest(request: NextRequest, accessToken: string) {
