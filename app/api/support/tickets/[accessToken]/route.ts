@@ -14,12 +14,11 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         reference: access.ticket.ticket_reference,
         subject: access.ticket.subject,
         categoryId: access.ticket.category_id,
-        team: access.ticket.team,
         status: access.ticket.status,
-        priority: access.ticket.priority,
         createdAt: access.ticket.created_at,
         updatedAt: access.ticket.updated_at,
       },
+      typing: conversation.typing,
       messages: conversation.messages.map((message) => ({
         id: message.id,
         senderType: message.sender_type,
@@ -35,6 +34,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
           scanState: attachment.scan_state,
           moderationState: attachment.moderation_state,
           sensitive: attachment.safety_sensitive,
+          validationState: attachment.validation_state ?? attachment.scan_state,
           href: `/api/support/tickets/${encodeURIComponent(accessToken)}/attachments/${encodeURIComponent(attachment.id)}`,
         })),
       })),
@@ -59,8 +59,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       takeSupportRateLimit({ scope: "support-message-ticket", key: access.ticket.id, windowSeconds: 3600, maxRequests: 60, blockSeconds: 900 }),
       takeSupportRateLimit({ scope: "support-message-network", key: supportNetworkKey(request), windowSeconds: 3600, maxRequests: 120, blockSeconds: 900 }),
     ]);
-    const result = await addPublicTicketMessage({ ticket: access.ticket, actorType: access.actorType, actorId: access.actorId, actorName: access.actorName, body: body || "Attachment added", files });
-    return NextResponse.json({ ok: true, messageId: result.message.id }, { status: 201 });
+    const clientMessageId = String(form.get("clientMessageId") ?? "").trim();
+    const result = await addPublicTicketMessage({ ticket: access.ticket, actorType: access.actorType, actorId: access.actorId, actorName: access.actorName, body: body || "Attachment added", files, clientMessageId });
+    return NextResponse.json({ ok: true, messageId: result.message.id, attachmentError: "attachmentError" in result ? result.attachmentError : null }, { status: 201 });
   } catch (error) {
     if (error instanceof SupportRateLimitError) {
       return NextResponse.json({ error: error.message, retryAfterSeconds: error.retryAfterSeconds }, { status: 429, headers: { "Retry-After": String(error.retryAfterSeconds) } });

@@ -11,7 +11,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const { accessToken } = await params;
     const ticket = await getTicketByAccessToken(accessToken);
     if (!ticket || !ticket.requester_email) {
-      return NextResponse.json({ error: "This private ticket link is invalid or cannot receive email verification." }, { status: 404 });
+      // Do not reveal whether an arbitrary support URL maps to a real ticket.
+      // Returning the same generic accepted shape prevents ticket enumeration.
+      return NextResponse.json({ ok: true, expiresInSeconds: 180, maskedEmail: "your support email" }, { status: 202, headers: { "Cache-Control": "no-store" } });
     }
 
     await Promise.all([

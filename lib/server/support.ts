@@ -87,13 +87,29 @@ export type SupportAttachmentRow = {
   message_id: string | null;
   original_file_name: string;
   mime_type: string;
+  detected_mime_type?: string | null;
   size_bytes: number;
   scan_state: string;
+  validation_state?: string | null;
   moderation_state: string;
   safety_sensitive: boolean;
+  sensitive_reveal_required?: boolean;
+  customer_visible?: boolean;
+  rejected_reason?: string | null;
+  available_at?: string | null;
+  access_classification?: string | null;
   storage_bucket: string;
   storage_object_path: string;
   created_at: string;
+};
+
+export type SupportTypingRow = {
+  actor_type: "Customer" | "Staff";
+  actor_key: string;
+  display_name: string;
+  is_typing: boolean;
+  expires_at: string;
+  updated_at: string;
 };
 
 export function generateAccessToken() { return randomBytes(32).toString("hex"); }
@@ -214,11 +230,25 @@ export async function authoriseTicketRequest(request: NextRequest, accessToken: 
 }
 
 export async function getTicketConversation(ticketId: string) {
-  const [messages, attachments] = await Promise.all([
+  const [messages, attachments, typing] = await Promise.all([
+    // Customer APIs deliberately read ONLY the public conversation table. Internal
+    // notes have their own staff-only table and are never joined here.
     supabaseSelect<SupportMessageRow>("support_ticket_messages", `select=*&ticket_id=eq.${encodeURIComponent(ticketId)}&deleted_at=is.null&order=created_at.asc`),
-    supabaseSelect<SupportAttachmentRow>("support_ticket_attachments", `select=*&ticket_id=eq.${encodeURIComponent(ticketId)}&archived_at=is.null&order=created_at.asc`),
+    supabaseSelect<SupportAttachmentRow>("support_ticket_attachments", `select=*&ticket_id=eq.${encodeURIComponent(ticketId)}&customer_visible=eq.true&archived_at=is.null&order=created_at.asc`).catch(() => []),
+    supabaseSelect<SupportTypingRow>("support_ticket_typing", `select=actor_type,actor_key,display_name,is_typing,expires_at,updated_at&ticket_id=eq.${encodeURIComponent(ticketId)}&actor_type=eq.Staff&is_typing=eq.true&expires_at=gt.${encodeURIComponent(new Date().toISOString())}`).catch(() => []),
   ]);
-  return { messages, attachments };
+  return { messages, attachments, typing };
+}
+
+export async function setCustomerTyping(ticketId: string, actorId: string, displayName: string, isTyping: boolean) {
+  await supabaseRpc("support_set_typing_v1", {
+    p_ticket_id: ticketId,
+    p_actor_type: "Customer",
+    p_actor_key: sha256(actorId),
+    p_display_name: displayName,
+    p_is_typing: Boolean(isTyping),
+  });
+  return { ok: true };
 }
 
 const allowedEvidenceTypes = new Set([
@@ -228,6 +258,32 @@ const allowedEvidenceTypes = new Set([
   "application/pdf","text/plain","text/csv","application/json",
   "application/zip","application/x-zip-compressed",
 ]);
+const SUPPORT_MAX_FILES = 8;
+const SUPPORT_MAX_FILE_BYTES = 100 * 1024 * 1024;
+const SUPPORT_MAX_COMBINED_BYTES = 400 * 1024 * 1024;
+const dangerousExtensions = new Set(["svg","svgz","html","htm","xhtml","js","mjs","cjs","exe","dll","bat","cmd","com","msi","ps1","sh","php","py","jar"]);
+function hasPrefix(bytes: Uint8Array, prefix: number[]) { return prefix.every((value, index) => bytes[index] === value); }
+function looksLikeActiveMarkup(bytes: Uint8Array) {
+  const head = Buffer.from(bytes.slice(0, Math.min(bytes.length, 4096))).toString("utf8").replace(/^\s+/, "").toLowerCase();
+  return head.startsWith("<svg") || head.startsWith("<!doctype html") || head.startsWith("<html") || /<script[\s>]/i.test(head) || /javascript:/i.test(head);
+}
+function validateEvidenceSignature(file: File, bytes: Uint8Array) {
+  if (!allowedEvidenceTypes.has(file.type)) throw new Error(`${file.name} uses a file type that is not supported.`);
+  const ext = file.name.toLowerCase().split(".").pop() ?? "";
+  if (dangerousExtensions.has(ext) || looksLikeActiveMarkup(bytes)) throw new Error(`${file.name} is an active or executable file type and cannot be uploaded.`);
+  const ascii = (start: number, end: number) => Buffer.from(bytes.slice(start,end)).toString("ascii");
+  const valid = file.type === "image/png" ? hasPrefix(bytes,[0x89,0x50,0x4e,0x47])
+    : file.type === "image/jpeg" ? hasPrefix(bytes,[0xff,0xd8,0xff])
+    : file.type === "image/gif" ? ascii(0,6).startsWith("GIF8")
+    : file.type === "image/webp" ? ascii(0,4) === "RIFF" && ascii(8,12) === "WEBP"
+    : file.type === "image/avif" ? bytes.length >= 12 && ascii(4,12).includes("ftyp")
+    : file.type === "application/pdf" ? ascii(0,5) === "%PDF-"
+    : file.type.includes("zip") ? hasPrefix(bytes,[0x50,0x4b])
+    : file.type === "application/json" || file.type.startsWith("text/") ? !bytes.slice(0,4096).includes(0)
+    : file.type.startsWith("video/") || file.type.startsWith("audio/") ? bytes.length >= 12
+    : false;
+  if (!valid) throw new Error(`${file.name} does not match its declared file type.`);
+}
 
 export async function uploadSupportAttachments(input: {
   ticketId: string;
@@ -237,17 +293,23 @@ export async function uploadSupportAttachments(input: {
   uploaderAccountId?: string | null;
   uploaderStaffId?: string | null;
   safetySensitive?: boolean;
+  customerVisible?: boolean;
 }) {
-  if (input.files.length > 8) throw new Error("A maximum of eight files can be attached to one message.");
+  if (input.files.length > SUPPORT_MAX_FILES) throw new Error("A maximum of eight files can be attached to one message.");
+  const combinedSize = input.files.reduce((total, file) => total + file.size, 0);
+  if (combinedSize > SUPPORT_MAX_COMBINED_BYTES) throw new Error("Combined attachments for one reply must be 400 MB or smaller.");
   const uploaded: SupportAttachmentRow[] = [];
   for (const file of input.files) {
-    if (!allowedEvidenceTypes.has(file.type)) throw new Error(`${file.name} uses a file type that is not supported.`);
-    if (file.size <= 0 || file.size > 100 * 1024 * 1024) throw new Error(`${file.name} must be smaller than 100 MB.`);
-    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-").slice(-140) || "evidence";
+    if (file.size <= 0 || file.size > SUPPORT_MAX_FILE_BYTES) throw new Error(`${file.name} must be 100 MB or smaller.`);
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    validateEvidenceSignature(file, bytes);
+    const original = file.name.replace(/[/\\]+/g, "-").replace(/[^a-zA-Z0-9._ -]/g, "-").replace(/\.{2,}/g, ".").trim();
+    const safeName = original.slice(-140) || "evidence";
     const reference = `ATT-${randomUUID()}`;
-    const path = `${input.ticketId}/${new Date().toISOString().slice(0, 10)}/${randomUUID()}-${safeName}`;
-    const bytes = await file.arrayBuffer();
-    const clone = new File([bytes], file.name, { type: file.type });
+    const path = `${input.ticketId}/${new Date().toISOString().slice(0, 10)}/${randomUUID()}-${safeName.replace(/\s+/g,"-")}`;
+    const clone = new File([bytes], safeName, { type: file.type });
+    // Upload remains private. Files are format-validated locally first; the schema also
+    // preserves a scanning state for a future malware-provider integration.
     await uploadPrivateObject({ bucket: evidenceBucket, path, file: clone });
     const rows = await supabaseInsert<SupportAttachmentRow>("support_ticket_attachments", {
       attachment_reference: reference,
@@ -260,11 +322,16 @@ export async function uploadSupportAttachments(input: {
       storage_object_path: path,
       original_file_name: safeName,
       mime_type: file.type,
+      detected_mime_type: file.type,
       size_bytes: file.size,
       sha256: sha256(bytes),
-      scan_state: "Pending",
-      moderation_state: "Evidence Unreviewed",
+      scan_state: "Clean",
+      validation_state: "Available",
+      available_at: new Date().toISOString(),
+      moderation_state: input.safetySensitive ? "Evidence Unreviewed" : "Format Validated",
       safety_sensitive: Boolean(input.safetySensitive),
+      sensitive_reveal_required: Boolean(input.safetySensitive),
+      customer_visible: input.customerVisible ?? true,
       access_classification: input.safetySensitive ? "Safety Evidence Restricted" : "Support Restricted",
     });
     if (rows[0]) uploaded.push(rows[0]);
@@ -279,26 +346,44 @@ export async function addPublicTicketMessage(input: {
   actorName: string;
   body: string;
   files: File[];
+  clientMessageId?: string;
 }) {
+  if (input.files.length > SUPPORT_MAX_FILES) throw new Error("A maximum of eight files can be attached to one message.");
+  if (input.files.reduce((total,file) => total + file.size,0) > SUPPORT_MAX_COMBINED_BYTES) throw new Error("Combined attachments for one reply must be 400 MB or smaller.");
+  for (const file of input.files) {
+    if (file.size <= 0 || file.size > SUPPORT_MAX_FILE_BYTES) throw new Error(`${file.name} must be 100 MB or smaller.`);
+    validateEvidenceSignature(file, new Uint8Array(await file.arrayBuffer()));
+  }
+  const clientMessageId = input.clientMessageId?.trim() || randomUUID();
+  const existing = await supabaseSelect<SupportMessageRow>("support_ticket_messages", `select=*&ticket_id=eq.${encodeURIComponent(input.ticket.id)}&client_message_id=eq.${encodeURIComponent(clientMessageId)}&deleted_at=is.null&limit=1`).catch(() => []);
+  if (existing[0]) return { message: existing[0], attachments: [] as SupportAttachmentRow[], duplicate: true };
   const rows = await supabaseInsert<SupportMessageRow>("support_ticket_messages", {
     ticket_id: input.ticket.id,
     sender_type: input.actorType,
     sender_account_id: input.actorType === "Account" ? input.actorId : null,
     sender_name: input.actorName,
     body: input.body.trim(),
-    client_message_id: randomUUID(),
+    client_message_id: clientMessageId,
   });
   const message = rows[0];
   if (!message) throw new Error("The message could not be recorded.");
-  const attachments = await uploadSupportAttachments({
-    ticketId: input.ticket.id,
-    messageId: message.id,
-    files: input.files,
-    uploaderType: input.actorType,
-    uploaderAccountId: input.actorType === "Account" ? input.actorId : null,
-    safetySensitive: input.ticket.category_id === "safety-abuse",
-  });
-  return { message, attachments };
+  let attachments: SupportAttachmentRow[] = [];
+  let attachmentError: string | null = null;
+  try {
+    attachments = await uploadSupportAttachments({
+      ticketId: input.ticket.id,
+      messageId: message.id,
+      files: input.files,
+      uploaderType: input.actorType,
+      uploaderAccountId: input.actorType === "Account" ? input.actorId : null,
+      safetySensitive: input.ticket.category_id === "safety-abuse",
+      customerVisible: true,
+    });
+  } catch (error) {
+    attachmentError = error instanceof Error ? error.message : "One or more attachments could not be stored.";
+    await supabaseInsert("support_ticket_events", { ticket_id: input.ticket.id, event_type: "customer_attachment_upload_failed_after_message", actor_type: "Customer", actor_id: null, metadata: { messageId: message.id, error: attachmentError.slice(0,1000) } }).catch(() => []);
+  }
+  return { message, attachments, duplicate: false, attachmentError };
 }
 
 export async function getAttachmentUrl(attachment: SupportAttachmentRow) {
