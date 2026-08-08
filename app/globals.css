@@ -3390,3 +3390,29 @@ iframe.goog-te-banner-frame {
 @media(min-width:901px){body:has(.support-ticket-app-page) main.site-main{overflow:hidden}.support-ticket-app-page{height:calc(100dvh - 76px);min-height:620px;overflow:hidden}.support-ticket-app-page>.support-customer-app{height:100%;max-width:1320px!important;overflow:hidden}.support-customer-app .support-customer-commandbar{flex:0 0 auto}.support-customer-app .support-customer-compact-header{flex:0 0 auto}.support-customer-app .support-customer-compact-security{flex:0 0 auto}}
 @media(max-width:900px){.support-ticket-app-page{height:auto;min-height:0;overflow:visible}.support-customer-app{height:auto}.support-customer-app-conversation{overflow:visible}.support-customer-app-thread{overflow:visible!important;max-height:none}.support-customer-app-composer{position:relative}.support-customer-compact-header{align-items:flex-start!important}.support-customer-compact-header h1{font-size:25px!important}.support-new-messages{position:sticky;bottom:12px}.support-customer-reply-actions{flex-wrap:wrap}.support-customer-reply-actions small{order:3;width:100%}}
 @media(min-width:901px){body:has(.support-ticket-app-page) .site-footer{display:none}body:has(.support-ticket-app-page) #main-content{height:calc(100dvh - 76px);overflow:hidden}.support-ticket-app-page{height:100%!important}}
+
+
+/* Support 025.2 — focused customer ticket UX regression corrections */
+.support-customer-app,.support-customer-app-conversation,.support-customer-app-thread,.support-customer-app-composer{min-width:0}
+.support-customer-app-conversation{width:100%}
+.support-customer-app-thread{box-sizing:border-box;width:100%;padding-left:max(24px,calc((100% - 1120px)/2))!important;padding-right:max(24px,calc((100% - 1120px)/2))!important}
+.support-customer-message{width:fit-content;max-width:min(70%,700px)}
+.support-customer-message.guest,.support-customer-message.account{margin-right:0}
+.support-customer-message.staff{margin-left:0}
+.support-customer-app-composer{display:flex!important;flex:0 0 auto!important;flex-direction:column!important;width:100%!important;box-sizing:border-box!important;min-width:0!important;padding:13px 20px 15px!important}
+.support-customer-app-composer textarea{display:block!important;width:100%!important;min-width:0!important;box-sizing:border-box!important;height:96px;min-height:96px!important;max-height:160px!important;padding:13px 14px!important;overflow-y:auto;resize:none!important;font-size:13px!important;line-height:1.55!important}
+.support-customer-reply-heading{width:100%;box-sizing:border-box;margin-bottom:9px}
+.support-customer-reply-actions{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:16px!important;width:100%;min-width:0;margin-top:10px!important}
+.support-customer-reply-actions-left,.support-customer-reply-actions-right{display:flex;align-items:center;gap:10px;min-width:0}
+.support-customer-reply-actions-left{flex:1 1 auto}
+.support-customer-reply-actions-right{flex:0 0 auto;justify-content:flex-end}
+.support-customer-reply-actions-left>small,.support-customer-enter-hint{color:#7182a1;font-size:9px;white-space:nowrap}
+.support-customer-reply-actions .button{flex:0 0 auto;min-height:42px}
+.support-customer-selected-attachments{overflow-x:auto;overflow-y:hidden;padding:0 0 8px}
+.support-customer-selected-attachment{min-width:240px;max-width:360px}
+.support-customer-message-attachments{max-width:min(560px,100%)}
+.support-customer-file-card.pending{width:min(460px,100%);min-height:54px;padding:9px 11px;box-sizing:border-box}
+.support-customer-file-card.pending>span{flex:0 0 auto}
+@media(max-width:900px){.support-customer-app-thread{padding-left:16px!important;padding-right:16px!important}.support-customer-message{max-width:92%}.support-customer-app-composer{padding:16px!important}.support-customer-reply-actions{align-items:stretch!important;flex-direction:column!important}.support-customer-reply-actions-left,.support-customer-reply-actions-right{width:100%;flex-wrap:wrap}.support-customer-reply-actions-right{justify-content:space-between}.support-customer-enter-hint{white-space:normal}.support-customer-reply-actions .button{margin-left:auto}}
+@media(max-width:560px){.support-customer-message{max-width:97%}.support-customer-reply-actions-left,.support-customer-reply-actions-right{align-items:stretch;flex-direction:column}.support-customer-reply-actions .button,.support-evidence-button{width:100%;box-sizing:border-box;justify-content:center}.support-customer-reply-actions .button{margin-left:0}.support-customer-enter-hint{text-align:center}}
+.support-customer-file-card.pending{display:flex;align-items:center;gap:10px;border:1px solid #334b70;border-radius:10px;background:#081326;color:#dfe6f4;text-align:left}.support-customer-file-card.pending>span{display:grid;place-items:center;width:30px;height:30px;border-radius:8px;background:#142342;color:#ac82f0;font-size:13px}.support-customer-file-card.pending strong,.support-customer-file-card.pending small{display:block}.support-customer-file-card.pending strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px}.support-customer-file-card.pending small{margin-top:3px;color:#7a8cab;font-size:8px}

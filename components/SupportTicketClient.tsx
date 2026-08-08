@@ -23,6 +23,7 @@ export default function SupportTicketClient({ accessToken }: { accessToken: stri
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [files, setFiles] = useState<File[]>([]);
+  const [draft, setDraft] = useState("");
   const [countdown, setCountdown] = useState(0);
   const [deliveryReference, setDeliveryReference] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<{ src: string; name: string } | null>(null);
@@ -35,6 +36,8 @@ export default function SupportTicketClient({ accessToken }: { accessToken: stri
   const typingStopRef = useRef<number | null>(null);
   const lastTypingSentRef = useRef(0);
   const draftNonceRef = useRef("");
+  const composerRef = useRef<HTMLTextAreaElement | null>(null);
+  const submittingRef = useRef(false);
   const endpoint = `/api/support/tickets/${encodeURIComponent(accessToken)}`;
 
   const readJsonSafely = useCallback(async <T extends Record<string, unknown>>(response: Response): Promise<T> => {
@@ -114,7 +117,10 @@ export default function SupportTicketClient({ accessToken }: { accessToken: stri
     if (!data || ["Closed", "Resolved", "Spam"].includes(data.ticket.status)) return;
     try { await fetch(`${endpoint}/typing`, { method: "POST", headers: { ...authHeaders(), "Content-Type": "application/json" }, body: JSON.stringify({ typing }), keepalive: true }); } catch { /* presence is best effort */ }
   }
-  function composerChanged() {
+  function composerChanged(event: ChangeEvent<HTMLTextAreaElement>) {
+    setDraft(event.currentTarget.value);
+    event.currentTarget.style.height = "auto";
+    event.currentTarget.style.height = `${Math.min(Math.max(event.currentTarget.scrollHeight, 96), 160)}px`;
     const now = Date.now();
     if (now - lastTypingSentRef.current > 1800) { lastTypingSentRef.current = now; void setTyping(true); }
     if (typingStopRef.current) window.clearTimeout(typingStopRef.current);
@@ -122,21 +128,30 @@ export default function SupportTicketClient({ accessToken }: { accessToken: stri
   }
 
   async function sendMessage(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setBusy(true); setError(null); setNotice(null);
+    event.preventDefault();
+    if (busy || submittingRef.current || !draft.trim()) return;
+    submittingRef.current = true;
+    setBusy(true); setError(null); setNotice(null);
     const formElement = event.currentTarget;
     try {
       const form = new FormData(formElement);
+      form.set("body", draft.trim());
       if (!draftNonceRef.current) draftNonceRef.current = globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random()}`;
       form.set("clientMessageId", draftNonceRef.current);
       files.forEach((file) => form.append("files", file));
       const response = await fetch(endpoint, { method: "POST", headers: authHeaders(), body: form });
       const body = await readJsonSafely<{ error?: string; attachmentError?: string | null }>(response);
       if (!response.ok) throw new Error(body.error ?? "The reply could not be sent.");
-      formElement.reset(); setFiles([]); draftNonceRef.current = ""; await setTyping(false); setNotice(body.attachmentError ? `Reply saved, but an attachment could not be stored: ${body.attachmentError}` : "Reply sent securely."); nearBottomRef.current = true; await load();
+      formElement.reset(); setDraft(""); setFiles([]); draftNonceRef.current = ""; if (composerRef.current) composerRef.current.style.height = "96px"; await setTyping(false); setNotice(body.attachmentError ? `Message sent, but an attachment could not be stored: ${body.attachmentError}` : "Message sent."); nearBottomRef.current = true; await load();
     } catch (caught) { setError(caught instanceof Error ? caught.message : "The reply could not be sent."); }
-    finally { setBusy(false); }
+    finally { submittingRef.current = false; setBusy(false); }
   }
-  function composerKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) { if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); event.currentTarget.form?.requestSubmit(); } }
+  function composerKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key !== "Enter" || event.shiftKey || event.nativeEvent.isComposing) return;
+    event.preventDefault();
+    if (busy || !draft.trim()) return;
+    event.currentTarget.form?.requestSubmit();
+  }
   function addFiles(incoming: File[]) {
     const merged = [...files, ...incoming].filter((file,index,all) => all.findIndex((candidate) => candidate.name === file.name && candidate.size === file.size && candidate.lastModified === file.lastModified) === index).slice(0, MAX_FILES);
     if (merged.some((file) => file.size > MAX_FILE)) return setError("Each attachment must be 100 MB or smaller.");
@@ -175,8 +190,8 @@ export default function SupportTicketClient({ accessToken }: { accessToken: stri
         {canReply ? <form className="support-customer-reply support-customer-app-composer" onSubmit={sendMessage}>
           <div className="support-customer-reply-heading"><div><strong>Reply to ESB Games Support</strong><span>Your message is added to this private case.</span></div><small>20,000 characters maximum</small></div>
           {files.length > 0 && <CustomerSelectedFilePreview files={files} onRemove={(index) => setFiles((current) => current.filter((_,fileIndex) => fileIndex !== index))}/>} 
-          <textarea name="body" maxLength={20000} rows={3} onChange={composerChanged} onKeyDown={composerKeyDown} placeholder="Write a clear reply, include any requested information, or provide an update…"/>
-          <div className="support-customer-reply-actions"><label className="button button-secondary support-evidence-button">＋ <span>Add evidence</span><input type="file" multiple accept="image/png,image/jpeg,image/webp,image/gif,image/avif,video/mp4,video/webm,video/quicktime,audio/mpeg,audio/wav,audio/ogg,audio/mp4,application/pdf,text/plain,text/csv,application/json,application/zip,.zip" onChange={(event: ChangeEvent<HTMLInputElement>) => { addFiles(Array.from(event.currentTarget.files ?? [])); event.currentTarget.value = ""; }}/></label><small>Up to 8 private files · 100 MB each · 400 MB combined</small><button className="button button-primary" disabled={busy}>{busy ? "Sending securely…" : "Send secure reply"}</button></div>
+          <textarea ref={composerRef} name="body" value={draft} maxLength={20000} rows={3} required onChange={composerChanged} onKeyDown={composerKeyDown} placeholder="Write a message..." aria-label="Message ESB Games Support"/>
+          <div className="support-customer-reply-actions"><div className="support-customer-reply-actions-left"><label className="button button-secondary support-evidence-button">＋ <span>Add evidence</span><input type="file" multiple accept="image/png,image/jpeg,image/webp,image/gif,image/avif,video/mp4,video/webm,video/quicktime,audio/mpeg,audio/wav,audio/ogg,audio/mp4,application/pdf,text/plain,text/csv,application/json,application/zip,.zip" onChange={(event: ChangeEvent<HTMLInputElement>) => { addFiles(Array.from(event.currentTarget.files ?? [])); event.currentTarget.value = ""; }}/></label><small>Up to 8 files · 100 MB each · 400 MB combined</small></div><div className="support-customer-reply-actions-right"><small className="support-customer-enter-hint">Enter to send · Shift+Enter for new line</small><button className="button button-primary" disabled={busy || !draft.trim()}>{busy ? "Sending…" : "Send Message"}</button></div></div>
           {notice && <div className="form-alert success support-inline-notice" role="status">{notice}</div>}{error && <div className="form-alert error support-inline-error" role="alert">{error}</div>}
         </form> : <div className="support-customer-closed support-customer-app-composer"><strong>This case is {data.ticket.status.toLowerCase()}.</strong><p>The conversation is read-only. Use the Support Centre if you need help accessing the case.</p></div>}
       </main>
@@ -195,7 +210,7 @@ function CustomerAttachment({ attachment, onDownload, onPreview }: { attachment:
   const [previewUrl,setPreviewUrl]=useState<string|null>(null); const [previewFailed,setPreviewFailed]=useState(false);
   const available=(attachment.validationState??attachment.scanState)==="Available"||attachment.scanState==="Clean";
   useEffect(()=>{ if(!attachment.type.startsWith("image/")||!available)return; let alive=true; let url:string|null=null; void(async()=>{try{const response=await fetch(attachment.href,{headers:authHeaders(),redirect:"follow",cache:"no-store"});if(!response.ok)throw new Error();const blob=await response.blob();url=URL.createObjectURL(blob);if(alive)setPreviewUrl(url)}catch{if(alive)setPreviewFailed(true)}})();return()=>{alive=false;if(url)URL.revokeObjectURL(url)}},[attachment.href,attachment.type,available]);
-  if(!available)return <div className="support-customer-file-card pending"><span>…</span><div><strong>{attachment.name}</strong><small>{formatBytes(attachment.size)} · {attachment.validationState??attachment.scanState??"Processing"}</small></div></div>;
+  if(!available)return <div className="support-customer-file-card pending"><span aria-hidden="true">▣</span><div><strong>{attachment.name}</strong><small>{formatBytes(attachment.size)} · {attachment.validationState??attachment.scanState??"Processing"}</small></div></div>;
   if(attachment.type.startsWith("image/")&&previewUrl&&!previewFailed)return <button className="support-customer-inline-image" type="button" onClick={()=>onPreview(previewUrl)} title={`Preview ${attachment.name}`}><img src={previewUrl} alt={attachment.name}/><span><strong>{attachment.name}</strong><small>{formatBytes(attachment.size)} · Available</small></span></button>;
   return <button className="support-customer-file-card" type="button" onClick={onDownload}><span>↗</span><div><strong>{attachment.name}</strong><small>{formatBytes(attachment.size)} · Available{attachment.sensitive?" · Sensitive evidence":""}</small></div></button>;
 }
