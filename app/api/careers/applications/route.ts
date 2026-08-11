@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sendEmail } from "@/lib/server/email";
 import { PublicRateLimitError, publicNetworkKey, takePublicRateLimit } from "@/lib/server/public-rate-limit";
-import { supabaseInsert, supabaseRpc } from "@/lib/server/supabase";
+import { supabaseInsert, supabaseRpc, supabaseSelect } from "@/lib/server/supabase";
 
 type Submission = {
   publicSlug: string;
@@ -26,6 +26,8 @@ export async function POST(request: NextRequest) {
       takePublicRateLimit({ scope: "careers-application-network", key: publicNetworkKey(request), windowSeconds: 3600, maxRequests: 10, blockSeconds: 3600 }),
       takePublicRateLimit({ scope: "careers-application-email", key: input.candidate.email.toLowerCase(), windowSeconds: 86400, maxRequests: 5, blockSeconds: 86400 }),
     ]);
+    const roleRows = await supabaseSelect<{ title?: string }>("public_careers_jobs", `select=title&public_slug=eq.${encodeURIComponent(input.publicSlug)}&limit=1`).catch(() => []);
+    const roleTitle = roleRows[0]?.title?.trim() || input.publicSlug;
     const result = await supabaseRpc<Record<string, unknown>>("public_submit_careers_application", {
       p_public_slug: input.publicSlug,
       p_application_form_version_id: input.formVersionId,
@@ -42,8 +44,8 @@ export async function POST(request: NextRequest) {
       to: input.candidate.email,
       replyTo: process.env.CAREERS_REPLY_TO_EMAIL ?? "careers@esbgames.com",
       subject: `We received your ESB Games application — ${applicationId}`,
-      text: `Hello ${input.candidate.fullName},\n\nWe have received your application for ${input.publicSlug}. Your reference is ${applicationId}.\n\nThe ESB Games Careers Team`,
-      html: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#10162a"><h1>Application received</h1><p>Hello ${escapeHtml(input.candidate.fullName)},</p><p>We have received your application for <strong>${escapeHtml(input.publicSlug)}</strong>.</p><p>Your reference is <strong>${escapeHtml(applicationId)}</strong>.</p><p>We will contact you using this email address if your application progresses.</p><p>ESB Games Careers</p></div>`,
+      text: `Hello ${input.candidate.fullName},\n\nWe have received your application for ${roleTitle}. Your reference is ${applicationId}.\n\nThe ESB Games Careers Team`,
+      html: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#10162a"><h1>Application received</h1><p>Hello ${escapeHtml(input.candidate.fullName)},</p><p>We have received your application for <strong>${escapeHtml(roleTitle)}</strong>.</p><p>Your reference is <strong>${escapeHtml(applicationId)}</strong>.</p><p>We will contact you using this email address if your application progresses.</p><p>ESB Games Careers</p></div>`,
     });
     await supabaseInsert("public_site_notification_outbox", {
       source_system: "Careers",
@@ -51,7 +53,7 @@ export async function POST(request: NextRequest) {
       channel: "Email",
       recipient: input.candidate.email.toLowerCase(),
       template_key: "careers_application_received",
-      payload: { publicSlug: input.publicSlug, applicationId },
+      payload: { publicSlug: input.publicSlug, jobTitle: roleTitle, applicationId },
       status: delivery.sent ? "Sent" : "Queued",
       attempts: delivery.sent ? 1 : 0,
       sent_at: delivery.sent ? new Date().toISOString() : null,
