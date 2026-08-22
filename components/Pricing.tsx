@@ -1,11 +1,20 @@
 import { CheckIcon } from "./Icons";
 
-const plans = [
+type PricingPlan = {
+  name: string;
+  tagline: string;
+  price: string;
+  features: readonly string[];
+  featured?: string;
+  orange?: boolean;
+};
+
+const plans: readonly PricingPlan[] = [
   { name: "Member", tagline: "The planned free starting point for players.", price: "Free tier planned", features: ["Core platform access", "Friends and communities", "Standard avatar options", "Core discovery features"] },
   { name: "Plus", tagline: "A planned membership tier for active players.", price: "Pricing to be confirmed", features: ["Member features", "Additional account benefits", "Expanded customisation", "Additional community features"] },
   { name: "Pro", tagline: "A planned tier for active players and creators.", price: "Pricing to be confirmed", featured: "In development", features: ["Plus features", "Creator-focused benefits", "Expanded community features", "Additional profile options"] },
   { name: "Max", tagline: "The planned highest membership tier.", price: "Pricing to be confirmed", featured: "In development", orange: true, features: ["Pro features", "Advanced creator benefits", "Higher supported allowances", "Additional programme benefits"] },
-] as const;
+];
 
 export default function Pricing() {
   return (
