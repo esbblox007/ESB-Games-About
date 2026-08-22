@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   title: "Creator Hub",
   description: "Explore ESB Studio and the creator systems being developed for the ESB Games ecosystem.",
   alternates: { canonical: "/developer-hub" },
+  openGraph: { title: "Creator Hub | ESB Games", description: "Explore ESB Studio and the creator systems being developed for ESB Games.", url: "/developer-hub", type: "website", images: [{ url: "/hero-studio-platform.png", alt: "ESB Studio creator tools" }] },
+  twitter: { card: "summary_large_image", title: "Creator Hub | ESB Games", description: "Explore ESB Studio and the creator systems being developed for ESB Games.", images: ["/hero-studio-platform.png"] },
 };
 
 const creatorFeatures = [
@@ -18,12 +20,12 @@ const creatorFeatures = [
 ];
 
 const resources = [
-  ["ESB Studio availability", "Follow public release availability and platform requirements as Studio development progresses.", "View availability →", "/download"],
-  ["Documentation", "Guides, tutorials and product walkthroughs will be published as features stabilise.", "Learn about Studio →", "#studio"],
-  ["Assets & templates", "Starter projects, interface kits and reusable creator resources are planned.", "Learn more →", "#studio"],
-  ["API reference", "Platform, analytics and publishing APIs will be documented before public use.", "Planned resource →", "#studio"],
-  ["Creator roadmap", "Follow the capabilities being designed, tested and prepared for creators.", "Explore the Creator Hub →", "#studio"],
-  ["Creator community", "Follow community access through the main ESB Games platform as testing expands.", "Explore ESB Games →", "https://esbgames.com"],
+  { title: "ESB Studio availability", text: "Follow public release availability and platform requirements as Studio development progresses.", linkText: "View availability →", href: "/download", icon: <DownloadIcon /> },
+  { title: "Documentation", text: "Official guides, tutorials and product walkthroughs will be published as features stabilise.", linkText: "Open documentation →", href: "/documentation", icon: <BookIcon /> },
+  { title: "Assets & templates", text: "Starter projects, interface kits and reusable creator resources are planned.", status: "Coming soon", icon: <CubeIcon /> },
+  { title: "API reference", text: "Platform, analytics and publishing APIs will be documented before public use.", status: "Coming soon", icon: <GlobeIcon /> },
+  { title: "Creator roadmap", text: "A public roadmap will be introduced when creator milestones are ready to be shared.", status: "Planned", icon: <BookIcon /> },
+  { title: "Creator community", text: "Follow community access through the main ESB Games platform as testing expands.", linkText: "Explore ESB Games →", href: "https://esbgames.com", icon: <UsersIcon />, external: true },
 ] as const;
 
 const collaborationAreas = [
@@ -43,7 +45,6 @@ export default function DeveloperHubPage() {
             <p>Build games in ESB Studio and manage projects through the connected creator ecosystem being developed for ESB Games.</p>
             <div className="creator-hero-actions"><Link href="/download" className="button button-primary"><DownloadIcon size={17} /> Download & Availability</Link><a href="#resources" className="button button-secondary"><BookIcon size={17} /> Explore Resources</a></div>
           </div>
-
           <div className="creator-code-window creator-workflow-window" aria-label="ESB Studio development workflow">
             <div className="creator-code-titlebar"><span className="creator-window-dots"><i /><i /><i /></span><span>ESB Studio · In development</span></div>
             <div className="creator-code-body creator-workflow-body"><p><strong>01</strong><span>Build</span><small>Create worlds, systems, interfaces and effects.</small></p><p><strong>02</strong><span>Test</span><small>Review projects before wider release.</small></p><p><strong>03</strong><span>Prepare</span><small>Publishing and moderation workflows are being developed.</small></p></div>
@@ -62,7 +63,7 @@ export default function DeveloperHubPage() {
       <section className="creator-section creator-feature-section"><div className="creator-container"><header className="creator-center-heading"><span className="eyebrow">Creator-first by design</span><h2>Built for creators, not <span className="gradient-text">gatekeepers.</span></h2><p>Tools, publishing and growth systems are being designed to help strong ideas move forward.</p></header><div className="creator-feature-grid">{creatorFeatures.map((feature) => <article className="creator-feature-card" key={feature.title}><span className={`creator-icon creator-icon-${feature.tone}`}>{feature.icon}</span><h3>{feature.title}</h3><p>{feature.text}</p></article>)}</div></div></section>
 
       <section className="creator-section" id="resources"><div className="creator-container creator-resource-layout">
-        <div><header className="creator-section-heading"><span className="eyebrow">Everything in one place</span><h2>Creator <span className="gradient-text">resources.</span></h2></header><div className="creator-resource-grid">{resources.map(([title, text, linkText, href], index) => <article className="creator-resource-card" key={title}><span className="creator-resource-icon">{index === 0 ? <DownloadIcon /> : index === 1 ? <BookIcon /> : index === 2 ? <CubeIcon /> : index === 3 ? <GlobeIcon /> : index === 4 ? <BookIcon /> : <UsersIcon />}</span><div><h3>{title}</h3><p>{text}</p><Link href={href}>{linkText}</Link></div></article>)}</div></div>
+        <div><header className="creator-section-heading"><span className="eyebrow">Everything in one place</span><h2>Creator <span className="gradient-text">resources.</span></h2></header><div className="creator-resource-grid">{resources.map((item) => <article className="creator-resource-card" key={item.title}><span className="creator-resource-icon">{item.icon}</span><div><h3>{item.title}</h3><p>{item.text}</p>{item.href ? (item.external ? <a href={item.href}>{item.linkText}</a> : <Link href={item.href}>{item.linkText}</Link>) : <span className="creator-planned-pill">{item.status}</span>}</div></article>)}</div></div>
         <aside className="creator-studio-directory"><header><span className="eyebrow">Planned collaboration</span><h2>Find specialist <span className="gradient-text">skills.</span></h2></header>{collaborationAreas.map(([title, meta, text]) => <article className="creator-studio-card" key={title}><div className="creator-studio-card-head"><h3>{title}</h3><span className="creator-planned-pill">Planned</span></div><strong><span>{meta}</span></strong><p>{text}</p></article>)}<Link href="/trust" className="creator-directory-link">Read creator trust &amp; safety information →</Link></aside>
       </div></section>
 
