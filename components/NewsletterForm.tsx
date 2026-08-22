@@ -44,6 +44,7 @@ export default function NewsletterForm() {
 
   const message = state !== "idle" && state !== "loading" ? messages[state] : "";
   const isSuccess = state === "success" || state === "exists";
+  const isError = state === "invalid" || state === "rate_limited" || state === "unavailable";
 
   return (
     <form className="home-newsletter-form" onSubmit={submit} noValidate>
@@ -54,7 +55,7 @@ export default function NewsletterForm() {
         <input className="newsletter-honeypot" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
         <button className="button button-primary" type="submit" disabled={state === "loading"}>{state === "loading" ? "Subscribing…" : "Subscribe"}</button>
       </div>
-      <p id="newsletter-status" className={`newsletter-status${isSuccess ? " success" : ""}`} role="status" aria-live="polite">{message}</p>
+      <p id="newsletter-status" className={`newsletter-status${isSuccess ? " success" : ""}${isError ? " error" : ""}`} role="status" aria-live="polite">{message}</p>
       <p id="newsletter-privacy" className="newsletter-privacy">By subscribing, you agree to receive major ESB Games updates. You can unsubscribe from any email.</p>
     </form>
   );

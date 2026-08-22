@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import PageShell from "@/components/PageShell";
 import CareersJobs from "@/components/CareersJobs";
 import { GlobeIcon, HeartIcon, SearchIcon, StarIcon, UsersIcon } from "@/components/Icons";
@@ -27,10 +28,10 @@ const peopleBenefits = [
 ] as const;
 
 const cultureCards = [
-  ["Collaborate", "Share ideas openly, ask better questions and build stronger outcomes together.", "career-culture-one"],
-  ["Create", "Experiment with ambitious ideas and turn them into thoughtful, polished experiences.", "career-culture-two"],
-  ["Have fun", "Take the work seriously without losing the joy that makes games worth building.", "career-culture-three"],
-  ["Give back", "Support creators, players and communities beyond the products we ship.", "career-culture-four"],
+  ["Collaborate", "Share ideas openly, ask better questions and build stronger outcomes together.", "/career-culture-collaborate.jpg", "career-culture-one"],
+  ["Create", "Experiment with ambitious ideas and turn them into thoughtful, polished experiences.", "/career-culture-create.jpg", "career-culture-two"],
+  ["Have fun", "Take the work seriously without losing the joy that makes games worth building.", "/career-culture-have-fun.jpg", "career-culture-three"],
+  ["Give back", "Support creators, players and communities beyond the products we ship.", "/career-culture-give-back.jpg", "career-culture-four"],
 ] as const;
 
 export default async function CareersPage() {
@@ -82,7 +83,12 @@ export default async function CareersPage() {
         <div className="career-container">
           <header className="career-section-heading"><div><span className="eyebrow">Life at ESB Games</span><h2>More than just a <span className="gradient-text">team.</span></h2></div></header>
           <div className="career-culture-grid">
-            {cultureCards.map(([title, text, className]) => <article className={className} key={title}><div><h3>{title}</h3><p>{text}</p></div></article>)}
+            {cultureCards.map(([title, text, image, className]) => (
+              <article className={className} key={title}>
+                <Image src={image} alt="" fill sizes="(max-width: 680px) 100vw, (max-width: 1100px) 50vw, 25vw" className="career-culture-image" />
+                <div><h3>{title}</h3><p>{text}</p></div>
+              </article>
+            ))}
           </div>
         </div>
       </section>

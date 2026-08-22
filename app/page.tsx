@@ -134,8 +134,9 @@ export default function HomePage() {
                         src="/hero-studio-preview.png"
                         alt="Preview of the ESB Studio creator tools"
                         fill
-                        sizes="(max-width: 960px) 88vw, 560px"
+                        sizes="(max-width: 960px) 88vw, 700px"
                         className="home-device-image"
+                        unoptimized
                         priority
                       />
                     </div>
@@ -151,8 +152,9 @@ export default function HomePage() {
                         src="/hero-discover-preview.png"
                         alt="Preview of the ESB Games discover experience"
                         fill
-                        sizes="(max-width: 960px) 78vw, 340px"
+                        sizes="(max-width: 960px) 78vw, 500px"
                         className="home-device-image home-tablet-image"
+                        unoptimized
                         priority
                       />
                     </div>
