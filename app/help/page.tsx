@@ -13,13 +13,13 @@ export const metadata: Metadata = {
 export default function HelpCentrePage() {
   return (
     <PageShell>
-      <div className="help-centre-page help-centre-page-compact">
-        <section className="help-centre-hero help-centre-hero-compact">
+      <div className="help-centre-page help-centre-page-structured">
+        <section className="help-centre-hero">
           <div className="help-centre-container">
             <div className="help-centre-hero-copy">
               <span className="eyebrow">ESB Games Help Centre</span>
               <h1>How can we <span className="gradient-text">help?</span></h1>
-              <p>Choose a topic or search for the task you need. If you still need help, Support will route your request to the right team.</p>
+              <p>Start with the area that best matches what you need. Search across Account help, safety, payments, Creator support, family controls, privacy and service information.</p>
               <div className="help-quick-actions">
                 <Link className="button button-secondary" href="/support/help/reset-password">Reset password</Link>
                 <Link className="button button-secondary" href="/support/help/report-player-or-game">Report a problem</Link>
@@ -30,9 +30,13 @@ export default function HelpCentrePage() {
           </div>
         </section>
 
-        <section className="help-centre-section help-centre-section-compact">
+        <section className="help-centre-section">
           <div className="help-centre-container">
-            <header className="help-section-heading help-section-heading-compact"><span className="eyebrow">Browse help</span><h2>Start with a topic.</h2></header>
+            <header className="help-browser-intro">
+              <span className="eyebrow">Browse Help</span>
+              <h2>Find the right route without the clutter.</h2>
+              <p>Help is grouped by the type of problem rather than one long list. Open a section, choose the closest task, or search across everything.</p>
+            </header>
             <HelpCentreBrowser />
           </div>
         </section>
