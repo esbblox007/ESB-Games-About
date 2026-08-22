@@ -73,9 +73,6 @@ function UserPlusIcon({ size = 21 }: { size?: number }) {
   );
 }
 
-
-
-
 export default function HomePage() {
   return (
     <PageShell>
@@ -98,7 +95,7 @@ export default function HomePage() {
 
               <div className="home-hero-action-row">
                 <div className="home-hero-actions">
-                  <a href="https://esbgames.com/login" className="button button-primary home-primary-action" data-analytics="join-now">
+                  <a href="https://esbgames.com" className="button button-primary home-primary-action" data-analytics="explore-platform">
                     <GamepadIcon size={17}/> Explore ESB Games
                   </a>
                   <Link href="/developer-hub" className="button button-secondary home-secondary-action">
@@ -119,44 +116,25 @@ export default function HomePage() {
                 <div><strong>CREATOR-FIRST</strong><span>Tools built for games, experiences and UGC.</span></div>
                 <div><strong>GLOBAL BY DESIGN</strong><span>Built for communities around the world.</span></div>
               </div>
-
             </div>
 
             <div className="home-hero-visual" aria-label="ESB Games product interface">
               <div className="home-aurora"/>
-
               <div className="home-device-scene">
                 <div className="home-laptop-frame">
                   <div className="home-laptop-screen-shell">
                     <div className="home-laptop-camera"/>
                     <div className="home-laptop-display">
-                      <Image
-                        src="/hero-studio-platform.png"
-                        alt="ESB Studio creator tools"
-                        fill
-                        sizes="(max-width: 960px) 88vw, 700px"
-                        className="home-device-image"
-                        unoptimized
-                        priority
-                      />
+                      <Image src="/hero-studio-platform.png" alt="ESB Studio creator tools" fill sizes="(max-width: 960px) 88vw, 700px" className="home-device-image" unoptimized priority />
                     </div>
                   </div>
                   <div className="home-laptop-base"/>
                 </div>
-
                 <div className="home-tablet-frame">
                   <div className="home-tablet-bezel">
                     <div className="home-tablet-camera"/>
                     <div className="home-tablet-screen">
-                      <Image
-                        src="/hero-discover-platform.png"
-                        alt="ESB Games discover experience"
-                        fill
-                        sizes="(max-width: 960px) 78vw, 500px"
-                        className="home-device-image home-tablet-image"
-                        unoptimized
-                        priority
-                      />
+                      <Image src="/hero-discover-platform.png" alt="ESB Games discover experience" fill sizes="(max-width: 960px) 78vw, 500px" className="home-device-image home-tablet-image" unoptimized priority />
                     </div>
                   </div>
                 </div>
@@ -166,7 +144,7 @@ export default function HomePage() {
         </section>
 
         <section className="home-proof-strip" aria-label="Highlights">
-          <p className="sr-only">{homeProofItems.join(". ")}</p>
+          <p className="sr-only">{homeProofItems.join(" ")}</p>
           <div className="home-proof-track" aria-hidden="true">
             {[0, 1, 2].map((group) => (
               <div className="home-proof-group" key={group}>
@@ -190,25 +168,21 @@ export default function HomePage() {
                 <p>ESB Studio is being designed around approachable building tools, reusable workflows, scripting, animation, VFX and connected publishing. Features will be introduced in stages as the creator tool moves through testing.</p>
                 <Link href="/developer-hub">Explore ESB Studio <span>→</span></Link>
               </article>
-
               <article className="home-feature-card home-feature-small">
                 <span className="home-feature-icon home-feature-icon-blue"><ShieldIcon size={21}/></span>
                 <h3>Safe by Design</h3>
                 <p>Moderation workflows, parental controls, account protection and age-appropriate settings are being designed alongside the platform. Safety requirements will continue to be tested and improved before public launch.</p>
               </article>
-
               <article className="home-feature-card home-feature-small home-feature-performance">
                 <span className="home-feature-icon home-feature-icon-pink"><BoltIcon/></span>
                 <h3>Smooth Performance Everywhere</h3>
                 <p>The platform and Studio are being developed with responsive controls, scalable graphics settings and support for a wide range of devices. Final performance targets will be confirmed through testing.</p>
               </article>
-
               <article className="home-feature-card home-feature-half">
                 <span className="home-feature-icon home-feature-icon-purple"><CodeIcon/></span>
                 <h3>Built for Creators</h3>
                 <p>Creator tools, analytics, collaboration and publishing workflows are being developed as one connected experience. Monetisation and publishing requirements will be published before those systems launch.</p>
               </article>
-
               <article className="home-feature-card home-feature-half">
                 <span className="home-feature-icon home-feature-icon-orange"><InfinityIcon/></span>
                 <h3>Endless Universes</h3>
@@ -233,9 +207,7 @@ export default function HomePage() {
                 <span className="home-overline home-overline-cyan">FOR PLAYERS</span>
                 <h3>Find your people.<br/>Make your legend.</h3>
                 <p>Friends, groups, events, messaging and discovery are being brought together with family controls and platform safety systems.</p>
-                <div className="home-community-avatars" aria-label="One connected ESB Games community">
-                  <i/><i/><i/><i/><i/><b>ESB</b>
-                </div>
+                <div className="home-community-avatars" aria-label="One connected ESB Games community"><i/><i/><i/><i/><i/><b>ESB</b></div>
                 <a href="https://esbgames.com" className="button button-secondary" data-analytics="explore-platform"><UserPlusIcon/> Explore the platform</a>
               </article>
             </div>
@@ -247,11 +219,8 @@ export default function HomePage() {
             <div className="home-support-copy">
               <h2>We&apos;re here when<br/><span className="home-gradient">you need us</span>.</h2>
               <p>Need help with an account, billing, safety or a technical issue? Use the private support flow to send the details to the appropriate ESB Games team.</p>
-              <div className="home-support-actions">
-                <Link href="/support" className="button button-primary"><HeadsetIcon/> Go to Support</Link>
-              </div>
+              <div className="home-support-actions"><Link href="/support" className="button button-primary"><HeadsetIcon/> Go to Support</Link></div>
             </div>
-
             <div className="home-support-cards">
               <article><span className="home-feature-icon home-feature-icon-magenta"><TicketIcon/></span><h3>Structured Requests</h3><p>Account, billing, creator, technical and general support categories are prepared.</p></article>
               <article><span className="home-feature-icon home-feature-icon-blue"><BoltIcon/></span><h3>Clear Statuses</h3><p>Support requests use clear case statuses from receipt through review and resolution.</p></article>
@@ -284,7 +253,7 @@ export default function HomePage() {
               <div>
                 <span className="home-newsletter-overline"><i/> STAY IN THE LOOP</span>
                 <h2>Get drops, updates &amp; insider<br/>news.</h2>
-                <p>Product updates, development notes and launch announcements, sent to your inbox. Unsubscribe at any time.</p>
+                <p>Product updates, development notes and launch announcements will be available here as ESB Games moves toward public launch.</p>
               </div>
               <NewsletterForm />
             </div>
