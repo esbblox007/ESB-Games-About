@@ -1,8 +1,10 @@
 import type { MetadataRoute } from "next";
 import { getPublishedArticleIndex, getPublishedDocumentationIndex } from "@/lib/content/news";
-import { policyDocuments } from "@/lib/content/policies-data";
+import { publishedPolicyDocuments } from "@/lib/content/policy-publication";
 import { supportArticles } from "@/lib/content/support";
 import { getLiveJobs } from "@/lib/content/careers-live";
+
+const STATIC_CONTENT_LAST_REVIEWED = new Date("2026-08-22T00:00:00Z");
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://about.esbgames.com";
@@ -24,7 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticEntries: MetadataRoute.Sitemap = paths.map((path) => ({
     url: `${base}${path}`,
-    lastModified: new Date(),
+    lastModified: STATIC_CONTENT_LAST_REVIEWED,
     changeFrequency: path === "" || path === "/news" ? "weekly" : "monthly",
     priority: path === "" ? 1 : path === "/news" || path === "/download" ? 0.9 : 0.8,
   }));
@@ -46,19 +48,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const supportEntries: MetadataRoute.Sitemap = supportArticles.map((article) => ({
     url: `${base}/support/help/${article.slug}`,
-    lastModified: new Date(),
+    lastModified: STATIC_CONTENT_LAST_REVIEWED,
     changeFrequency: "monthly",
     priority: 0.65,
   }));
 
   const careerEntries: MetadataRoute.Sitemap = careers.jobs.map((job) => ({
     url: `${base}/careers/${job.slug}`,
-    lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.75,
   }));
 
-  const policyEntries: MetadataRoute.Sitemap = policyDocuments.map((policy) => ({ url: `${base}/${policy.slug}`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 }));
+  const policyEntries: MetadataRoute.Sitemap = publishedPolicyDocuments.map((policy) => ({
+    url: `${base}/${policy.slug}`,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
 
   return [...staticEntries, ...policyEntries, ...articleEntries, ...documentationEntries, ...supportEntries, ...careerEntries];
 }
