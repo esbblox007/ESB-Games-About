@@ -5,10 +5,10 @@ function formatDate(value: string) {
   return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" }).format(new Date(value));
 }
 
-export default function ArticleCard({ article, featured = false }: { article: NewsArticle; featured?: boolean }) {
+export default function ArticleCard({ article, featured = false, href }: { article: NewsArticle; featured?: boolean; href?: string }) {
   return (
     <article className={`article-card${featured ? " article-card-featured" : ""}`}>
-      <Link href={`/news/${article.slug}`} className="article-card-link" aria-label={`Open article: ${article.title}`}>
+      <Link href={href ?? `/news/${article.slug}`} className="article-card-link" aria-label={`Open article: ${article.title}`}>
         <div className="article-card-media">
           {article.coverImage ? (
             <img src={article.coverImage} alt={article.coverImageAlt || ""} loading={featured ? "eager" : "lazy"} />

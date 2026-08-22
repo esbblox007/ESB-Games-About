@@ -178,6 +178,8 @@ export async function getPublishedArticles(options?: {
   query?: string;
   page?: number;
   pageSize?: number;
+  tag?: string;
+  excludeTag?: string;
 }): Promise<NewsListResult> {
   const locale = options?.locale || "en";
   const page = Math.max(1, options?.page || 1);
@@ -187,9 +189,11 @@ export async function getPublishedArticles(options?: {
     const source = previewEnabled ? previewFor(locale) : [];
     const filtered = source.filter((article) => {
       const categoryMatches = !options?.category || article.category === options.category;
+      const tagMatches = !options?.tag || article.tags.some((tag) => tag.toLowerCase() === options.tag!.toLowerCase());
+      const excludeTagMatches = !options?.excludeTag || !article.tags.some((tag) => tag.toLowerCase() === options.excludeTag!.toLowerCase());
       const haystack = `${article.title} ${article.excerpt} ${article.category} ${article.tags.join(" ")}`.toLowerCase();
       const queryMatches = !options?.query || haystack.includes(options.query.toLowerCase());
-      return categoryMatches && queryMatches;
+      return categoryMatches && tagMatches && excludeTagMatches && queryMatches;
     });
     const start = (page - 1) * pageSize;
     return {
@@ -212,6 +216,10 @@ export async function getPublishedArticles(options?: {
       "order=featured.desc,published_at.desc",
     ];
     if (options?.category) filters.push(`category=eq.${encodeURIComponent(options.category)}`);
+    const safeTag = options?.tag?.toLowerCase().replace(/[^a-z0-9_-]/g, "");
+    const safeExcludeTag = options?.excludeTag?.toLowerCase().replace(/[^a-z0-9_-]/g, "");
+    if (safeTag) filters.push(`tags=cs.${encodeURIComponent(`{${safeTag}}`)}`);
+    if (safeExcludeTag) filters.push(`tags=not.cs.${encodeURIComponent(`{${safeExcludeTag}}`)}`);
     if (options?.query) {
       const safe = options.query.replace(/[,*()]/g, " ").trim();
       if (safe) filters.push(`or=(title.ilike.*${encodeURIComponent(safe)}*,excerpt.ilike.*${encodeURIComponent(safe)}*)`);
@@ -228,6 +236,8 @@ export async function getPublishedArticles(options?: {
           "visibility=eq.Public",
           `published_at=lte.${now}`,
           `locale=eq.${encodeURIComponent(locale)}`,
+          ...(safeTag ? [`tags=cs.${encodeURIComponent(`{${safeTag}}`)}`] : []),
+          ...(safeExcludeTag ? [`tags=not.cs.${encodeURIComponent(`{${safeExcludeTag}}`)}`] : []),
           "limit=500",
         ].join("&"),
         { revalidate: 300, tags: ["news-categories"] },
@@ -281,7 +291,7 @@ export async function getArticleBySlug(slug: string, locale = "en"):
 }
 
 export async function getRelatedArticles(article: NewsArticle, limit = 3): Promise<NewsArticle[]> {
-  const result = await getPublishedArticles({ locale: article.locale, pageSize: 24 });
+  const result = await getPublishedArticles({ locale: article.locale, pageSize: 24, excludeTag: "documentation-only" });
   const preferred = result.articles.filter((candidate) =>
     candidate.slug !== article.slug &&
     (article.relatedSlugs.includes(candidate.slug) || candidate.category === article.category),
@@ -298,7 +308,7 @@ export async function getPublishedArticleIndex(locale = "en"): Promise<Array<{ s
     const now = encodeURIComponent(new Date().toISOString());
     const rows = await contentSelect<Pick<ArticleRow, "slug" | "published_at" | "updated_at" | "featured" | "sitemap">>(
       "cms_articles",
-      ["select=slug,published_at,updated_at,featured,sitemap", "publication_state=eq.Published", "visibility=eq.Public", "sitemap=eq.true", `published_at=lte.${now}`, `locale=eq.${encodeURIComponent(locale)}`, "order=published_at.desc", "limit=500"].join("&"),
+      ["select=slug,published_at,updated_at,featured,sitemap", "publication_state=eq.Published", "visibility=eq.Public", "sitemap=eq.true", "tags=not.cs.%7Bdocumentation-only%7D", `published_at=lte.${now}`, `locale=eq.${encodeURIComponent(locale)}`, "order=published_at.desc", "limit=500"].join("&"),
       { revalidate: 300, tags: ["news-index"] },
     );
     if (rows.length === 0 && locale !== "en") return getPublishedArticleIndex("en");
@@ -307,6 +317,27 @@ export async function getPublishedArticleIndex(locale = "en"): Promise<Array<{ s
     return [];
   }
 }
+
+export async function getPublishedDocumentationIndex(locale = "en"): Promise<Array<{ slug: string; publishedAt: string; updatedAt?: string; featured: boolean }>> {
+  if (!contentBackendConfigured) {
+    return (previewEnabled ? previewFor(locale) : [])
+      .filter((article) => article.tags.some((tag) => tag.toLowerCase() === "documentation"))
+      .map((article) => ({ slug: article.slug, publishedAt: article.publishedAt, updatedAt: article.updatedAt, featured: article.featured }));
+  }
+  try {
+    const now = encodeURIComponent(new Date().toISOString());
+    const rows = await contentSelect<Pick<ArticleRow, "slug" | "published_at" | "updated_at" | "featured" | "sitemap">>(
+      "cms_articles",
+      ["select=slug,published_at,updated_at,featured,sitemap", "publication_state=eq.Published", "visibility=eq.Public", "sitemap=eq.true", "tags=cs.%7Bdocumentation%7D", `published_at=lte.${now}`, `locale=eq.${encodeURIComponent(locale)}`, "order=published_at.desc", "limit=500"].join("&"),
+      { revalidate: 300, tags: ["documentation-index"] },
+    );
+    if (rows.length === 0 && locale !== "en") return getPublishedDocumentationIndex("en");
+    return rows.map((row) => ({ slug: row.slug, publishedAt: row.published_at || new Date(0).toISOString(), updatedAt: row.updated_at || undefined, featured: Boolean(row.featured) }));
+  } catch {
+    return [];
+  }
+}
+
 export async function getAllPublishedArticleSlugs(locale = "en") {
   const index = await getPublishedArticleIndex(locale);
   return index.map((article) => article.slug);

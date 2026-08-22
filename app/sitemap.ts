@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
-import { getPublishedArticleIndex } from "@/lib/content/news";
+import { getPublishedArticleIndex, getPublishedDocumentationIndex } from "@/lib/content/news";
+import { policyDocuments } from "@/lib/content/policies-data";
 import { supportArticles } from "@/lib/content/support";
 import { getLiveJobs } from "@/lib/content/careers-live";
 
@@ -11,6 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/developer-hub",
     "/parental-controls",
     "/news",
+    "/documentation",
     "/download",
     "/careers",
     "/support",
@@ -26,12 +28,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: path === "" ? 1 : path === "/news" || path === "/download" ? 0.9 : 0.8,
   }));
 
-  const [news, careers] = await Promise.all([getPublishedArticleIndex(), getLiveJobs()]);
+  const [news, documentation, careers] = await Promise.all([getPublishedArticleIndex(), getPublishedDocumentationIndex(), getLiveJobs()]);
   const articleEntries: MetadataRoute.Sitemap = news.map((article) => ({
     url: `${base}/news/${article.slug}`,
     lastModified: new Date(article.updatedAt || article.publishedAt),
     changeFrequency: "monthly",
     priority: article.featured ? 0.85 : 0.75,
+  }));
+
+  const documentationEntries: MetadataRoute.Sitemap = documentation.map((article) => ({
+    url: `${base}/documentation/${article.slug}`,
+    lastModified: new Date(article.updatedAt || article.publishedAt),
+    changeFrequency: "monthly",
+    priority: article.featured ? 0.8 : 0.7,
   }));
 
   const supportEntries: MetadataRoute.Sitemap = supportArticles.map((article) => ({
@@ -48,5 +57,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.75,
   }));
 
-  return [...staticEntries, ...articleEntries, ...supportEntries, ...careerEntries];
+  const policyEntries: MetadataRoute.Sitemap = policyDocuments.map((policy) => ({ url: `${base}/${policy.slug}`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 }));
+
+  return [...staticEntries, ...policyEntries, ...articleEntries, ...documentationEntries, ...supportEntries, ...careerEntries];
 }

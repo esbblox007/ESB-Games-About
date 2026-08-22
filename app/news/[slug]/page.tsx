@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import PageShell from "@/components/PageShell";
 import ArticleCard from "@/components/ArticleCard";
 import ArticleRenderer, { ArticleVideoEmbed } from "@/components/ArticleRenderer";
@@ -33,7 +33,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const { article } = await getArticleBySlug(slug);
   if (!article) return { title: "Article unavailable", robots: { index: false, follow: false } };
-  const canonical = article.canonicalUrl || `${siteUrl}/news/${article.slug}`;
+  const documentationOnly = article.tags.some((tag) => tag.toLowerCase() === "documentation-only");
+  const canonical = article.canonicalUrl || (documentationOnly ? `${siteUrl}/documentation/${article.slug}` : `${siteUrl}/news/${article.slug}`);
   const image = article.socialImage || article.coverImage;
   return {
     title: article.seoTitle || article.title,
@@ -66,9 +67,10 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
     );
   }
   if (!article) notFound();
+  if (article.tags.some((tag) => tag.toLowerCase() === "documentation-only")) redirect(`/documentation/${article.slug}`);
 
   const related = await getRelatedArticles(article);
-  const all = await getPublishedArticles({ locale: article.locale, pageSize: 24 });
+  const all = await getPublishedArticles({ locale: article.locale, pageSize: 24, excludeTag: "documentation-only" });
   const index = all.articles.findIndex((item) => item.slug === article.slug);
   const previous = index >= 0 ? all.articles[index + 1] : undefined;
   const next = index > 0 ? all.articles[index - 1] : undefined;

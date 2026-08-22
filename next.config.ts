@@ -37,6 +37,9 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      { source: "/tos", destination: "/terms-of-service", permanent: true },
+      { source: "/docs", destination: "/documentation", permanent: true },
+      { source: "/doc", destination: "/documentation", permanent: true },
       { source: "/blog", destination: "/news", permanent: true },
       { source: "/blog/:slug*", destination: "/news/:slug*", permanent: true },
       { source: "/creator-hub", destination: "/developer-hub", permanent: true },

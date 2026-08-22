@@ -27,7 +27,7 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
   const category = single(params.category) || "";
   const query = single(params.q) || "";
   const page = Math.max(1, Number(single(params.page) || 1));
-  const result = await getPublishedArticles({ category: category || undefined, query: query || undefined, page, pageSize: 9 });
+  const result = await getPublishedArticles({ category: category || undefined, query: query || undefined, page, pageSize: 9, excludeTag: "documentation-only" });
   const featured = page === 1 ? result.articles.find((article) => article.featured) : undefined;
   const standardArticles = featured ? result.articles.filter((article) => article.id !== featured.id) : result.articles;
   const totalPages = Math.max(1, Math.ceil(result.total / 9));

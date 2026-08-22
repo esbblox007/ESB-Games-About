@@ -16,12 +16,12 @@ export type TrustSection = {
   resources: TrustResource[];
 };
 
-const prelaunch = (slug: string, title: string, description: string): TrustResource => ({
+const prelaunch = (slug: string, title: string, description: string, href: string): TrustResource => ({
   slug,
   title,
   description,
   state: "development",
-  href: `/legal/${slug}`,
+  href,
 });
 
 export const trustSections: TrustSection[] = [
@@ -30,13 +30,13 @@ export const trustSections: TrustSection[] = [
     title: "Legal",
     description: "The terms and policies that will govern access, payments, subscriptions and virtual currency across ESB Games.",
     resources: [
-      prelaunch("terms", "Terms of Service", "The terms governing access to and use of ESB Games services."),
-      prelaunch("privacy", "Privacy Policy", "How ESB Games handles personal information and privacy choices."),
-      prelaunch("cookies", "Cookie Policy", "How cookies and similar technologies are used on ESB Games websites."),
-      prelaunch("refunds", "Refund Policy", "The planned rules for eligible refunds and payment reversals."),
-      prelaunch("subscription-terms", "Subscription Terms", "Terms for paid ESB Games memberships when subscriptions become available."),
-      prelaunch("esbucks", "ESBucks & Virtual Currency Policy", "Rules for ESBucks, virtual items and platform balances."),
-      prelaunch("payment-terms", "Payment Terms", "The planned terms for purchases, billing and supported payment methods."),
+      prelaunch("terms", "Terms of Service", "The terms governing access to and use of ESB Games services.", "/terms-of-service"),
+      prelaunch("privacy", "Privacy Policy", "How ESB Games handles personal information and privacy choices.", "/privacy-policy"),
+      prelaunch("cookies", "Cookie Policy", "How cookies and similar technologies are used on ESB Games websites.", "/cookie-policy"),
+      prelaunch("refunds", "Refund Policy", "The planned rules for eligible refunds and payment reversals.", "/refund-policy"),
+      prelaunch("subscription-terms", "Subscription Terms", "Terms for paid ESB Games memberships when subscriptions become available.", "/subscription-terms"),
+      prelaunch("esbucks", "ESBucks & Virtual Currency Policy", "Rules for ESBucks, virtual items and platform balances.", "/esbucks-virtual-currency-policy"),
+      prelaunch("payment-terms", "Payment Terms", "The planned terms for purchases, billing and supported payment methods.", "/payment-terms"),
     ],
   },
   {
@@ -44,12 +44,12 @@ export const trustSections: TrustSection[] = [
     title: "Safety",
     description: "Clear standards, reporting routes and enforcement principles designed to support safer communities.",
     resources: [
-      prelaunch("community-standards", "Community Standards", "The standards being finalised for behaviour, content and participation across ESB Games."),
-      prelaunch("child-safety", "Child Safety", "The principles and safeguards being developed for younger users and families."),
-      prelaunch("reporting-enforcement", "Reporting & Enforcement Policy", "How reports, review and enforcement are intended to work across the ecosystem."),
-      prelaunch("appeals", "Appeals Policy", "How eligible moderation decisions will be able to be challenged and reviewed."),
-      { slug: "safety-centre", title: "Safety Centre", description: "A high-level overview of prevention, detection, enforcement, appeals and family safety.", state: "available", href: "/trust/safety" },
-      prelaunch("transparency", "Transparency Reports", "The structure for future public reporting about safety and enforcement activity."),
+      prelaunch("community-standards", "Community Standards", "The standards being finalised for behaviour, content and participation across ESB Games.", "/community-standards"),
+      prelaunch("child-safety", "Child Safety", "The principles and safeguards being developed for younger users and families.", "/child-safety"),
+      prelaunch("reporting-enforcement", "Reporting & Enforcement Policy", "How reports, review and enforcement are intended to work across the ecosystem.", "/reporting-enforcement-policy"),
+      prelaunch("appeals", "Appeals Policy", "How eligible moderation decisions will be able to be challenged and reviewed.", "/appeals-policy"),
+      { slug: "safety-centre", title: "Safety Centre", description: "A detailed public safety resource covering prevention, detection, enforcement, appeals and family safety.", state: "development", href: "/safety-centre" },
+      prelaunch("transparency", "Transparency Reports", "The structure for future public reporting about safety and enforcement activity.", "/trust#safety"),
     ],
   },
   {
@@ -57,10 +57,10 @@ export const trustSections: TrustSection[] = [
     title: "Parents & Families",
     description: "Guidance and tools designed to help parents and guardians understand and manage age-appropriate experiences.",
     resources: [
-      prelaunch("parental-guide", "Parental Guide", "A practical guide to accounts, safety, privacy and family settings."),
-      { slug: "family-centre", title: "Family Centre", description: "The dedicated family experience for linked accounts and parental controls, currently in development.", state: "development", href: "/parental-controls" },
-      prelaunch("digital-wellbeing", "Screen Time & Digital Wellbeing Guide", "Guidance for healthy play patterns, screen-time controls and family conversations."),
-      prelaunch("age-ratings", "Age Ratings & Content Guide", "How content labels and age-appropriate experiences are intended to be communicated."),
+      prelaunch("parental-guide", "Parental Guide", "A practical guide to accounts, safety, privacy and family settings.", "/parental-guide"),
+      { slug: "family-centre", title: "Family Centre Guide", description: "Guidance for the dedicated family experience, linked accounts and parental controls.", state: "development", href: "/family-centre-guide" },
+      prelaunch("digital-wellbeing", "Screen Time & Digital Wellbeing Guide", "Guidance for healthy play patterns, screen-time controls and family conversations.", "/screen-time-digital-wellbeing-guide"),
+      prelaunch("age-ratings", "Age Ratings & Content Guide", "How content labels and age-appropriate experiences are intended to be communicated.", "/age-ratings-content-guide"),
     ],
   },
   {
@@ -68,12 +68,12 @@ export const trustSections: TrustSection[] = [
     title: "Creators",
     description: "Standards and policies being prepared for creators, publishing, UGC and Marketplace participation.",
     resources: [
-      prelaunch("creator-terms", "Creator Terms", "The planned terms for using ESB Studio and creator services."),
-      prelaunch("marketplace", "Marketplace Policy", "Rules being prepared for Marketplace listings, transactions and creator conduct."),
-      prelaunch("ugc", "UGC Guidelines", "Guidance for user-generated content published through ESB Games."),
-      prelaunch("copyright", "Copyright Policy", "How copyright concerns and rights-holder requests will be handled."),
-      prelaunch("trademark", "Trademark Policy", "Guidance on trademarks, brand use and protected identifiers."),
-      prelaunch("brand-guidelines", "Brand Guidelines", "Rules for approved use of ESB Games names, logos and brand assets."),
+      prelaunch("creator-terms", "Creator Terms", "The planned terms for using ESB Studio and creator services.", "/creator-terms"),
+      prelaunch("marketplace", "Marketplace Policy", "Rules being prepared for Marketplace listings, transactions and creator conduct.", "/marketplace-policy"),
+      prelaunch("ugc", "UGC Guidelines", "Guidance for user-generated content published through ESB Games.", "/ugc-guidelines"),
+      prelaunch("copyright", "Copyright Policy", "How copyright concerns and rights-holder requests will be handled.", "/copyright-policy"),
+      prelaunch("trademark", "Trademark Policy", "Guidance on trademarks, brand use and protected identifiers.", "/trademark-policy"),
+      prelaunch("brand-guidelines", "Brand Guidelines", "Rules for approved use of ESB Games names, logos and brand assets.", "/brand-guidelines"),
     ],
   },
   {
@@ -81,11 +81,11 @@ export const trustSections: TrustSection[] = [
     title: "Privacy & Security",
     description: "Resources for privacy rights, data handling, security practices and responsible vulnerability reporting.",
     resources: [
-      prelaunch("data-requests", "Data Requests", "How users will be able to request access, correction or deletion of eligible data."),
-      prelaunch("data-retention", "Data Retention Policy", "How retention periods and deletion practices are being documented."),
-      prelaunch("security", "Security Policy", "The security principles being established for ESB Games services and accounts."),
-      prelaunch("responsible-disclosure", "Responsible Disclosure Policy", "Guidance for reporting potential security vulnerabilities responsibly."),
-      { slug: "accessibility", title: "Accessibility Statement", description: "Current accessibility commitments and the status of the full public statement.", state: "development", href: "/accessibility" },
+      prelaunch("data-requests", "Data Requests", "How users will be able to request access, correction or deletion of eligible data.", "/data-requests"),
+      prelaunch("data-retention", "Data Retention Policy", "How retention periods and deletion practices are being documented.", "/data-retention-policy"),
+      prelaunch("security", "Security Policy", "The security principles being established for ESB Games services and accounts.", "/security-policy"),
+      prelaunch("responsible-disclosure", "Responsible Disclosure Policy", "Guidance for reporting potential security vulnerabilities responsibly.", "/responsible-disclosure-policy"),
+      { slug: "accessibility", title: "Accessibility Statement", description: "Accessibility commitments across ESB Games products and services.", state: "development", href: "/accessibility-statement" },
     ],
   },
   {
@@ -100,9 +100,6 @@ export const trustSections: TrustSection[] = [
   },
 ];
 
-export const legalDocuments = Object.fromEntries(
-  trustSections
-    .flatMap((section) => section.resources)
-    .filter((resource) => resource.href?.startsWith("/legal/"))
-    .map((resource) => [resource.slug, resource]),
-) as Record<string, TrustResource>;
+export const legalDocuments: Record<string, TrustResource> = Object.fromEntries(
+  trustSections.flatMap((section) => section.resources).map((resource) => [resource.slug, resource]),
+);

@@ -7,7 +7,7 @@ function escapeXml(value: string) {
 }
 
 export async function GET() {
-  const result = await getPublishedArticles({ pageSize: 24 });
+  const result = await getPublishedArticles({ pageSize: 24, excludeTag: "documentation-only" });
   const items = result.articles.map((article) => `
     <item>
       <title>${escapeXml(article.title)}</title>

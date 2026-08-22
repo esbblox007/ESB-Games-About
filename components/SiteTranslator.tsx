@@ -21,10 +21,19 @@ function resetGoogleTranslatePageOffset() {
   forceImportantStyle(document.body, "top", "0px");
   forceImportantStyle(document.body, "margin-top", "0px");
   forceImportantStyle(document.body, "position", "static");
+  forceImportantStyle(document.body, "transform", "none");
+  forceImportantStyle(document.body, "translate", "none");
   forceImportantStyle(document.documentElement, "top", "0px");
   forceImportantStyle(document.documentElement, "margin-top", "0px");
-  document.querySelector<HTMLElement>(".site-header")?.style.removeProperty("transform");
-  document.querySelectorAll<HTMLElement>("body > .skiptranslate:not(.google-translate-host), .goog-te-banner-frame").forEach((element) => {
+  forceImportantStyle(document.documentElement, "transform", "none");
+  forceImportantStyle(document.documentElement, "translate", "none");
+  const header = document.querySelector<HTMLElement>(".site-header");
+  if (header) {
+    forceImportantStyle(header, "top", "0px");
+    forceImportantStyle(header, "transform", "none");
+    forceImportantStyle(header, "translate", "none");
+  }
+  document.querySelectorAll<HTMLElement>("body > .skiptranslate:not(.google-translate-host), .goog-te-banner-frame, .VIpgJd-ZVi9od-ORHb-OEVmcd").forEach((element) => {
     forceImportantStyle(element, "display", "none");
     forceImportantStyle(element, "height", "0px");
   });
