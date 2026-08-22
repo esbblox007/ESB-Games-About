@@ -7,7 +7,7 @@ import { trustSections } from "@/lib/content/trust";
 
 export const metadata: Metadata = {
   title: "Trust, Safety & Legal",
-  description: "Explore ESB Games safety, family, privacy, creator and legal resources being prepared for public launch.",
+  description: "Explore ESB Games safety, family, privacy, creator and legal resources in the public Trust Centre.",
   alternates: { canonical: "/trust" },
   openGraph: {
     title: "Trust, Safety & Legal | ESB Games",
@@ -27,12 +27,12 @@ export default function TrustPage() {
             <div>
               <span className="eyebrow">ESB Games Trust Centre</span>
               <h1>Trust, Safety<br />&amp; <span className="gradient-text">Legal.</span></h1>
-              <p>Building an environment where everyone can discover, belong and build safely. This centre brings together the public resources being prepared for the ESB Games ecosystem.</p>
+              <p>Building an environment where everyone can discover, belong and build safely. This centre brings together the public resources available for the ESB Games ecosystem.</p>
               <div className="trust-hero-actions"><Link href="/trust/safety" className="button button-primary"><ShieldIcon size={17} /> Safety Centre</Link><Link href="/parental-controls" className="button button-secondary">Family Centre <ArrowIcon size={16} /></Link></div>
             </div>
             <aside className="trust-truth-card" aria-label="Document availability guide">
-              <span className="eyebrow">Pre-launch truth model</span>
-              <h2>Clear about what is ready.</h2>
+              <span className="eyebrow">Resource status</span>
+              <h2>Clear about what is available.</h2>
               <dl>
                 <div><dt><i className="trust-state-dot available" /> Available now</dt><dd>Public resources or services that can be used today.</dd></div>
                 <div><dt><i className="trust-state-dot development" /> In development</dt><dd>Active work that is not yet a final public release.</dd></div>
@@ -44,7 +44,7 @@ export default function TrustPage() {
 
         <section className="trust-resource-section">
           <div className="trust-container">
-            <header className="trust-section-heading"><span className="eyebrow">Public resources</span><h2>Everything in one <span className="gradient-text">trusted place.</span></h2><p>Unfinished policy drafts are not published here. Pre-launch documents use a clear temporary state until final text is approved.</p></header>
+            <header className="trust-section-heading"><span className="eyebrow">Public resources</span><h2>Everything in one <span className="gradient-text">trusted place.</span></h2><p>The policy and guidance library is available here. If a source document still contains pre-launch legal placeholders or a draft notice, the document page identifies that clearly rather than hiding it.</p></header>
             <div className="trust-section-grid">
               {trustSections.map((section, index) => (
                 <article className="trust-section-card" key={section.id} id={section.id}>

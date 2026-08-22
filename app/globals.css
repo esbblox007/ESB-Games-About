@@ -3813,3 +3813,152 @@ body {
 }
 .career-culture-grid h3 { font-size: 20px; }
 .career-culture-grid p { color: #d2d9e9; font-size: 12.5px; }
+
+/* --------------------------------------------------------------------------
+   August 22, 2026 — QA follow-up: exact header spacing + Help Centre polish
+   -------------------------------------------------------------------------- */
+
+/* Reserve the fixed header exactly once in normal document flow. This avoids
+   the dark band created when padding was applied to the entire <main> element. */
+#main-content { padding-top: 0 !important; }
+.site-header-spacer {
+  display: block;
+  width: 100%;
+  height: var(--site-header-height);
+  min-height: var(--site-header-height);
+  flex: 0 0 var(--site-header-height);
+  pointer-events: none;
+}
+.header-inner { min-height: var(--site-header-height); }
+
+/* Quick Help rows need enough internal height/padding at browser zoom levels. */
+.support-quick-links { gap: 10px; }
+.support-quick-link {
+  min-height: 70px;
+  padding: 16px 26px !important;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 22px;
+}
+.support-quick-link > span {
+  display: block;
+  min-width: 0;
+  padding-block: 2px;
+  line-height: 1.45;
+}
+.support-quick-link svg {
+  justify-self: end;
+  margin: 0;
+}
+
+/* Help Centre */
+.help-centre-page { background: #030610; }
+.help-centre-hero {
+  padding: 88px 0 66px;
+  border-bottom: 1px solid rgba(136, 148, 190, .12);
+  background:
+    radial-gradient(circle at 20% 30%, rgba(142, 54, 255, .22), transparent 34rem),
+    radial-gradient(circle at 84% 18%, rgba(14, 192, 226, .14), transparent 34rem),
+    #050815;
+}
+.help-centre-container { width: min(calc(100% - 56px), 1240px); margin: 0 auto; }
+.help-centre-hero-copy { max-width: 790px; }
+.help-centre-hero h1 { margin: 13px 0 16px; font-size: clamp(52px, 6vw, 82px); line-height: .98; letter-spacing: -.065em; }
+.help-centre-hero p { max-width: 720px; margin: 0; color: #a9b3ca; font-size: clamp(16px, 1.5vw, 20px); line-height: 1.65; }
+.help-search-shell {
+  margin-top: 30px;
+  max-width: 760px;
+  min-height: 58px;
+  padding: 0 18px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(151, 134, 205, .28);
+  border-radius: 14px;
+  background: rgba(7, 11, 27, .92);
+  box-shadow: 0 18px 55px rgba(0,0,0,.25);
+}
+.help-search-shell svg { color: #b992ff; }
+.help-search-shell input { width: 100%; border: 0; outline: 0; background: transparent; color: #fff; font-size: 15px; }
+.help-search-shell input::placeholder { color: #78839f; }
+.help-quick-actions { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; }
+.help-centre-section { padding: 74px 0; }
+.help-centre-section.alt { background: #050916; border-block: 1px solid rgba(132,145,187,.08); }
+.help-section-heading { max-width: 720px; margin-bottom: 28px; }
+.help-section-heading h2 { margin: 8px 0 10px; font-size: clamp(32px, 4vw, 48px); letter-spacing: -.05em; }
+.help-section-heading p { margin: 0; color: #9ba7c1; line-height: 1.7; }
+.help-category-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.help-category-card {
+  min-width: 0;
+  padding: 23px;
+  border: 1px solid rgba(135, 148, 192, .14);
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(11,17,35,.94), rgba(6,10,23,.94));
+}
+.help-category-card header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.help-category-card h3 { margin: 0; font-size: 20px; letter-spacing: -.025em; }
+.help-category-card p { margin: 7px 0 0; color: #8996b1; font-size: 13px; line-height: 1.6; }
+.help-category-card ul { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.help-category-card li { min-width: 0; }
+.help-category-card a,
+.help-category-card .help-article-label {
+  min-height: 39px;
+  padding: 9px 11px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-radius: 9px;
+  color: #cbd4e8;
+  background: rgba(255,255,255,.025);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.help-category-card a:hover { color: #fff; background: rgba(139, 79, 242, .10); }
+.help-category-card .help-article-label { color: #98a4bd; }
+.help-category-card[hidden] { display: none; }
+.help-empty-state { padding: 26px; border: 1px dashed rgba(145, 133, 190, .25); border-radius: 14px; color: #98a4bd; text-align: center; }
+.help-popular-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.help-popular-card { padding: 22px; border: 1px solid rgba(135,148,192,.14); border-radius: 15px; background: #080d1c; }
+.help-popular-card span { color: #ad88ff; font-size: 10px; font-weight: 850; letter-spacing: .13em; text-transform: uppercase; }
+.help-popular-card h3 { margin: 9px 0 8px; font-size: 18px; }
+.help-popular-card p { margin: 0; color: #8f9bb5; font-size: 12px; line-height: 1.6; }
+.help-popular-card a { display: inline-flex; margin-top: 16px; color: #cf8cff; font-size: 12px; font-weight: 800; }
+.help-faq-list { display: grid; gap: 10px; }
+.help-faq-list details { border: 1px solid rgba(135,148,192,.14); border-radius: 13px; background: #080d1c; }
+.help-faq-list summary { padding: 17px 20px; cursor: pointer; font-weight: 750; }
+.help-faq-list p { margin: 0; padding: 0 20px 19px; color: #98a4bd; line-height: 1.65; }
+.help-contact-band { padding: 66px 0 86px; }
+.help-contact-card { padding: 30px; display: flex; align-items: center; justify-content: space-between; gap: 28px; border: 1px solid rgba(151, 105, 255, .28); border-radius: 18px; background: linear-gradient(135deg, rgba(91,46,174,.22), rgba(4,22,36,.92)); }
+.help-contact-card h2 { margin: 6px 0 8px; font-size: 30px; letter-spacing: -.04em; }
+.help-contact-card p { margin: 0; color: #9ca8c1; }
+
+.newsletter-unsubscribe-page { min-height: 60vh; padding: 90px 0; background: #030610; }
+.newsletter-unsubscribe-card { width: min(calc(100% - 40px), 640px); margin: 0 auto; padding: 34px; border: 1px solid rgba(145,128,198,.22); border-radius: 18px; background: #080d1c; text-align: center; }
+.newsletter-unsubscribe-card h1 { margin: 9px 0 12px; font-size: clamp(34px, 5vw, 52px); letter-spacing: -.05em; }
+.newsletter-unsubscribe-card p { color: #9da9c1; line-height: 1.65; }
+.newsletter-unsubscribe-actions { margin-top: 24px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.newsletter-unsubscribe-message { margin-top: 18px !important; font-weight: 700; }
+.newsletter-unsubscribe-message.success { color: #49ddb2; }
+.newsletter-unsubscribe-message.error { color: #ff6678; }
+
+@media (max-width: 820px) {
+  .help-centre-container { width: calc(100% - 30px); }
+  .help-centre-hero { padding: 64px 0 50px; }
+  .help-category-grid, .help-popular-grid { grid-template-columns: 1fr; }
+  .help-contact-card { align-items: stretch; flex-direction: column; }
+  .help-contact-card .button { width: 100%; }
+}
+
+/* Final header geometry: keep the header in normal flow. The translator cleanup
+   removes injected Google banner space, so sticky positioning avoids both the
+   original space above the header and the later duplicate space below it. */
+.site-header {
+  position: sticky !important;
+  top: 0 !important;
+  inset-block-start: 0 !important;
+}
+.site-header-spacer { display: none !important; }
+#main-content { padding-top: 0 !important; margin-top: 0 !important; }

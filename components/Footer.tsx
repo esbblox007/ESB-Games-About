@@ -29,7 +29,7 @@ export default function Footer() {
         </div>
         <div><strong>PLATFORM</strong><a href="https://esbgames.com">ESB Games</a><Link href="/developer-hub">Creator Hub</Link><Link href="/download">Downloads</Link><Link href="/subscriptions">Subscriptions</Link></div>
         <div><strong>COMPANY</strong><Link href="/about">About</Link><Link href="/news">News</Link><Link href="/documentation">Documentation</Link><Link href="/careers">Careers</Link><Link href="/trust">Trust, Safety &amp; Legal</Link></div>
-        <div><strong>SUPPORT</strong><Link href="/support">Help Centre</Link><Link href="/support#contact-support">Contact Support</Link><Link href="/parental-controls">Family Centre</Link><a href={ESB_BRAND.statusUrl}>Service Status</a></div>
+        <div><strong>SUPPORT</strong><Link href="/help">Help Centre</Link><Link href="/support#contact-support">Contact Support</Link><Link href="/parental-controls">Family Centre</Link><a href={ESB_BRAND.statusUrl}>Service Status</a></div>
       </div>
       <div className="home-footer-bottom">
         <span>© {new Date().getFullYear()} ESB Games. All rights reserved. {ESB_BRAND.tagline}</span>

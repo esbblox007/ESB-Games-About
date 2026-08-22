@@ -11,10 +11,14 @@ create table if not exists public.newsletter_subscriptions (
   locale text not null default 'en',
   source text not null default 'about-homepage',
   status text not null default 'Subscribed',
+  unsubscribe_token text,
   subscribed_at timestamptz not null default now(),
   unsubscribed_at timestamptz,
   updated_at timestamptz not null default now()
 );
+alter table public.newsletter_subscriptions add column if not exists unsubscribe_token text;
+update public.newsletter_subscriptions set unsubscribe_token = gen_random_uuid()::text where unsubscribe_token is null or btrim(unsubscribe_token) = '';
+create unique index if not exists newsletter_subscriptions_unsubscribe_token_idx on public.newsletter_subscriptions (unsubscribe_token) where unsubscribe_token is not null;
 create index if not exists newsletter_subscriptions_status_idx on public.newsletter_subscriptions (status);
 create index if not exists newsletter_subscriptions_subscribed_at_idx on public.newsletter_subscriptions (subscribed_at desc);
 alter table public.newsletter_subscriptions enable row level security;

@@ -175,7 +175,7 @@ export default function SupportClient() {
           <span className="card-icon"><BookIcon /></span>
           <h3>Help Centre</h3>
           <p>Browse guidance covering accounts, billing, creator tools, safety and technical support.</p>
-          <a className="card-link" href="#quick-help">Browse articles →</a>
+          <a className="card-link" href="/help">Browse articles →</a>
         </article>
 
         <article className="card support-card" id="submit-ticket">
