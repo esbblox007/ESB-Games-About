@@ -20,21 +20,21 @@ export const supportArticles: SupportArticle[] = [
   {
     slug: "manage-subscription",
     title: "Cancel or change a subscription",
-    description: "Manage an ESB Games subscription, plan or renewal setting.",
-    intro: "Subscription controls will be available from the billing area of your ESB Games account.",
+    description: "Preview how ESB Games subscription, plan and renewal controls are intended to work.",
+    intro: "Subscriptions are not publicly available yet. The flow below describes the planned account experience and may change before launch.",
     sections: [
-      { heading: "Manage your plan", body: ["Sign in to your ESB Games account, open Settings and choose Subscriptions or Billing."], steps: ["Review the active plan.", "Choose Change Plan or Cancel Renewal.", "Read the confirmation details before continuing.", "Keep the confirmation email for your records."] },
-      { heading: "Need billing help?", body: ["The planned Billing & Payments form will request the account username and transaction reference. Never include passwords or full card information."] },
+      { heading: "Planned subscription management flow", body: ["When subscriptions launch, the current plan and renewal controls are intended to be available from Settings under Subscriptions or Billing."], steps: ["Open the subscription or billing area.", "Review the active plan.", "Choose the available plan-change or renewal option.", "Review the confirmation details before continuing.", "Keep any confirmation email for your records."] },
+      { heading: "Billing support", body: ["The planned Billing & Payments form will request the account username and transaction reference. Never include passwords or full card information."] },
     ],
   },
   {
     slug: "request-refund",
     title: "Request a refund",
     description: "Learn what information to provide when asking ESB Games to review a purchase.",
-    intro: "Refund eligibility depends on the purchase, account activity and applicable consumer rules.",
+    intro: "Public ESB Games purchasing is not yet available. This article describes the planned refund-support flow; final eligibility will depend on the purchase and applicable consumer rules.",
     sections: [
-      { heading: "Before submitting", body: ["Gather the purchase date, receipt or transaction reference, account username and a clear explanation of the issue."] },
-      { heading: "Submit your request", body: ["The planned Billing & Payments workflow will collect the information needed for a review and send a confirmation once the request has been stored."], steps: ["Choose Billing & Payments.", "Select the relevant purchase issue.", "Add the transaction details.", "Only treat the request as submitted after receiving a confirmation reference."] },
+      { heading: "Before submitting", body: ["When purchases launch, keep the purchase date, receipt or transaction reference, account username and a clear explanation of the issue."] },
+      { heading: "Planned refund request flow", body: ["The planned Billing & Payments workflow will collect the information needed for a review and provide a confirmation once the request has been stored."], steps: ["Choose Billing & Payments.", "Select the relevant purchase issue.", "Add the transaction details.", "Only treat the request as submitted after receiving a confirmation reference."] },
     ],
   },
   {
@@ -61,7 +61,7 @@ export const supportArticles: SupportArticle[] = [
     slug: "creator-payout-guide",
     title: "Creator payout guide",
     description: "Understand the information creators will need for ESB Games payout systems.",
-    intro: "Creator payouts are planned to use verified account, tax and payment information before funds can be released.",
+    intro: "Creator payouts are not publicly available yet. They are planned to use verified account, tax and payment information before funds can be released.",
     sections: [
       { heading: "Prepare your account", body: ["Keep your account secure, enable two factor authentication and ensure your creator information is accurate."] },
       { heading: "Payout requirements", body: ["Final payout thresholds, supported regions and verification requirements will be published before public creator payouts launch."] },
