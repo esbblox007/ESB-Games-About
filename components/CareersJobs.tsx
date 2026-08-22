@@ -12,6 +12,27 @@ export default function CareersJobs({ jobs, unavailable = false }: { jobs: LiveJ
   const locations = useMemo(() => ["All", ...Array.from(new Set(jobs.map((job) => job.location)))], [jobs]);
   const filtered = useMemo(() => jobs.filter((job) => (department === "All" || job.departments.includes(department)) && (location === "All" || job.location === location)), [department, location, jobs]);
 
+  if (unavailable) {
+    return (
+      <div className="career-job-browser career-job-browser-list-only">
+        <div className="career-job-results">
+          <div className="career-empty-jobs"><strong>Opportunities are temporarily unavailable.</strong><br />We couldn&apos;t load the current role list. Please check again shortly.</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (jobs.length === 0) {
+    return (
+      <div className="career-job-browser career-job-browser-list-only">
+        <div className="career-job-results">
+          <div className="career-job-results-head"><strong>No roles are open right now</strong><small>This is an intentional empty state, not a filtered result.</small></div>
+          <div className="career-empty-jobs">There are currently no published ESB Games vacancies. New opportunities will appear here when recruitment opens.</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="career-job-browser career-job-browser-list-only">
       <aside className="career-job-filters">
@@ -20,13 +41,13 @@ export default function CareersJobs({ jobs, unavailable = false }: { jobs: LiveJ
       </aside>
       <div className="career-job-results">
         <div className="career-job-results-head"><strong>{filtered.length} {filtered.length === 1 ? "role" : "roles"} open</strong><small>Select a role to view the full description and application form.</small></div>
-        {unavailable ? <div className="career-empty-jobs">Current opportunities are temporarily unavailable. Please try again shortly.</div> : filtered.length ? (
+        {filtered.length ? (
           <div className="career-job-list">{filtered.map((job) => (
             <Link className="career-job-card career-job-link" key={job.slug} href={`/careers/${job.slug}`}>
               <span className="career-job-icon"><BriefcaseIcon /></span><div><h3>{job.title}</h3><p><span>{job.departments.join(" · ")}</span><span><GlobeIcon size={13} /> {job.location}</span><span>{job.type}</span></p></div><span className="career-job-open">View role <ArrowIcon size={15} /></span>
             </Link>
           ))}</div>
-        ) : <div className="career-empty-jobs">No roles match those filters yet.</div>}
+        ) : <div className="career-empty-jobs">No roles match those filters. Try another department or location.</div>}
       </div>
     </div>
   );
