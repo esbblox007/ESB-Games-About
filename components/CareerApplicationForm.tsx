@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useMemo, useRef, useState } from "react";
 import type { ApplicationField, LiveJob } from "@/lib/content/careers-live";
 
@@ -110,7 +111,7 @@ export default function CareerApplicationForm({ job }: { job: LiveJob }) {
       <div className="career-role-application-heading">
         <span className="eyebrow">Application</span>
         <h2 id="application-heading">Apply for {job.title}</h2>
-        <p>{liveReady ? "Complete the form below. Your application and files are sent securely to the ESB Games recruitment workspace." : "Online applications for this role are not currently available."}</p>
+        <p>{liveReady ? <>Complete the form below. Your application and files are sent securely to the ESB Games recruitment workspace. Read the <Link href="/careers/privacy">Careers Application Privacy Notice</Link> before submitting.</> : "Online applications for this role are not currently available."}</p>
       </div>
 
       <form className="career-role-form" onSubmit={submit}>
@@ -141,7 +142,7 @@ export default function CareerApplicationForm({ job }: { job: LiveJob }) {
           <label className="career-upload-field full"><span>CV or résumé *</span><input required type="file" name="cv" accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.webp" onChange={(event) => setCv(event.target.files?.[0] ?? null)} /><b>{cv?.name || "Choose a PDF, DOC, DOCX, TXT or image file"}</b><small>Maximum 15 MB. Files are stored privately and are only available to authorised recruitment staff.</small></label>
 
           {job.consents.map((consent) => (
-            <label className="career-consent full" key={consent.id}><input type="checkbox" required={consent.required} checked={acceptedConsents.includes(consent.id)} onChange={(event) => setAcceptedConsents((current) => event.target.checked ? [...current, consent.id] : current.filter((id) => id !== consent.id))} /><span><strong>{consent.title}{consent.required ? " *" : ""}</strong>{typeof consent.content === "string" ? ` ${consent.content}` : " I have read and accept this application privacy statement."}</span></label>
+            <label className="career-consent full" key={consent.id}><input type="checkbox" required={consent.required} checked={acceptedConsents.includes(consent.id)} onChange={(event) => setAcceptedConsents((current) => event.target.checked ? [...current, consent.id] : current.filter((id) => id !== consent.id))} /><span><strong>{consent.title}{consent.required ? " *" : ""}</strong> I have read the <Link href="/careers/privacy" target="_blank">Careers Application Privacy Notice</Link> and agree to the required recruitment processing described for this application.</span></label>
           ))}
         </div>
 

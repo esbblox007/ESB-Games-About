@@ -9,6 +9,17 @@ export const metadata: Metadata = {
   title: "Careers",
   description: "Explore current ESB Games opportunities and the official website application process.",
   alternates: { canonical: "/careers" },
+  openGraph: {
+    title: "Careers | ESB Games",
+    description: "Explore current ESB Games opportunities and the official website application process.",
+    url: "/careers",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Careers | ESB Games",
+    description: "Explore current ESB Games opportunities and the official website application process.",
+  },
 };
 
 const impactCards = [

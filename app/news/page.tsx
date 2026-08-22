@@ -14,6 +14,11 @@ export const metadata: Metadata = {
     url: "/news",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "ESB Games News & Updates",
+    description: "Read company announcements, platform updates and creator news from ESB Games.",
+  },
 };
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -76,7 +81,7 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
               <div className="content-state">
                 <h2>{query || category ? "We couldn’t find an exact match." : "No news articles have been published yet."}</h2>
                 <p>{query || category ? "Try a broader search or return to all news." : "Published ESB Games articles will appear here when they are available."}</p>
-                <div><Link className="button button-primary" href="/news">View all news</Link><Link className="button button-secondary" href="/support">Visit Support</Link></div>
+                <div>{query || category ? <Link className="button button-primary" href="/news">Clear filters</Link> : <Link className="button button-primary" href="/about">About ESB Games</Link>}<Link className="button button-secondary" href="/support">Visit Support</Link></div>
               </div>
             ) : (
               <>
