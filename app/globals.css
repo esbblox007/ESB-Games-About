@@ -3648,3 +3648,61 @@ iframe.goog-te-banner-frame {
 .documentation-explainer strong { flex:0 0 auto; color:#d9efff; }
 .documentation-explainer code { color:#77d7ff; }
 @media(max-width:680px){.documentation-hero{padding:52px 0 42px}.documentation-explainer{flex-direction:column}}
+
+/* --------------------------------------------------------------------------
+   August 22, 2026 — translator route-offset + primary CTA consistency fix
+   -------------------------------------------------------------------------- */
+/* Google Translate can reserve banner space asynchronously after a Next.js
+   route change. Keep that injected chrome completely outside page layout. */
+html,
+body {
+  top: 0 !important;
+  inset-block-start: 0 !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  transform: none !important;
+  translate: none !important;
+}
+body > .skiptranslate:not(.google-translate-host),
+body > .goog-te-banner-frame,
+body > iframe.goog-te-banner-frame,
+body > .VIpgJd-ZVi9od-ORHb-OEVmcd,
+body > [class*="VIpgJd-ZVi9od-ORHb"],
+body > iframe[src*="translate.google"] {
+  display: none !important;
+  visibility: hidden !important;
+  position: fixed !important;
+  inset: 0 auto auto -10000px !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+/* Purple/primary CTAs should read as one deliberate control, not a two-line
+   text block. This also keeps icons from squeezing the label. */
+.button-primary,
+.home-newsletter-form button,
+.auth-submit {
+  white-space: nowrap;
+  line-height: 1;
+}
+.button-primary > svg,
+.button-primary > span:first-child,
+.home-newsletter-form button > svg,
+.auth-submit > svg {
+  flex: 0 0 auto;
+}
+.header-cta {
+  min-width: 172px;
+  padding-inline: 18px;
+  justify-content: center;
+}
+@media (min-width: 1321px) {
+  .header-inner {
+    grid-template-columns: minmax(240px, 285px) minmax(0, 1fr) minmax(172px, 190px);
+  }
+}
