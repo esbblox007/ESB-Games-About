@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { languages, resolvePreferredLocale } from "./LanguageSelector";
 
@@ -19,10 +19,6 @@ function forceImportantStyle(element: HTMLElement, property: string, value: stri
 }
 
 function removeInjectedTranslateChrome() {
-  // Google Translate can inject a banner directly under <body>. When that
-  // happens, the banner can reserve layout space above the viewport content.
-  // Removing that injected chrome keeps the fixed ESB navigation flush to the top.
-  // The translator host itself is excluded so language switching still works.
   document.querySelectorAll<HTMLElement>([
     "body > .skiptranslate:not(.google-translate-host)",
     "body > .goog-te-banner-frame",
@@ -47,14 +43,9 @@ function resetGoogleTranslatePageOffset() {
     forceImportantStyle(element, "translate", "none");
   }
 
-  // Google sometimes switches body to position:relative when it attempts to
-  // reserve space for its banner. The ESB layout does not need that offset.
-  forceImportantStyle(document.body, "position", "static");
-
   const header = document.querySelector<HTMLElement>(".site-header");
   if (header) {
     forceImportantStyle(header, "top", "0px");
-    forceImportantStyle(header, "inset-block-start", "0px");
     forceImportantStyle(header, "margin-top", "0px");
     forceImportantStyle(header, "transform", "none");
     forceImportantStyle(header, "translate", "none");
@@ -62,24 +53,29 @@ function resetGoogleTranslatePageOffset() {
 }
 
 function scheduleOffsetCleanup() {
-  const delays = [0, 40, 120, 300, 650, 1200, 2200];
+  const delays = [0, 60, 180, 500, 1200];
   const timers = delays.map((delay) => window.setTimeout(resetGoogleTranslatePageOffset, delay));
   return () => timers.forEach((timer) => window.clearTimeout(timer));
 }
 
+function selectedLanguage() {
+  const preferredLocale = resolvePreferredLocale();
+  return languages.find((item) => item.locale === preferredLocale) || languages[0];
+}
+
 function applySelectedLanguage() {
   resetGoogleTranslatePageOffset();
-  const preferredLocale = resolvePreferredLocale();
-  const language = languages.find((item) => item.locale === preferredLocale) || languages[0];
+  const language = selectedLanguage();
   document.documentElement.lang = language.locale;
   if (language.google === "en") return;
+
   window.setTimeout(() => {
     const select = document.querySelector<HTMLSelectElement>(".goog-te-combo");
     if (select && select.value !== language.google) {
       select.value = language.google;
       select.dispatchEvent(new Event("change"));
     }
-  }, 400);
+  }, 250);
 }
 
 function initialiseTranslator() {
@@ -87,54 +83,85 @@ function initialiseTranslator() {
   if (!target || target.dataset.ready === "true") return;
   const TranslateElement = window.google?.translate?.TranslateElement;
   if (!TranslateElement) return;
-  new TranslateElement({ pageLanguage: "en", includedLanguages: supportedLanguages, autoDisplay: false, multilanguagePage: true }, "google_translate_element");
+
+  new TranslateElement(
+    { pageLanguage: "en", includedLanguages: supportedLanguages, autoDisplay: false, multilanguagePage: true },
+    "google_translate_element",
+  );
   target.dataset.ready = "true";
   applySelectedLanguage();
 }
 
+function loadTranslatorScript() {
+  if (window.google?.translate?.TranslateElement) {
+    initialiseTranslator();
+    return;
+  }
+
+  if (document.getElementById("google-translate-script")) return;
+  const script = document.createElement("script");
+  script.id = "google-translate-script";
+  script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+  script.async = true;
+  script.defer = true;
+  document.body.appendChild(script);
+}
+
 export default function SiteTranslator() {
   const pathname = usePathname();
+  const observerRef = useRef<MutationObserver | null>(null);
 
   useEffect(() => {
     resetGoogleTranslatePageOffset();
-    const cancelScheduledCleanup = scheduleOffsetCleanup();
-    applySelectedLanguage();
+    const preferred = selectedLanguage();
 
-    const offsetObserver = new MutationObserver(() => resetGoogleTranslatePageOffset());
-    offsetObserver.observe(document.body, {
-      childList: true,
-      subtree: false,
-      attributes: true,
-      attributeFilter: ["style", "class"],
-    });
-    offsetObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["style", "class"],
-    });
+    const ensureObserver = () => {
+      if (observerRef.current) return;
+      const observer = new MutationObserver(() => resetGoogleTranslatePageOffset());
+      observer.observe(document.body, { childList: true, subtree: false, attributes: true, attributeFilter: ["style", "class"] });
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ["style", "class"] });
+      observerRef.current = observer;
+    };
 
-    window.googleTranslateElementInit = initialiseTranslator;
-    const onLanguageChange = () => {
-      applySelectedLanguage();
+    window.googleTranslateElementInit = () => {
+      initialiseTranslator();
+      ensureObserver();
       scheduleOffsetCleanup();
     };
-    window.addEventListener("esb-language-change" as keyof WindowEventMap, onLanguageChange as EventListener);
 
-    if (window.google?.translate?.TranslateElement) initialiseTranslator();
-    else if (!document.getElementById("google-translate-script")) {
-      const script = document.createElement("script");
-      script.id = "google-translate-script";
-      script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-      script.async = true;
-      script.defer = true;
-      document.body.appendChild(script);
+    if (preferred.google !== "en") {
+      ensureObserver();
+      loadTranslatorScript();
     }
 
+    const onLanguageChange = (event: Event) => {
+      const customEvent = event as CustomEvent<{ google?: string }>;
+      const googleCode = customEvent.detail?.google || selectedLanguage().google;
+      resetGoogleTranslatePageOffset();
+
+      if (googleCode !== "en") {
+        ensureObserver();
+        loadTranslatorScript();
+        window.setTimeout(applySelectedLanguage, 120);
+      }
+      scheduleOffsetCleanup();
+    };
+
+    window.addEventListener("esb-language-change" as keyof WindowEventMap, onLanguageChange as EventListener);
     return () => {
-      cancelScheduledCleanup();
-      offsetObserver.disconnect();
       window.removeEventListener("esb-language-change" as keyof WindowEventMap, onLanguageChange as EventListener);
     };
+  }, []);
+
+  useEffect(() => {
+    resetGoogleTranslatePageOffset();
+    if (selectedLanguage().google !== "en") {
+      window.setTimeout(applySelectedLanguage, 80);
+      scheduleOffsetCleanup();
+    }
   }, [pathname]);
+
+  useEffect(() => () => observerRef.current?.disconnect(), []);
 
   return <div id="google_translate_element" className="google-translate-host notranslate" translate="no" aria-hidden="true" />;
 }
