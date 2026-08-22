@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import PageShell from "@/components/PageShell";
 import CareersJobs from "@/components/CareersJobs";
-import { GlobeIcon, HeartIcon, SearchIcon, StarIcon, UsersIcon } from "@/components/Icons";
+import { CheckIcon, GlobeIcon, HeartIcon, RocketIcon, SearchIcon, StarIcon, UsersIcon } from "@/components/Icons";
 import { getLiveJobs } from "@/lib/content/careers-live";
 
 export const metadata: Metadata = {
@@ -14,19 +14,21 @@ export const metadata: Metadata = {
     description: "Explore current ESB Games opportunities and the official website application process.",
     url: "/careers",
     type: "website",
+    images: [{ url: "/career-culture-collaborate.jpg", alt: "Careers at ESB Games" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Careers | ESB Games",
     description: "Explore current ESB Games opportunities and the official website application process.",
+    images: ["/career-culture-collaborate.jpg"],
   },
 };
 
 const impactCards = [
-  ["⚡", "Make a real impact", "Work on systems, experiences and tools that shape the platform from its earliest stages."],
-  ["👥", "Work alongside builders", "Collaborate across product, safety, engineering, community and creative disciplines."],
-  ["↗", "Accelerate your growth", "Take ownership, learn quickly and build a portfolio of meaningful platform work."],
-  ["♥", "Clear role expectations", "Responsibilities, reporting lines and application requirements are explained before you apply."],
+  { icon: <StarIcon />, title: "Make a real impact", text: "Work on systems, experiences and tools that shape the platform from its earliest stages." },
+  { icon: <UsersIcon />, title: "Work alongside builders", text: "Collaborate across product, safety, engineering, community and creative disciplines." },
+  { icon: <RocketIcon />, title: "Accelerate your growth", text: "Take ownership, learn quickly and build a portfolio of meaningful platform work." },
+  { icon: <CheckIcon />, title: "Clear role expectations", text: "Responsibilities, reporting lines and application requirements are explained before you apply." },
 ] as const;
 
 const peopleBenefits = [
@@ -47,6 +49,8 @@ const cultureCards = [
 
 export default async function CareersPage() {
   const live = await getLiveJobs();
+  const hasRoles = live.jobs.length > 0;
+
   return (
     <PageShell>
       <section className="career-hero">
@@ -55,7 +59,10 @@ export default async function CareersPage() {
             <span className="eyebrow">Careers at ESB Games</span>
             <h1>Build the future of <span className="gradient-text">gaming,</span> with us.</h1>
             <p>We are a remote-first team bringing together people who care about creators, players, safety and the future of interactive entertainment.</p>
-            <div className="career-hero-actions"><a href="#open-roles" className="button button-primary"><SearchIcon size={17} /> See open roles</a><a href="#culture" className="button button-secondary"><HeartIcon size={17} /> Our culture</a></div>
+            <div className="career-hero-actions">
+              {hasRoles ? <a href="#open-roles" className="button button-primary"><SearchIcon size={17} /> See open roles</a> : <a href="#open-roles" className="button button-primary"><SearchIcon size={17} /> Recruitment status</a>}
+              <a href="#culture" className="button button-secondary"><HeartIcon size={17} /> Our culture</a>
+            </div>
           </div>
           <div className="career-metric-grid">
             <article><UsersIcon /><strong>Small teams</strong><span>HIGH OWNERSHIP</span></article>
@@ -69,14 +76,17 @@ export default async function CareersPage() {
       <section className="career-section career-impact-section">
         <div className="career-container">
           <div className="career-impact-grid">
-            {impactCards.map(([icon, title, text]) => <article key={title}><span>{icon}</span><h3>{title}</h3><p>{text}</p></article>)}
+            {impactCards.map((item) => <article key={item.title}><span>{item.icon}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}
           </div>
         </div>
       </section>
 
       <section className="career-section" id="open-roles">
         <div className="career-container">
-          <header className="career-section-heading career-jobs-title"><div><span className="eyebrow">Open opportunities</span><h2>Find your <span className="gradient-text">seat.</span></h2></div><p>Choose a department or location to explore current opportunities.</p></header>
+          <header className="career-section-heading career-jobs-title">
+            <div><span className="eyebrow">{hasRoles ? "Open opportunities" : "Recruitment status"}</span><h2>{hasRoles ? <>Find your <span className="gradient-text">seat.</span></> : <>Future <span className="gradient-text">opportunities.</span></>}</h2></div>
+            <p>{hasRoles ? "Choose a department or location to explore current opportunities." : "There are no published vacancies at the moment. This page will update when recruitment opens."}</p>
+          </header>
           <CareersJobs jobs={live.jobs} unavailable={live.unavailable} />
         </div>
       </section>
@@ -106,7 +116,10 @@ export default async function CareersPage() {
 
       <section className="career-section career-final-section">
         <div className="career-container">
-          <div className="career-final-cta"><div><h2>Your next role starts with ESB Games.</h2><p>Explore current opportunities and help build the future of gaming.</p></div><a href="#open-roles" className="button button-primary"><SearchIcon size={17} /> See open roles</a></div>
+          <div className="career-final-cta">
+            <div><h2>{hasRoles ? "Your next role starts with ESB Games." : "Interested in future ESB Games roles?"}</h2><p>{hasRoles ? "Explore current opportunities and help build the future of gaming." : "Check this careers page for official openings as the team grows. Applications are only accepted for published roles."}</p></div>
+            <a href="#open-roles" className="button button-primary"><SearchIcon size={17} /> {hasRoles ? "See open roles" : "View recruitment status"}</a>
+          </div>
         </div>
       </section>
     </PageShell>
