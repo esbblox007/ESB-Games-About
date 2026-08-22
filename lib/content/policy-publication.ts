@@ -18,4 +18,8 @@ export function isPublishedPolicy(slug: string) {
   return getPolicyPublicationState(slug) === "published";
 }
 
+export function isKnownPolicySlug(slug: string) {
+  return policyDocuments.some((policy) => policy.slug === slug);
+}
+
 export const publishedPolicyDocuments = policyDocuments.filter((policy) => isPublishedPolicy(policy.slug));
