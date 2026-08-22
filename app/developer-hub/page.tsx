@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import PageShell from "@/components/PageShell";
@@ -19,14 +20,24 @@ const creatorFeatures = [
   { icon: <GlobeIcon />, title: "Grow your work", text: "Planned analytics and release tools will help creators understand performance and prepare experiences for wider audiences.", tone: "green" },
 ];
 
-const resources = [
+type CreatorResource = {
+  title: string;
+  text: string;
+  icon: ReactNode;
+  linkText?: string;
+  href?: string;
+  status?: string;
+  external?: boolean;
+};
+
+const resources: CreatorResource[] = [
   { title: "ESB Studio availability", text: "Follow public release availability and platform requirements as Studio development progresses.", linkText: "View availability →", href: "/download", icon: <DownloadIcon /> },
   { title: "Documentation", text: "Official guides, tutorials and product walkthroughs will be published as features stabilise.", linkText: "Open documentation →", href: "/documentation", icon: <BookIcon /> },
   { title: "Assets & templates", text: "Starter projects, interface kits and reusable creator resources are planned.", status: "Coming soon", icon: <CubeIcon /> },
   { title: "API reference", text: "Platform, analytics and publishing APIs will be documented before public use.", status: "Coming soon", icon: <GlobeIcon /> },
   { title: "Creator roadmap", text: "A public roadmap will be introduced when creator milestones are ready to be shared.", status: "Planned", icon: <BookIcon /> },
   { title: "Creator community", text: "Follow community access through the main ESB Games platform as testing expands.", linkText: "Explore ESB Games →", href: "https://esbgames.com", icon: <UsersIcon />, external: true },
-] as const;
+];
 
 const collaborationAreas = [
   ["World & environment design", "3D modelling · Level design", "A planned collaboration area for creators seeking world-building and environment specialists."],
