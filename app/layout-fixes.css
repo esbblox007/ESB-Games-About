@@ -111,9 +111,36 @@
   margin-top: 4px;
 }
 
+/* Consumer-facing publication states */
+.trust-resource-status{
+  display: inline-flex !important;
+  width: fit-content;
+  margin-top: 7px;
+  padding: 4px 7px;
+  border: 1px solid rgba(139,79,242,.22);
+  border-radius: 999px;
+  background: rgba(139,79,242,.08);
+  color: #c6b6e8 !important;
+  font-size: 10px !important;
+  font-weight: 750;
+  letter-spacing: .035em;
+}
+.home-newsletter-input-row:has(> .button:first-child){
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 8px;
+}
+.home-newsletter-input-row:has(> .button:first-child) .button{
+  width: 100%;
+  justify-content: center;
+}
+
 @media (max-width: 820px){
   .help-centre-page-structured .help-centre-hero{ padding: 58px 0 48px; }
   .help-topic-section{ padding: 18px; }
   .help-topic-section-header{ grid-template-columns: 1fr; gap: 8px; }
   .help-topic-section .help-category-grid{ grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px){
+  .home-newsletter-input-row:has(> .button:first-child){ grid-template-columns: 1fr; }
 }
