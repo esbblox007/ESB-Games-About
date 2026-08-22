@@ -26,7 +26,7 @@ export default async function SupportHelpPage({ params }: { params: Promise<{ sl
 
   return (
     <PageShell>
-      <main className="support-help-page">
+      <div className="support-help-page">
         <div className="support-help-container">
           <nav className="support-help-breadcrumb" aria-label="Breadcrumb">
             <Link href="/support">Support</Link><span aria-hidden="true">›</span><span>{article.title}</span>
@@ -50,7 +50,7 @@ export default async function SupportHelpPage({ params }: { params: Promise<{ sl
             <Link className="button button-primary" href="/support#submit-ticket">Go to Support</Link>
           </aside>
         </div>
-      </main>
+      </div>
     </PageShell>
   );
 }

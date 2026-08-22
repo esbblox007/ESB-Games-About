@@ -203,7 +203,7 @@ export async function POST(request: NextRequest) {
 
     stage = "complete";
     return NextResponse.json(
-      { ok: true, ticketReference, privatePath, requiresEmailVerification, emailSent: delivery.sent, verificationEmailOnDemand: requiresEmailVerification, pipelineVersion: 3 },
+      { ok: true, ticketReference, privatePath, requiresEmailVerification, emailSent: delivery.sent, verificationEmailOnDemand: requiresEmailVerification },
       { status: 201, headers: noStoreHeaders() },
     );
   } catch (error) {
@@ -236,8 +236,6 @@ export async function POST(request: NextRequest) {
         headers: {
           ...noStoreHeaders(),
           "X-ESB-Support-Incident": incidentReference,
-          "X-ESB-Support-Failure-Stage": stage,
-          "X-ESB-Support-Pipeline": "3",
         },
       },
     );

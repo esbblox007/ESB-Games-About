@@ -11,6 +11,7 @@ export const revalidate = 0;
 export const metadata: Metadata = {
   title: "Support",
   description: "Browse ESB Games help resources, start a private support conversation and visit the official service status website.",
+  alternates: { canonical: "/support" },
 };
 
 const quickHelpLinks = [
@@ -19,7 +20,7 @@ const quickHelpLinks = [
   ["Request a refund", "/support/help/request-refund"],
   ["Appeal an account action", "/support/help/appeal-account-action"],
   ["Report a player or game", "/support/help/report-player-or-game"],
-  ["Creator payout guide", "/support/help/creator-payout-guide"],
+  ["Creator payout planning guide", "/support/help/creator-payout-guide"],
 ] as const;
 
 const statusUrl = "https://status.esbgames.com";
@@ -56,18 +57,18 @@ export default function SupportPage() {
 
             <div className="support-side-stack">
               <article className="support-status-panel">
-                <div><h2>Platform Status</h2><span>● Official status website</span></div>
-                <p><span>Play Platform</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View live status</a></p>
-                <p><span>ESB Studio</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View live status</a></p>
-                <p><span>Authentication</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View live status</a></p>
-                <p><span>Family Centre</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View live status</a></p>
-                <p><span>Support services</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View live status</a></p>
+                <div><h2>Service Status</h2><span>● Pre-launch status information</span></div>
+                <p><span>ESB Games platform</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View service status</a></p>
+                <p><span>ESB Studio</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View service status</a></p>
+                <p><span>Authentication</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View service status</a></p>
+                <p><span>Family Centre</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View service status</a></p>
+                <p><span>Support services</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View service status</a></p>
               </article>
               <article className="support-community-panel">
                 <span>◉</span>
                 <div>
                   <h3>ESB Games Status</h3>
-                  <p>View current service availability, planned maintenance and incident updates on the dedicated status website.</p>
+                  <p>View service availability, planned maintenance and incident information on the dedicated status website. During pre-launch, some status information may be preview data.</p>
                   <a href={statusUrl} target="_blank" rel="noopener noreferrer">Open the status website <ArrowIcon size={15} /></a>
                 </div>
               </article>

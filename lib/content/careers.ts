@@ -84,7 +84,7 @@ export const jobs: Job[] = [
     location: "Remote",
     type: "Full-time",
     reportsTo: "Chief Operating Officer",
-    summary: "Set the product vision across play, create, connect and family experiences in the ESB Games ecosystem.",
+    summary: "Set the product vision across discovery, creation, community and family experiences in the ESB Games ecosystem.",
     responsibilities: [
       "Own product direction, prioritisation and roadmap quality.",
       "Work closely with design, engineering, safety and operations.",

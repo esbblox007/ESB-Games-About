@@ -6,7 +6,8 @@ import { getLiveJobs } from "@/lib/content/careers-live";
 
 export const metadata: Metadata = {
   title: "Careers",
-  description: "Join ESB Games and help build a safer, more creative gaming platform.",
+  description: "Explore current ESB Games opportunities and the official website application process.",
+  alternates: { canonical: "/careers" },
 };
 
 const impactCards = [

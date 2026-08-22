@@ -4,7 +4,7 @@ import Pricing from "@/components/Pricing";
 import Reveal from "@/components/Reveal";
 import { ClockIcon, GlobeIcon, ShieldIcon } from "@/components/Icons";
 
-export const metadata: Metadata = { title: "Subscriptions" };
+export const metadata: Metadata = { title: "Subscriptions", description: "Preview the membership structure being developed for ESB Games. Pricing and benefits are not yet final.", alternates: { canonical: "/subscriptions" } };
 
 export default function SubscriptionsPage() {
   return (
@@ -13,7 +13,7 @@ export default function SubscriptionsPage() {
         <div className="hero-inner">
           <span className="eyebrow">Flexible membership</span>
           <h1 className="page-title">Choose your<br /><span className="gradient-text">power level.</span></h1>
-          <p className="hero-lead" style={{marginInline:"auto"}}>Preview the membership structure being designed for ESB Games. Final prices, benefits and availability will be confirmed before launch.</p>
+          <p className="hero-lead" style={{marginInline:"auto"}}>Explore the membership structure being designed for ESB Games. Final prices, benefits, renewal rules and availability will be confirmed before subscriptions become publicly purchasable.</p>
           <div className="trust-row"><span>Preview only</span><span>No payment taken</span><span>Benefits under review</span><span>Availability to be confirmed</span></div>
         </div>
       </section>

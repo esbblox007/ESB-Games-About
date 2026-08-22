@@ -170,7 +170,7 @@ export default function SupportClient() {
 
   return (
     <>
-      <div className="grid-3 support-cards">
+      <div className="grid-3 support-cards" id="contact-support">
         <article className="card support-card">
           <span className="card-icon"><BookIcon /></span>
           <h3>Help Centre</h3>

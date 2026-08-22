@@ -22,7 +22,7 @@ export default async function SupportTranscriptPage({ params }: { params: Promis
   const expired = Boolean(record?.expires_at && new Date(record.expires_at).getTime() < Date.now());
 
   if (!record || record.revoked_at || expired) {
-    return <PageShell><main className="support-transcript-page"><div className="support-transcript-shell support-transcript-invalid"><span className="support-transcript-lock">⌁</span><span className="eyebrow">PRIVATE SUPPORT TRANSCRIPT</span><h1>This transcript link is unavailable.</h1><p>The link may have expired, been revoked or be invalid. Contact ESB Games Support and provide your ticket reference if you need another copy.</p><Link className="button button-primary" href="/support">Go to Support</Link></div></main></PageShell>;
+    return <PageShell><div className="support-transcript-page"><div className="support-transcript-shell support-transcript-invalid"><span className="support-transcript-lock">⌁</span><span className="eyebrow">PRIVATE SUPPORT TRANSCRIPT</span><h1>This transcript link is unavailable.</h1><p>The link may have expired, been revoked or be invalid. Contact ESB Games Support and provide your ticket reference if you need another copy.</p><Link className="button button-primary" href="/support">Go to Support</Link></div></div></PageShell>;
   }
 
   const [tickets, messages, attachments] = await Promise.all([
@@ -34,10 +34,10 @@ export default async function SupportTranscriptPage({ params }: { params: Promis
   await supabaseUpdate("support_ticket_transcript_tokens", `id=eq.${encodeURIComponent(record.id)}`, { last_accessed_at: new Date().toISOString() }).catch(() => []);
 
   if (!ticket) {
-    return <PageShell><main className="support-transcript-page"><div className="support-transcript-shell support-transcript-invalid"><span className="eyebrow">PRIVATE SUPPORT TRANSCRIPT</span><h1>Ticket not found.</h1><p>The support record linked to this transcript is no longer available.</p></div></main></PageShell>;
+    return <PageShell><div className="support-transcript-page"><div className="support-transcript-shell support-transcript-invalid"><span className="eyebrow">PRIVATE SUPPORT TRANSCRIPT</span><h1>Ticket not found.</h1><p>The support record linked to this transcript is no longer available.</p></div></div></PageShell>;
   }
 
-  return <PageShell><main className="support-transcript-page"><div className="support-transcript-shell">
+  return <PageShell><div className="support-transcript-page"><div className="support-transcript-shell">
     <header className="support-transcript-commandbar"><div><span className="support-transcript-logo">ESB</span><div><small>ESB GAMES SUPPORT</small><strong>Read-only ticket transcript</strong></div></div><span className="support-transcript-readonly">Closed · replies disabled</span></header>
     <section className="support-transcript-heading"><div><span className="eyebrow">{ticket.ticket_reference}</span><h1>{ticket.subject}</h1><p>{categoryLabel(ticket.category_id)} · Opened {formatDate(ticket.created_at)}</p></div><div><strong>{ticket.status}</strong></div></section>
     <section className="support-transcript-summary"><div><span>Customer</span><strong>{ticket.requester_name}</strong><small>{ticket.requester_email ?? "Linked ESB Games account"}</small></div><div><span>Opened</span><strong>{formatDate(ticket.created_at)}</strong></div><div><span>Closed</span><strong>{ticket.closed_at ? formatDate(ticket.closed_at) : "Closed"}</strong></div><div><span>Messages</span><strong>{messages.length}</strong></div></section>
@@ -48,7 +48,7 @@ export default async function SupportTranscriptPage({ params }: { params: Promis
       </div>
     </section>
     <footer className="support-transcript-footer"><div><strong>Need another review?</strong><p>A closed transcript cannot receive replies. Start a new support ticket and reference {ticket.ticket_reference}.</p></div><Link className="button button-secondary" href="/support#submit-ticket">Open a new ticket</Link></footer>
-  </div></main></PageShell>;
+  </div></div></PageShell>;
 }
 
 function categoryLabel(id: string) { return ({ "account-access": "Account & Access", "billing-payments": "Billing & Payments", "creator-developer": "Creator & Developer Support", "safety-abuse": "Safety & Abuse", "technical-issues": "Technical Issues", "something-else": "Something Else" } as Record<string,string>)[id] ?? id; }

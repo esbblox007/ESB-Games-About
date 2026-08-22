@@ -13,13 +13,13 @@ import {
   ShieldIcon,
   TicketIcon,
 } from "@/components/Icons";
-import { homeProofItems, siteMetrics } from "@/lib/content/siteMetrics";
+import { homeProofItems } from "@/lib/content/siteMetrics";
 
 export const metadata: Metadata = {
-  title: "Play. Create. Connect.",
-  description: "Discover ESB Games, the next-generation universe for playing, creating and connecting.",
+  title: { absolute: "ESB Games — Discover. Belong. Build." },
+  description: "Discover ESB Games, a connected gaming and creator ecosystem being built for players, creators, families and communities.",
   alternates: { canonical: "/" },
-  openGraph: { title: "ESB Games: Play. Create. Connect.", description: "Discover, play and build across one connected gaming universe.", url: "/" },
+  openGraph: { title: "ESB Games — Discover. Belong. Build.", description: "A connected gaming and creator ecosystem where people can discover, belong and build.", url: "/" },
 };
 
 function SparklesIcon({ size = 22 }: { size?: number }) {
@@ -93,17 +93,16 @@ export default function HomePage() {
               </h1>
 
               <p className="home-hero-lead">
-                ESB Games is the next generation gaming platform, many worlds, one community, infinite possibilities.
-                Whether you come to discover new experiences, find your people, or build your own, you belong here.
+                ESB Games is building a connected gaming and creator ecosystem: many worlds, one community and room for ambitious ideas. Whether you come to discover new experiences, find your people or build your own, you belong here.
               </p>
 
               <div className="home-hero-action-row">
                 <div className="home-hero-actions">
                   <a href="https://esbgames.com/login" className="button button-primary home-primary-action" data-analytics="join-now">
-                    <GamepadIcon size={17}/> Start Playing
+                    <GamepadIcon size={17}/> Explore ESB Games
                   </a>
                   <Link href="/developer-hub" className="button button-secondary home-secondary-action">
-                    <CubeIcon size={17}/> Start Creating
+                    <CubeIcon size={17}/> Explore Creator Hub
                   </Link>
                 </div>
 
@@ -111,14 +110,14 @@ export default function HomePage() {
                   <div className="home-avatar-stack" aria-hidden="true">
                     <i/><i/><i/><i/><i/>
                   </div>
-                  <span><strong>One account</strong><small>across the ESB Games ecosystem</small></span>
+                  <span><strong>One account </strong><small>across the ESB Games ecosystem</small></span>
                 </div>
               </div>
 
-              <div className="home-hero-stats" aria-label="Platform statistics">
-                <div><strong>{siteMetrics.connectedServices}</strong><span>CONNECTED SERVICES</span></div>
-                <div><strong>{siteMetrics.corePlatformAreas}+</strong><span>PLATFORM AREAS</span></div>
-                <div><strong>{siteMetrics.plannedDesktopPlatforms}</strong><span>STUDIO PLATFORMS PLANNED</span></div>
+              <div className="home-hero-stats home-proof-points" aria-label="ESB Games product principles">
+                <div><strong>ONE ECOSYSTEM</strong><span>Games, creation, communities and discovery.</span></div>
+                <div><strong>CREATOR-FIRST</strong><span>Tools built for games, experiences and UGC.</span></div>
+                <div><strong>GLOBAL BY DESIGN</strong><span>Built for communities around the world.</span></div>
               </div>
 
             </div>
@@ -165,9 +164,10 @@ export default function HomePage() {
         </section>
 
         <section className="home-proof-strip" aria-label="Highlights">
-          <div className="home-proof-track">
+          <p className="sr-only">{homeProofItems.join(". ")}</p>
+          <div className="home-proof-track" aria-hidden="true">
             {[0, 1, 2].map((group) => (
-              <div className="home-proof-group" aria-hidden={group !== 0} key={group}>
+              <div className="home-proof-group" key={group}>
                 {homeProofItems.map((item) => <span key={`${group}-${item}`}><b>★</b>{item}</span>)}
               </div>
             ))}
@@ -178,7 +178,7 @@ export default function HomePage() {
           <div className="home-section-inner">
             <header className="home-center-heading">
               <h2>A platform that puts <span className="home-gradient">you</span> first.</h2>
-              <p>We built ESB from the ground up for players who want freedom, creators who want fairness,<br className="home-desktop-break"/> and communities that deserve safety.</p>
+              <p>We are building ESB Games for players who want freedom, creators who want fairness,<br className="home-desktop-break"/> and communities that deserve safety.</p>
             </header>
 
             <div className="home-feature-grid">
@@ -186,7 +186,7 @@ export default function HomePage() {
                 <span className="home-feature-icon home-feature-icon-magenta"><SparklesIcon/></span>
                 <h3>Build ambitious worlds,<br/>step by step.</h3>
                 <p>ESB Studio is being designed around approachable building tools, reusable workflows, scripting, animation, VFX and connected publishing. Features will be introduced in stages as the creator tool moves through testing.</p>
-                <Link href="/developer-hub">Open Studio <span>→</span></Link>
+                <Link href="/developer-hub">Explore ESB Studio <span>→</span></Link>
               </article>
 
               <article className="home-feature-card home-feature-small">
@@ -217,14 +217,14 @@ export default function HomePage() {
             <div className="home-audience-grid">
               <article className="home-audience-card home-creators-card">
                 <span className="home-overline">FOR CREATORS</span>
-                <h3>Build it. Ship it.<br/>Get paid for it.</h3>
-                <p>A planned creator-first model brings building, publishing, analytics and monetisation into one ecosystem. Final payout rules, supported regions and programme terms will be published before launch.</p>
-                <div className="home-mini-metrics">
-                  <div><strong>{siteMetrics.plannedCreatorShare}%</strong><span>PLANNED CREATOR SHARE</span></div>
-                  <div><strong>{siteMetrics.universalAccounts}</strong><span>UNIVERSAL ACCOUNT</span></div>
-                  <div><strong>{siteMetrics.connectedServices}</strong><span>CONNECTED SERVICES</span></div>
+                <h3>Build it. Prepare it.<br/>Grow with it.</h3>
+                <p>ESB Games is building creator publishing, analytics, monetisation and marketplace systems designed to help successful creators grow. Final commercial terms will be published before those systems launch.</p>
+                <div className="home-mini-metrics home-mini-proof">
+                  <div><strong>CONNECTED</strong><span>Studio and platform workflows</span></div>
+                  <div><strong>CREATOR-FIRST</strong><span>Growth tools in development</span></div>
+                  <div><strong>PRE-LAUNCH</strong><span>Terms not yet final</span></div>
                 </div>
-                <Link href="/developer-hub" className="button button-primary"><CodeIcon size={17}/> Start Building</Link>
+                <Link href="/developer-hub" className="button button-primary"><CodeIcon size={17}/> Explore creator tools</Link>
               </article>
 
               <article className="home-audience-card home-players-card">
@@ -234,7 +234,7 @@ export default function HomePage() {
                 <div className="home-community-avatars" aria-label="One connected ESB Games community">
                   <i/><i/><i/><i/><i/><b>ESB</b>
                 </div>
-                <a href="https://esbgames.com/sign-up" className="button button-secondary" data-analytics="join-now"><UserPlusIcon/> Create an account</a>
+                <a href="https://esbgames.com" className="button button-secondary" data-analytics="explore-platform"><UserPlusIcon/> Explore the platform</a>
               </article>
             </div>
           </div>
@@ -244,7 +244,7 @@ export default function HomePage() {
           <div className="home-section-inner home-support-grid">
             <div className="home-support-copy">
               <h2>We&apos;re here when<br/><span className="home-gradient">you need us</span>.</h2>
-              <p>Got a billing issue, a bug to report, or just need help with something? Our support team is made up of real people, submit a ticket and we&apos;ll get back to you fast.</p>
+              <p>Need help with an account, billing, safety or a technical issue? Use the private support flow to send the details to the appropriate ESB Games team.</p>
               <div className="home-support-actions">
                 <Link href="/support" className="button button-primary"><HeadsetIcon/> Go to Support</Link>
               </div>
@@ -252,9 +252,9 @@ export default function HomePage() {
 
             <div className="home-support-cards">
               <article><span className="home-feature-icon home-feature-icon-magenta"><TicketIcon/></span><h3>Structured Requests</h3><p>Account, billing, creator, technical and general support categories are prepared.</p></article>
-              <article><span className="home-feature-icon home-feature-icon-blue"><BoltIcon/></span><h3>Clear Statuses</h3><p>The planned backend will track each request from receipt through review and resolution.</p></article>
+              <article><span className="home-feature-icon home-feature-icon-blue"><BoltIcon/></span><h3>Clear Statuses</h3><p>Support requests use clear case statuses from receipt through review and resolution.</p></article>
               <article><span className="home-feature-icon home-feature-icon-teal"><SearchIcon/></span><h3>Safety Route</h3><p>A dedicated safety form is prepared for harassment, abuse and dangerous content concerns.</p></article>
-              <article><span className="home-feature-icon home-feature-icon-orange"><BookIcon/></span><h3>Growing Help Centre</h3><p>Initial guidance covers accounts, subscriptions, appeals, reports and creator payouts.</p></article>
+              <article><span className="home-feature-icon home-feature-icon-orange"><BookIcon/></span><h3>Growing Help Centre</h3><p>Initial guidance covers accounts, subscriptions, appeals, reports and creator topics, with more articles being prepared.</p></article>
             </div>
           </div>
 
@@ -263,7 +263,7 @@ export default function HomePage() {
               <h2>The next era of play is<br/><span className="home-gradient">being built</span>.</h2>
               <p>Create your ESB Games account and follow the platform as testing, creator tools and public availability expand.</p>
               <div className="home-banner-actions">
-                <a href="https://esbgames.com/sign-up" className="button button-primary" data-analytics="join-now"><RocketIcon/> Join Now</a>
+                <a href="https://esbgames.com" className="button button-primary" data-analytics="explore-platform"><RocketIcon/> Explore ESB Games</a>
                 <Link href="/about" className="button button-secondary">Learn more</Link>
               </div>
               <div className="home-banner-trust">

@@ -10,7 +10,7 @@ interface SearchDialogProps {
   onClose: () => void;
 }
 
-const suggestions = ["Download ESB Studio", "How do I create an account?", "My child’s account", "I forgot my password"];
+const suggestions = ["ESB Studio availability", "How do I access my account?", "My child’s account", "I forgot my password"];
 
 export default function SearchDialog({ open, onClose }: SearchDialogProps) {
   const router = useRouter();
@@ -127,7 +127,7 @@ export default function SearchDialog({ open, onClose }: SearchDialogProps) {
           ))}
           {state === "empty" && <div className="search-empty-state"><strong>We couldn’t find an exact match.</strong><p>Try fewer words, search for a product name, or visit Support.</p><div>{suggestions.slice(0, 3).map((suggestion) => <button key={suggestion} type="button" onClick={() => setQuery(suggestion)}>{suggestion}</button>)}</div><a href="/support">Go to Support</a></div>}
           {state === "unavailable" && <div className="search-empty-state"><strong>Search is temporarily unavailable.</strong><p>Please try again or use the main navigation.</p></div>}
-          {state === "partial" && <p className="search-partial-note">Some live content could not be searched, so these results may be incomplete.</p>}
+          {state === "partial" && <p className="search-partial-note">Some content could not be searched right now, so these results may be incomplete.</p>}
         </div>
         <p className="search-tip">Use ↑ and ↓ to move, Enter to open, and Esc to close.</p>
       </section>

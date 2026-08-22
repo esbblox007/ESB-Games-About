@@ -15,7 +15,7 @@ export async function GET() {
   const config = getSupabaseServerConfig();
   if (!config) {
     return NextResponse.json(
-      { available: false, state: "configuration_missing" },
+      { available: false, state: "unavailable" },
       { status: 503, headers: noStoreHeaders() },
     );
   }
@@ -25,19 +25,19 @@ export async function GET() {
     const result = normalisePreflight(raw);
     if (result.ready !== true) {
       return NextResponse.json(
-        { available: false, state: "database_unavailable" },
+        { available: false, state: "unavailable" },
         { status: 503, headers: noStoreHeaders() },
       );
     }
 
     return NextResponse.json(
-      { available: true, state: "ready", pipelineVersion: result.pipelineVersion ?? 3 },
+      { available: true, state: "ready" },
       { headers: noStoreHeaders() },
     );
   } catch (error) {
     console.error("[support-health] Support submission preflight failed", error);
     return NextResponse.json(
-      { available: false, state: "database_unavailable" },
+      { available: false, state: "unavailable" },
       { status: 503, headers: noStoreHeaders() },
     );
   }

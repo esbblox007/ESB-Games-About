@@ -12,13 +12,21 @@ declare global {
 
 const supportedLanguages = languages.map((language) => language.google).join(",");
 
+function forceImportantStyle(element: HTMLElement, property: string, value: string) {
+  if (element.style.getPropertyValue(property) === value && element.style.getPropertyPriority(property) === "important") return;
+  element.style.setProperty(property, value, "important");
+}
+
 function resetGoogleTranslatePageOffset() {
-  document.body.style.setProperty("top", "0px", "important");
-  document.body.style.setProperty("margin-top", "0px", "important");
-  document.documentElement.style.setProperty("margin-top", "0px", "important");
+  forceImportantStyle(document.body, "top", "0px");
+  forceImportantStyle(document.body, "margin-top", "0px");
+  forceImportantStyle(document.body, "position", "static");
+  forceImportantStyle(document.documentElement, "top", "0px");
+  forceImportantStyle(document.documentElement, "margin-top", "0px");
+  document.querySelector<HTMLElement>(".site-header")?.style.removeProperty("transform");
   document.querySelectorAll<HTMLElement>("body > .skiptranslate:not(.google-translate-host), .goog-te-banner-frame").forEach((element) => {
-    element.style.setProperty("display", "none", "important");
-    element.style.setProperty("height", "0px", "important");
+    forceImportantStyle(element, "display", "none");
+    forceImportantStyle(element, "height", "0px");
   });
 }
 
@@ -53,6 +61,7 @@ export default function SiteTranslator() {
     applySelectedLanguage();
     const offsetObserver = new MutationObserver(resetGoogleTranslatePageOffset);
     offsetObserver.observe(document.body, { childList: true, subtree: false, attributes: true, attributeFilter: ["style"] });
+    offsetObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["style"] });
     window.googleTranslateElementInit = initialiseTranslator;
     const onLanguageChange = () => applySelectedLanguage();
     window.addEventListener("esb-language-change" as keyof WindowEventMap, onLanguageChange as EventListener);

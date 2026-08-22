@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Accessibility", description: "Access
 export default function AccessibilityPage() {
   return (
     <PageShell>
-      <main className="legal-page">
+      <div className="legal-page">
         <div className="legal-container">
           <span className="eyebrow">Accessibility</span>
           <h1>Building ESB Games for more people.</h1>
@@ -17,7 +17,7 @@ export default function AccessibilityPage() {
             <p>During development, accessibility issues can be raised through the <a href="/support">Support page</a>.</p>
           </section>
         </div>
-      </main>
+      </div>
     </PageShell>
   );
 }

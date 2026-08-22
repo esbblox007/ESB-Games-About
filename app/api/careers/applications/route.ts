@@ -63,7 +63,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true, applicationId, emailSent: delivery.sent }, { status: 201 });
   } catch (error) {
     if (error instanceof PublicRateLimitError) return NextResponse.json({ error: error.message, retryAfterSeconds: error.retryAfterSeconds }, { status: 429, headers: { "Retry-After": String(error.retryAfterSeconds) } });
-    return NextResponse.json({ error: error instanceof Error ? error.message : "Your application could not be submitted. No hiring decision has been made." }, { status: 503 });
+    console.error("[careers-application] Submission failed", error);
+    return NextResponse.json({ error: "Your application could not be submitted right now. No hiring decision has been made. Please try again shortly." }, { status: 503 });
   }
 }
 

@@ -49,6 +49,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true, fileReference, fileName: safeName, scanState: "Pending" }, { status: 201 });
   } catch (error) {
     if (error instanceof PublicRateLimitError) return NextResponse.json({ error: error.message, retryAfterSeconds: error.retryAfterSeconds }, { status: 429, headers: { "Retry-After": String(error.retryAfterSeconds) } });
-    return NextResponse.json({ error: error instanceof Error ? error.message : "The file could not be uploaded." }, { status: 503 });
+    console.error("[careers-upload] Candidate file upload failed", error);
+    return NextResponse.json({ error: "The file could not be uploaded right now. Please try again shortly." }, { status: 503 });
   }
 }

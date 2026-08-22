@@ -40,7 +40,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       })),
     }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : "The ticket could not be loaded." }, { status: 503 });
+    console.error("[support-ticket] Ticket load failed", error);
+    return NextResponse.json({ error: "This ticket could not be loaded right now. Please try again shortly." }, { status: 503 });
   }
 }
 
@@ -66,6 +67,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     if (error instanceof SupportRateLimitError) {
       return NextResponse.json({ error: error.message, retryAfterSeconds: error.retryAfterSeconds }, { status: 429, headers: { "Retry-After": String(error.retryAfterSeconds) } });
     }
-    return NextResponse.json({ error: error instanceof Error ? error.message : "The message could not be sent." }, { status: 503 });
+    console.error("[support-ticket] Customer reply failed", error);
+    return NextResponse.json({ error: "Your message could not be sent right now. Please try again shortly." }, { status: 503 });
   }
 }

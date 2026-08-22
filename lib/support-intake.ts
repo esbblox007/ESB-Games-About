@@ -328,7 +328,7 @@ export const supportCategoryDefinitions: readonly SupportCategoryDefinition[] = 
         label: "Which product or service is affected?",
         type: "select",
         required: true,
-        options: ["Play Platform", "ESB Games Player", "ESB Studio", "Creator Hub", "Family Centre", "About website", "Backend or staff tools", "Another service"],
+        options: ["ESB Games platform", "ESB Games Player", "ESB Studio", "Creator Hub", "Family Centre", "About website", "Another service"],
       },
       {
         name: "issueType",

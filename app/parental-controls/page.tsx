@@ -4,8 +4,9 @@ import PageShell from "@/components/PageShell";
 import { ArrowIcon, CheckIcon, ShieldIcon, UsersIcon } from "@/components/Icons";
 
 export const metadata: Metadata = {
-  title: "Parental Controls",
-  description: "Explore the family safety, spending, communication and activity controls being built for ESB Games.",
+  title: "Family Centre",
+  description: "Explore the Family Centre and the linked-account, spending, communication, privacy and activity controls being developed for ESB Games.",
+  alternates: { canonical: "/parental-controls" },
 };
 
 const features = [
@@ -13,78 +14,78 @@ const features = [
     icon: "◷",
     tone: "purple",
     title: "Screen Time Controls",
-    text: "Set daily limits, bedtimes and break reminders that support healthy play habits.",
+    text: "Planned controls include daily limits, bedtimes and break reminders designed to support healthy play habits.",
   },
   {
     icon: "▣",
     tone: "blue",
     title: "Spending Management",
-    text: "Set monthly budgets, require purchase approval and receive clear spending notifications.",
+    text: "Planned controls include monthly budgets, purchase approvals and clearer spending notifications.",
   },
   {
     icon: "◎",
     tone: "teal",
     title: "Communication Controls",
-    text: "Choose who your child can chat with and manage privacy settings in one place.",
+    text: "Communication permissions and privacy settings are being designed for linked family accounts.",
   },
   {
     icon: "◇",
     tone: "purple",
     title: "Content & Privacy",
-    text: "Filter experiences, block unsuitable content and customise safety levels by age.",
+    text: "Content and privacy controls are being developed to support age-appropriate experiences.",
   },
   {
     icon: "✓",
     tone: "orange",
     title: "Approvals & Requests",
-    text: "Review friend requests, spending, invitations and selected content before they proceed.",
+    text: "Approval flows are planned for selected requests, spending and account actions.",
   },
   {
     icon: "⌁",
     tone: "blue",
     title: "Activity Reports",
-    text: "Receive clear weekly reports covering screen time, activity and platform interactions.",
+    text: "Weekly reporting and activity visibility are being developed for supported family accounts.",
   },
 ] as const;
 
 const linkingSteps = [
-  ["1. Open your child’s settings", "Log in to your child’s ESB Games account and open Settings, then go to Parental Controls."],
-  ["2. Add a parent email", "Choose Add parent and enter the email address of the parent or guardian who will manage the account."],
-  ["3. Create or log in to your parent account", "The parent will receive an email with instructions to sign in or create their ESB Games parent account."],
-  ["4. Approve the link", "Once signed in, the parent confirms the request and can start managing limits, spending, approvals and reports."],
+  ["1. Open your child’s settings", "The intended flow starts from the child account settings and the Family section."],
+  ["2. Add a parent email", "A parent or guardian email is added to begin a secure linking request."],
+  ["3. Create or log in to your parent account", "The parent or guardian is then guided through sign-in and identity confirmation."],
+  ["4. Approve the link", "Once linking is approved, supported controls and reports can be managed from Family Centre as those features become available."],
 ] as const;
 
 function FamilyDashboardMockup() {
   return (
-    <div className="parental-product" aria-label="Product concept preview of the ESB Games parental controls dashboard">
+    <div className="parental-product" aria-label="Product concept preview of the ESB Games Family Centre dashboard">
       <div className="parental-laptop">
         <div className="parental-laptop-screen">
           <aside>
-            <strong>Parental Controls</strong>
+            <strong>Family Centre</strong>
             {["Overview", "Screen Time", "Spending", "Communication", "Content & Privacy", "Approvals", "Activity Log", "Family Members"].map((item, index) => (
               <span className={index === 0 ? "active" : ""} key={item}>{index === 0 ? "▣" : "○"} {item}</span>
             ))}
           </aside>
           <section>
-            <header><b>Overview</b><small>Updated just now</small></header>
+            <header><b>Overview</b><small>Illustrative preview</small></header>
             <div className="parental-profile-row">
-              <article className="parental-profile-card"><i>ES</i><div><strong>Alex</strong><span>Age 10</span><small>Member since 2026</small></div></article>
-              <article><span>Screen Time</span><strong>1h 45m</strong><small>of 2h allowed</small><b className="mini-progress"><i /></b></article>
-              <article><span>Spending</span><strong>1,150</strong><small>of 5,000 ESBucks</small><b className="mini-progress purple"><i /></b></article>
+              <article className="parental-profile-card"><i>ES</i><div><strong>Child profile</strong><span>Linked account</span><small>Illustrative preview</small></div></article>
+              <article><span>Screen Time</span><strong>Daily limit</strong><small>Parent-managed control</small><b className="mini-progress"><i /></b></article>
+              <article><span>Spending</span><strong>Monthly limit</strong><small>Approval controls planned</small><b className="mini-progress purple"><i /></b></article>
             </div>
             <div className="parental-dashboard-lower">
               <article className="parental-activity-card">
                 <strong>Recent Activity</strong>
-                <p><i className="activity-thumb one" /> <span><b>BuildWithNova</b><small>Played · 35m ago</small></span></p>
-                <p><i className="activity-thumb two" /> <span><b>Island Tycoon</b><small>Played · 1h ago</small></span></p>
-                <p><i className="activity-thumb three" /> <span><b>Space Adventure</b><small>Played · 4h ago</small></span></p>
+                <p><i className="activity-thumb one" /> <span><b>Experience activity</b><small>Example visibility</small></span></p>
+                <p><i className="activity-thumb two" /> <span><b>Play-time activity</b><small>Example visibility</small></span></p>
+                <p><i className="activity-thumb three" /> <span><b>Safety information</b><small>Example visibility</small></span></p>
               </article>
               <article className="parental-quick-card">
                 <strong>Quick Controls</strong>
-                <p><span>◷ <b>Screen Time</b><small>Limited to 2h per day</small></span><i className="toggle on" /></p>
-                <p><span>▣ <b>Spending Limit</b><small>500 ESBucks per month</small></span><i className="toggle on" /></p>
-                <p><span>▢ <b>Chat & Communication</b><small>Friends only</small></span><em>›</em></p>
-                <p><span>◇ <b>Content Restrictions</b><small>Moderate</small></span><em>›</em></p>
+                <p><span>◷ <b>Screen Time</b><small>Daily limits planned</small></span><i className="toggle on" /></p>
+                <p><span>▣ <b>Spending Limit</b><small>Parent-managed limit</small></span><i className="toggle on" /></p>
+                <p><span>▢ <b>Chat &amp; Communication</b><small>Permission controls planned</small></span><em>›</em></p>
+                <p><span>◇ <b>Content Restrictions</b><small>Age-aware settings planned</small></span><em>›</em></p>
               </article>
             </div>
           </section>
@@ -94,8 +95,8 @@ function FamilyDashboardMockup() {
 
       <div className="parental-phone">
         <div className="parental-phone-notch" />
-        <header><b>Parental Controls</b></header>
-        <div className="parental-phone-profile"><i>ES</i><span><b>Alex</b><small>Age 10</small></span></div>
+        <header><b>Family Centre</b></header>
+        <div className="parental-phone-profile"><i>ES</i><span><b>Child profile</b><small>Illustrative preview</small></span></div>
         {["Screen Time", "Spending", "Communication", "Content & Privacy", "Approvals"].map((item, index) => (
           <div className="parental-phone-item" key={item}><span>{["◷", "▣", "▢", "◇", "✓"][index]}</span><b>{item}</b><em>›</em></div>
         ))}
@@ -112,11 +113,11 @@ export default function ParentalControlsPage() {
         <section className="parental-hero">
           <div className="parental-container parental-hero-grid">
             <div className="parental-hero-copy">
-              <span className="parental-eyebrow"><ShieldIcon size={15} /> Parental Controls</span>
+              <span className="parental-eyebrow"><ShieldIcon size={15} /> Family Centre · In development</span>
               <h1>A safer universe<br />for <span className="gradient-text">every</span> player.</h1>
               <p>Family Centre is being designed to help parents and guardians manage screen time, spending, communication and account safety as ESB Games develops.</p>
               <div className="parental-actions">
-                <a href="https://family.esbgames.com" className="button button-primary"><ShieldIcon size={17} /> Open Family Centre</a>
+                <a href="https://family.esbgames.com" className="button button-primary"><ShieldIcon size={17} /> Open Family Centre preview</a>
                 <a href="#linking-steps" className="button button-secondary">How linking works <ArrowIcon size={16} /></a>
               </div>
               <div className="parental-trust-row">
@@ -134,8 +135,8 @@ export default function ParentalControlsPage() {
           <div className="parental-container">
             <header className="parental-section-heading">
               <span className="eyebrow">Family tools</span>
-              <h2>Everything you need to support your child&apos;s experience.</h2>
-              <p>Designed to give parents and guardians more clarity, more control and a simpler way to stay involved.</p>
+              <h2>Family controls being designed around what matters.</h2>
+              <p>Planned tools focus on clarity, age-appropriate settings and a simpler way for parents and guardians to stay involved.</p>
             </header>
             <div className="parental-feature-grid">
               {features.map((feature) => (
@@ -190,8 +191,8 @@ export default function ParentalControlsPage() {
           <div className="parental-container">
             <div className="parental-safety-card">
               <span className="parental-safety-icon"><ShieldIcon size={31} /></span>
-              <div><h2>Family safety is our priority.</h2><p>ESB Games is being designed to support creativity and connection in a safe, positive environment for players of every age.</p></div>
-              <Link href="/support" className="button button-secondary">Learn More About Safety <ArrowIcon size={16} /></Link>
+              <div><h2>Family safety is our priority.</h2><p>ESB Games is being designed to support creativity and connection with age-appropriate safety, privacy and family controls.</p></div>
+              <Link href="/trust/safety" className="button button-secondary">Learn More About Safety <ArrowIcon size={16} /></Link>
             </div>
           </div>
         </section>

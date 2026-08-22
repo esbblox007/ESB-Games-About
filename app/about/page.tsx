@@ -3,10 +3,9 @@ import Link from "next/link";
 import PageShell from "@/components/PageShell";
 import Reveal from "@/components/Reveal";
 import { CubeIcon, GamepadIcon, GlobeIcon, HeartIcon, RocketIcon, ShieldIcon, UsersIcon } from "@/components/Icons";
-import { siteMetrics } from "@/lib/content/siteMetrics";
 
 export const metadata: Metadata = {
-  title: "About",
+  title: "About ESB Games",
   description: "Learn about the ESB Games mission, principles and current development direction.",
   alternates: { canonical: "/about" },
 };
@@ -31,7 +30,7 @@ export default function AboutPage() {
               <h1>We&apos;re building<br />the future of<br /><span>play.</span></h1>
               <p>ESB Games is a next-generation gaming and creation ecosystem being developed for players, creators, families and communities.</p>
               <div className="about-hero-actions">
-                <a href="https://esbgames.com/sign-up" className="button button-primary" data-analytics="join-now"><RocketIcon size={17} /> Join ESB Games</a>
+                <a href="https://esbgames.com" className="button button-primary" data-analytics="explore-platform"><RocketIcon size={17} /> Explore ESB Games</a>
                 <Link href="/careers" className="button button-secondary">Join the team</Link>
               </div>
             </div>
@@ -46,11 +45,11 @@ export default function AboutPage() {
         <section className="about-mission-section">
           <div className="about-section-inner">
             <Reveal><article className="about-mission-card"><span className="about-quote-mark">“</span><blockquote>Our mission is to build a safer, fairer and more <em>creative gaming ecosystem</em>, and to share its success with the players and creators who help build it.</blockquote><p>The ESB Games founding team</p></article></Reveal>
-            <div className="about-stat-grid" aria-label="Verified ESB Games development metrics">
-              <Reveal><article><RocketIcon size={20} /><strong>{siteMetrics.connectedServices}</strong><span>Connected services</span></article></Reveal>
-              <Reveal><article><GamepadIcon size={20} /><strong>{siteMetrics.corePlatformAreas}+</strong><span>Core platform areas</span></article></Reveal>
-              <Reveal><article><GlobeIcon size={20} /><strong>{siteMetrics.plannedDesktopPlatforms}</strong><span>Studio desktop platforms planned</span></article></Reveal>
-              <Reveal><article><UsersIcon size={20} /><strong>{siteMetrics.universalAccounts}</strong><span>Universal account</span></article></Reveal>
+            <div className="about-stat-grid about-proof-grid" aria-label="ESB Games direction">
+              <Reveal><article><RocketIcon size={20} /><strong>ONE ECOSYSTEM</strong><span>Play, creation, communities and support are designed to connect.</span></article></Reveal>
+              <Reveal><article><GamepadIcon size={20} /><strong>PLAYER-FOCUSED</strong><span>Discovery, performance and community are being built around the player experience.</span></article></Reveal>
+              <Reveal><article><GlobeIcon size={20} /><strong>GLOBAL BY DESIGN</strong><span>The ecosystem is being prepared for communities across regions and languages.</span></article></Reveal>
+              <Reveal><article><UsersIcon size={20} /><strong>CREATOR-FIRST</strong><span>Studio, publishing and growth tools are being developed as connected systems.</span></article></Reveal>
             </div>
           </div>
         </section>
@@ -64,7 +63,7 @@ export default function AboutPage() {
 
         <section className="about-platform-section">
           <div className="about-section-inner about-platform-layout">
-            <Reveal className="about-platform-copy"><span className="about-kicker">Why ESB Games</span><h2>One ecosystem, built to <span>connect.</span></h2><p>ESB Games is bringing play, creation, publishing, communities, family controls and internal operations together through shared accounts and connected services.</p><Link href="/developer-hub" className="button button-secondary">Explore the Creator Hub</Link></Reveal>
+            <Reveal className="about-platform-copy"><span className="about-kicker">Why ESB Games</span><h2>One ecosystem, built to <span>belong.</span></h2><p>ESB Games is bringing play, creation, publishing, communities, family controls and internal operations together through shared accounts and connected services.</p><Link href="/developer-hub" className="button button-secondary">Explore the Creator Hub</Link></Reveal>
             <div className="about-platform-grid">
               <Reveal><article><span className="about-card-icon about-card-icon-purple"><RocketIcon size={21} /></span><h3>Connected platform</h3><p>Core products are designed around one ESB Games account instead of disconnected identities.</p></article></Reveal>
               <Reveal><article><span className="about-card-icon about-card-icon-pink"><CubeIcon size={21} /></span><h3>Creator tools in development</h3><p>ESB Studio, creator resources, publishing and analytics are being developed in stages.</p></article></Reveal>
@@ -74,7 +73,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="about-cta-section"><Reveal><div className="about-cta-card"><div><span className="about-kicker">The future starts here</span><h2>Follow the next stage of ESB Games.</h2><p>Create an account, explore the ecosystem and watch development updates as testing expands.</p></div><a href="https://esbgames.com/sign-up" className="button button-primary" data-analytics="join-now"><RocketIcon size={17} /> Join Now</a></div></Reveal></section>
+        <section className="about-cta-section"><Reveal><div className="about-cta-card"><div><span className="about-kicker">The future starts here</span><h2>Follow the next stage of ESB Games.</h2><p>Explore the ecosystem and follow development updates as testing expands.</p></div><a href="https://esbgames.com" className="button button-primary" data-analytics="explore-platform"><RocketIcon size={17} /> Explore the platform</a></div></Reveal></section>
       </div>
     </PageShell>
   );

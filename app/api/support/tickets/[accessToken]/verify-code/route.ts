@@ -34,7 +34,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       return NextResponse.json({ error: error.message, retryAfterSeconds: error.retryAfterSeconds }, { status: 429, headers: { "Retry-After": String(error.retryAfterSeconds) } });
     }
     const message = error instanceof Error ? error.message : "The verification code could not be checked.";
-    const status = /incorrect|expired|attempt|invalid/i.test(message) ? 400 : 503;
-    return NextResponse.json({ error: message }, { status });
+    const isExpectedCodeError = /incorrect|expired|attempt|invalid/i.test(message);
+    if (!isExpectedCodeError) console.error("[support-verification] Code verification failed", error);
+    return NextResponse.json({ error: isExpectedCodeError ? message : "The verification code could not be checked right now. Please try again shortly." }, { status: isExpectedCodeError ? 400 : 503 });
   }
 }

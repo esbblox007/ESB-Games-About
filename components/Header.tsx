@@ -12,19 +12,20 @@ const nav = [
   ["Home", "/"],
   ["About", "/about"],
   ["Creator Hub", "/developer-hub"],
-  ["Parental Controls", "/parental-controls"],
+  ["Families", "/parental-controls"],
+  ["Trust", "/trust"],
   ["News", "/news"],
   ["Careers", "/careers"],
   ["Support", "/support"],
 ] as const;
 
-const signUpUrl = "https://esbgames.com/sign-up";
+const platformUrl = "https://esbgames.com";
 const loginUrl = "https://esbgames.com/login";
 
 function JoinButton({ mobile = false }: { mobile?: boolean }) {
   return (
-    <a href={signUpUrl} className={`button button-primary header-cta${mobile ? " mobile-account-button" : ""}`} data-analytics="join-now">
-      <RocketIcon size={17} /> Join Now
+    <a href={platformUrl} className={`button button-primary header-cta${mobile ? " mobile-account-button" : ""}`} data-analytics="explore-platform">
+      <RocketIcon size={17} /> Explore Platform
     </a>
   );
 }

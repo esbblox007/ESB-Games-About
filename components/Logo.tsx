@@ -15,7 +15,7 @@ export default function Logo() {
       </span>
       <span className="brand-copy">
         <strong>ESB GAMES</strong>
-        <small>DISCOVER · BELONG · BUILD</small>
+        <small>DISCOVER. BELONG. BUILD.</small>
       </span>
     </Link>
   );

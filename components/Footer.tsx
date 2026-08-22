@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Logo from "./Logo";
 import LanguageSelector from "./LanguageSelector";
+import { ESB_BRAND } from "@/lib/site-config";
 
 function XIcon() {
   return <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.901 2H22l-6.767 7.734L23 22h-6.32l-4.948-7.697L4.995 22H1.894l7.238-8.274L1 2h6.48l4.472 7.081L18.901 2Zm-1.106 18h1.747L6.532 3.896H4.66L17.795 20Z"/></svg>;
@@ -21,18 +22,18 @@ export default function Footer() {
       <div className="home-footer-grid">
         <div className="home-footer-brand">
           <Logo />
-          <p>A connected gaming and creator ecosystem being built for players, creators, families and communities.</p>
+          <p>A connected gaming and creator ecosystem being built so people can {ESB_BRAND.taglineSentence}.</p>
           <div className="home-social-row">
-            {socials.map((item) => <a key={item.label} href={item.href} aria-label={item.label} target="_blank" rel="noreferrer">{item.icon}</a>)}
+            {socials.map((item) => <a key={item.label} href={item.href} aria-label={`${item.label} — ESB Games`} target="_blank" rel="noreferrer">{item.icon}</a>)}
           </div>
         </div>
-        <div><strong>PLATFORM</strong><a href="https://esbgames.com/login">Play Platform</a><Link href="/developer-hub">Creator Hub</Link><Link href="/download">Downloads</Link><Link href="/subscriptions">Subscriptions</Link></div>
-        <div><strong>COMPANY</strong><Link href="/about">About</Link><Link href="/news">News</Link><Link href="/careers">Careers</Link></div>
-        <div><strong>SUPPORT</strong><Link href="/support">Help Centre</Link><Link href="/support#contact-support">Contact Support</Link><Link href="/parental-controls">Family Safety</Link><a href="https://status.esbgames.com">Service Status</a></div>
+        <div><strong>PLATFORM</strong><a href="https://esbgames.com">ESB Games</a><Link href="/developer-hub">Creator Hub</Link><Link href="/download">Downloads</Link><Link href="/subscriptions">Subscriptions</Link></div>
+        <div><strong>COMPANY</strong><Link href="/about">About</Link><Link href="/news">News</Link><Link href="/careers">Careers</Link><Link href="/trust">Trust, Safety &amp; Legal</Link></div>
+        <div><strong>SUPPORT</strong><Link href="/support">Help Centre</Link><Link href="/support#contact-support">Contact Support</Link><Link href="/parental-controls">Family Centre</Link><a href={ESB_BRAND.statusUrl}>Service Status</a></div>
       </div>
       <div className="home-footer-bottom">
-        <span>© {new Date().getFullYear()} ESB Games. All rights reserved. Crafted with <b>♥</b> for players.</span>
-        <nav aria-label="Legal links"><Link href="/legal/terms">Terms</Link><Link href="/legal/privacy">Privacy</Link><Link href="/legal/community-standards">Community Standards</Link><Link href="/legal/cookies">Cookies</Link><Link href="/accessibility">Accessibility</Link></nav>
+        <span>© {new Date().getFullYear()} ESB Games. All rights reserved. {ESB_BRAND.tagline}</span>
+        <nav aria-label="Legal links"><Link href="/trust">Trust Centre</Link><Link href="/legal/terms">Terms</Link><Link href="/legal/privacy">Privacy</Link><Link href="/legal/community-standards">Community Standards</Link><Link href="/legal/cookies">Cookies</Link><Link href="/accessibility">Accessibility</Link></nav>
         <LanguageSelector />
       </div>
     </footer>

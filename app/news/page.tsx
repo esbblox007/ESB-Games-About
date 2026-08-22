@@ -69,13 +69,13 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
             {result.unavailable ? (
               <div className="content-state content-state-error">
                 <h2>News is temporarily unavailable.</h2>
-                <p>The newsroom could not connect to the publishing service. Please try again shortly.</p>
+                <p>We couldn't load this section right now. Please try again shortly.</p>
                 <div><Link className="button button-primary" href="/news">Retry</Link><Link className="button button-secondary" href="/">Return Home</Link></div>
               </div>
             ) : result.articles.length === 0 ? (
               <div className="content-state">
                 <h2>{query || category ? "We couldn’t find an exact match." : "No news articles have been published yet."}</h2>
-                <p>{query || category ? "Try a broader search or return to all news." : "Published articles from the ESB Games Backend will appear here automatically."}</p>
+                <p>{query || category ? "Try a broader search or return to all news." : "Published ESB Games articles will appear here when they are available."}</p>
                 <div><Link className="button button-primary" href="/news">View all news</Link><Link className="button button-secondary" href="/support">Visit Support</Link></div>
               </div>
             ) : (

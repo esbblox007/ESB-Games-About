@@ -61,7 +61,7 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
   if (unavailable) {
     return (
       <PageShell>
-        <div className="article-state-page"><div className="content-state content-state-error"><h1>News is temporarily unavailable.</h1><p>This article could not be loaded from the publishing service.</p><div><Link className="button button-primary" href={`/news/${slug}`}>Retry</Link><Link className="button button-secondary" href="/news">Back to News</Link></div></div></div>
+        <div className="article-state-page"><div className="content-state content-state-error"><h1>News is temporarily unavailable.</h1><p>We couldn't load this article right now. Please try again shortly.</p><div><Link className="button button-primary" href={`/news/${slug}`}>Retry</Link><Link className="button button-secondary" href="/news">Back to News</Link></div></div></div>
       </PageShell>
     );
   }
@@ -104,7 +104,7 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
         <header className="article-header">
           <div className="article-container article-header-inner">
             <nav className="article-breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span>/</span><Link href="/news">News</Link><span>/</span><span aria-current="page">{article.category}</span></nav>
-            {article.preview && <span className="article-preview-banner">Content preview, not a live Backend article</span>}
+            {article.preview && <span className="article-preview-banner">Editorial preview</span>}
             <span className="article-category">{article.category}</span>
             <h1>{article.title}</h1>
             {article.subtitle && <p className="article-subtitle">{article.subtitle}</p>}
