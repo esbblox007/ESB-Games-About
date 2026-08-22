@@ -1,106 +1,71 @@
 # ESB Games About Website
 
-The public ESB Games information website for `https://about.esbgames.com`, built with Next.js 15, React 19 and TypeScript.
+Public information, News, Careers, Help and Trust for `https://about.esbgames.com`.
 
-This release presents ESB Games honestly as a pre-launch gaming and creator ecosystem. Unsupported user, game, creator, country, press, rating and payout claims have been replaced with verified development information.
+**Brand line:** `Discover. Belong. Build.`
 
-## Public routes
+## Stack
+
+- Next.js 15
+- React 19
+- TypeScript
+- ESB Games Production Supabase project
+- Resend for transactional website email
+
+## Main routes
 
 ```text
-/                              Homepage
+/                              Home
 /about                         About ESB Games
 /developer-hub                 Creator Hub
-/parental-controls             Parental Controls
-/news                          News index
-/news/[slug]                   Published news article
-/news/rss.xml                  RSS feed
-/download                      Official product availability
-/careers                       Careers and vacancy list
-/careers/[slug]                Dedicated role and application preview
-/support                       Help and support frontend
-/support/help/[slug]           Help article
-/subscriptions                 Provisional subscription preview
-/legal/terms                   Terms route awaiting final reviewed content
-/legal/privacy                 Privacy route awaiting final reviewed content
-/legal/community-standards     Community Standards route awaiting final reviewed content
-/legal/cookies                 Cookie Policy route awaiting final reviewed content
-/accessibility                 Accessibility route awaiting final reviewed content
+/parental-controls             Families
+/trust                         Trust, Safety & Legal
+/trust/safety                  Safety Centre
+/help                          Help Centre
+/news                          News
+/documentation                 Documentation
+/download                      Product availability
+/subscriptions                 Membership information
+/careers                       Careers
+/support                       Contact Support
 ```
 
-Redirects:
+Policy pages are generated from `lib/content/policies-data.ts`. Route aliases are configured centrally in `next.config.ts`.
 
-```text
-/blog and /blog/[slug]  → News
-/creator-hub            → /developer-hub
-/login                  → https://esbgames.com/login
-/signup and /sign-up    → https://esbgames.com/sign-up
-/early-access           → https://esbgames.com/sign-up
-```
+## Live content
 
-## Current backend boundaries
+- **News and Documentation:** Backend-managed Supabase content records.
+- **Careers:** Backend-managed published careers through Supabase.
+- **Support:** Supabase support workflow with private case access and email verification.
+- **Newsletter:** Supabase subscriber records with Resend confirmation email and token-based unsubscribe.
+- **Policies:** Native About-site policy pages.
 
-- **Support:** frontend preview only. The form does not send or store information and does not generate ticket references.
-- **Careers:** frontend preview only. Applications and CV files are not sent or stored.
-- **Newsletter:** can use the shared Supabase Production project when configured.
-- **News, downloads and search documents:** prepared for Backend-managed Supabase content.
+## Supabase migrations
 
-Do not show submission success for Support or Careers until a durable backend write and acknowledgement flow has been implemented.
+Database changes live under `supabase/migrations/`. Apply migrations in filename order to the Production project and keep secret/service-role credentials server-only.
 
-## Run locally
+## Environment
+
+Copy `env.example` to `.env.local` and supply the Production values. Never expose a secret/service-role key through a `NEXT_PUBLIC_` variable.
+
+## Local development
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`.
-
-Production:
+Production validation:
 
 ```bash
 npm run typecheck
 npm run build
-npm run start
 ```
-
-## Environment variables
-
-Copy `env.example` to `.env.local`:
-
-```env
-NEXT_PUBLIC_SITE_URL=https://about.esbgames.com
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-REVALIDATION_SECRET=
-NEXT_PUBLIC_CONTENT_PREVIEW=false
-```
-
-`SUPABASE_SERVICE_ROLE_KEY` and `REVALIDATION_SECRET` are server-only. Never expose them through a `NEXT_PUBLIC_` variable.
-
-## Supabase
-
-`supabase.sql` contains only the optional About-site content tables currently used or prepared by this project:
-
-```text
-newsletter_subscriptions
-cms_articles
-download_releases
-site_search_documents
-```
-
-Support and Careers tables are intentionally excluded until their backend workflows, permissions, attachment storage, notifications and internal queues are approved.
 
 ## Deployment
 
-1. Review the changes and commit them to the existing GitHub repository.
-2. Push the branch connected to Vercel.
-3. Add the required environment variables in Vercel.
-4. Run a production build and test all redirects, forms, legal routes and responsive layouts.
-5. Add final reviewed legal content before public launch.
-
-See `UPDATE-NOTES.md` for the cleanup summary.
-
-## Dependency lockfile
-
-This package does not include a generated `package-lock.json` because the review environment could not reach the public npm registry. Run `npm install` in a normal development environment and commit the generated lockfile before production deployment.
+1. Apply any Supabase migration required by the release.
+2. Verify Vercel environment variables.
+3. Run type checking and a production build.
+4. Deploy the GitHub branch connected to Vercel.
+5. Smoke-test navigation, translations, News, Help, Trust, newsletter, Careers and Support.

@@ -31,7 +31,7 @@ export default function CareerApplicationForm({ job }: { job: LiveJob }) {
   const [state, setState] = useState<SubmissionState>(null);
   const [acceptedConsents, setAcceptedConsents] = useState<string[]>([]);
   const extraFields = useMemo(() => job.applicationFields.filter((field) => !isStandardField(field)), [job.applicationFields]);
-  const liveReady = job.source === "supabase" && Boolean(job.applicationFormVersionId);
+  const liveReady = Boolean(job.applicationFormVersionId);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

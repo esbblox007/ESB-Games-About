@@ -68,7 +68,7 @@ export default function SupportPage() {
                 <span>◉</span>
                 <div>
                   <h3>ESB Games Status</h3>
-                  <p>View service availability, planned maintenance and incident information on the dedicated status website. During pre-launch, some status information may be preview data.</p>
+                  <p>View service availability, planned maintenance and incident information on the dedicated status website. Status information is published on the dedicated service-status site.</p>
                   <a href={statusUrl} target="_blank" rel="noopener noreferrer">Open the status website <ArrowIcon size={15} /></a>
                 </div>
               </article>

@@ -1,6 +1,20 @@
 import "server-only";
 import { contentSelect } from "./supabase";
-import { jobs as staticJobs, type Job } from "./careers";
+
+export type Job = {
+  slug: string;
+  title: string;
+  departments: string[];
+  location: string;
+  type: string;
+  reportsTo: string;
+  summary: string;
+  responsibilities: string[];
+  requirements: string[];
+  desirable: string[];
+  eligibility?: string;
+  applicationPrompt: string;
+};
 
 export type ApplicationField = {
   id?: string;
@@ -31,7 +45,6 @@ export type LiveJob = Job & {
   consents: CareerConsent[];
   closingDate?: string;
   featured?: boolean;
-  source: "supabase" | "static";
 };
 
 type JobRow = Record<string, unknown>;
@@ -57,49 +70,39 @@ function asArray<T>(value: unknown): T[] { return Array.isArray(value) ? value a
 
 function mapRow(row: JobRow): LiveJob {
   const blocks = blockLists(row.content_blocks);
-  const slug = String(row.public_slug ?? "");
-  const fallback = staticJobs.find((job) => job.slug === slug);
+  const slug = String(row.public_slug ?? "").trim();
   return {
     slug,
     jobId: String(row.job_id ?? slug),
-    title: String(row.title ?? fallback?.title ?? "Open role"),
-    departments: [String(row.department ?? row.category ?? fallback?.departments[0] ?? "ESB Games")],
-    location: String(row.location ?? fallback?.location ?? "Remote"),
-    type: String(row.employment_type ?? fallback?.type ?? "Full-time"),
-    reportsTo: String(row.reports_to ?? fallback?.reportsTo ?? "Chief Operating Officer"),
-    summary: String(row.short_description ?? fallback?.summary ?? "Join ESB Games and help build the future of gaming."),
-    responsibilities: blocks.responsibilities?.length ? blocks.responsibilities : fallback?.responsibilities ?? [],
-    requirements: blocks.requirements?.length ? blocks.requirements : fallback?.requirements ?? [],
-    desirable: blocks.desirable?.length ? blocks.desirable : fallback?.desirable ?? [],
-    eligibility: String(row.eligibility ?? fallback?.eligibility ?? "") || undefined,
-    applicationPrompt: String(row.application_prompt ?? fallback?.applicationPrompt ?? "Tell us why you are a strong fit for this role."),
+    title: String(row.title ?? "Open role"),
+    departments: [String(row.department ?? row.category ?? "ESB Games")],
+    location: String(row.location ?? "Remote"),
+    type: String(row.employment_type ?? "Role-specific"),
+    reportsTo: String(row.reports_to ?? "ESB Games leadership"),
+    summary: String(row.short_description ?? "Join ESB Games and help build the future of gaming."),
+    responsibilities: blocks.responsibilities ?? [],
+    requirements: blocks.requirements ?? [],
+    desirable: blocks.desirable ?? [],
+    eligibility: String(row.eligibility ?? "").trim() || undefined,
+    applicationPrompt: String(row.application_prompt ?? "Tell us why you are a strong fit for this role."),
     applicationFormVersionId: String(row.application_form_version_id ?? ""),
     applicationFields: asArray<ApplicationField>(row.application_fields).filter((field) => !field.recruiterOnly),
     consents: asArray<CareerConsent>(row.consents),
     closingDate: row.closing_date ? String(row.closing_date) : undefined,
     featured: Boolean(row.featured),
-    source: "supabase",
-  };
-}
-
-function staticToLive(job: Job): LiveJob {
-  return {
-    ...job,
-    jobId: job.slug,
-    applicationFormVersionId: "",
-    applicationFields: [],
-    consents: [],
-    source: "static",
   };
 }
 
 export async function getLiveJobs(): Promise<{ jobs: LiveJob[]; configured: boolean; unavailable: boolean }> {
+  const configured = Boolean(
+    (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL)
+    && (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY),
+  );
+  if (!configured) return { jobs: [], configured: false, unavailable: false };
+
   try {
     const rows = await contentSelect<JobRow>("public_careers_jobs", "select=*&order=featured.desc,publish_date.desc", { cache: "no-store" });
-    if (rows.length) return { jobs: rows.map(mapRow), configured: true, unavailable: false };
-    const configured = Boolean((process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL) && (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY));
-    const previewEnabled = process.env.NEXT_PUBLIC_CAREERS_PREVIEW === "true" || process.env.NODE_ENV === "development";
-    return { jobs: configured || !previewEnabled ? [] : staticJobs.map(staticToLive), configured, unavailable: false };
+    return { jobs: rows.map(mapRow).filter((job) => Boolean(job.slug)), configured: true, unavailable: false };
   } catch {
     return { jobs: [], configured: true, unavailable: true };
   }

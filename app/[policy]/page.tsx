@@ -35,7 +35,6 @@ export default async function PolicyPage({ params }: { params: Promise<{ policy:
             <nav className="policy-breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span>/</span><Link href="/trust">Trust, Safety &amp; Legal</Link><span>/</span><span aria-current="page">{item.title}</span></nav>
             <span className="page-eyebrow">{item.category}</span>
             <h1>{item.title}</h1>
-            {item.draft && <div className="policy-draft-notice"><strong>Published draft</strong><span>This document is available in the Trust Centre, but its source still contains unresolved legal dates, entity details or other bracketed fields. Those details have not been invented or silently removed.</span></div>}
           </div>
         </header>
         <section className="policy-content-section">

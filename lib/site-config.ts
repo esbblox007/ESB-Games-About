@@ -7,11 +7,3 @@ export const ESB_BRAND = {
   familyUrl: "https://family.esbgames.com",
   statusUrl: "https://status.esbgames.com",
 } as const;
-
-export const PRODUCT_STATE = {
-  available: "Available now",
-  development: "In development",
-  planned: "Planned",
-} as const;
-
-export type ProductState = keyof typeof PRODUCT_STATE;

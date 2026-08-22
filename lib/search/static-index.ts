@@ -1,6 +1,5 @@
 import type { SearchDocument } from "@/lib/content/types";
 import { supportArticles } from "@/lib/content/support";
-import { jobs } from "@/lib/content/careers";
 
 const coreSearchDocuments: SearchDocument[] = [
   {
@@ -175,7 +174,7 @@ const coreSearchDocuments: SearchDocument[] = [
     id: "subscriptions",
     type: "Page",
     title: "ESB Games subscriptions",
-    description: "Preview the planned ESB Games membership structure and provisional benefits.",
+    description: "View the planned ESB Games membership structure and current benefit information.",
     route: "/subscriptions",
     category: "Platform",
     locale: "en",
@@ -189,20 +188,6 @@ const coreSearchDocuments: SearchDocument[] = [
 
 export const staticSearchDocuments: SearchDocument[] = [
   ...coreSearchDocuments,
-  ...jobs.map((job) => ({
-    id: `career-${job.slug}`,
-    type: "Careers" as const,
-    title: job.title,
-    description: job.summary,
-    route: `/careers/${job.slug}`,
-    category: job.departments[0],
-    locale: "en",
-    keywords: [job.title, ...job.departments, job.location, job.type],
-    synonyms: [job.reportsTo, ...job.responsibilities],
-    questions: [`How do I apply for ${job.title}?`],
-    content: [...job.responsibilities, ...job.requirements, ...job.desirable, job.applicationPrompt].join(" "),
-    priority: 89,
-  })),
   ...supportArticles.map((article) => ({
     id: `support-${article.slug}`,
     type: "Help" as const,

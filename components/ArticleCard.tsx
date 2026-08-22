@@ -16,7 +16,6 @@ export default function ArticleCard({ article, featured = false, href }: { artic
             <div className="article-card-placeholder" aria-hidden="true"><span>ESB</span></div>
           )}
           {article.featured && <span className="article-featured-label">Featured</span>}
-          {article.preview && <span className="article-preview-label">Preview</span>}
         </div>
         <div className="article-card-body">
           <span className="article-card-category">{article.category}</span>

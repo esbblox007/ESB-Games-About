@@ -38,24 +38,20 @@ export default function HelpCentreBrowser() {
       <div className="help-category-grid" aria-live="polite">
         {filtered.map((category) => (
           <article className="help-category-card" key={category.id}>
-            <header>
-              <div><h3>{category.title}</h3><p>{category.description}</p></div>
-            </header>
+            <header><div><h3>{category.title}</h3><p>{category.description}</p></div></header>
             <ul>
               {category.articles.map((article) => (
                 <li key={`${category.id}-${article.title}`}>
-                  {article.href ? (
-                    <a href={article.href} target={article.external ? "_blank" : undefined} rel={article.external ? "noreferrer" : undefined}>
-                      <span>{article.title}</span><ArrowIcon size={14} />
-                    </a>
-                  ) : <span className="help-article-label"><span>{article.title}</span></span>}
+                  <a href={article.href} target={article.external ? "_blank" : undefined} rel={article.external ? "noreferrer" : undefined}>
+                    <span>{article.title}</span><ArrowIcon size={14} />
+                  </a>
                 </li>
               ))}
             </ul>
           </article>
         ))}
       </div>
-      {filtered.length === 0 && <div className="help-empty-state">No Help Centre topics matched that search. You can still contact Support for the correct route.</div>}
+      {filtered.length === 0 && <div className="help-empty-state">No matching topic was found. Contact Support and we’ll route your request.</div>}
     </>
   );
 }

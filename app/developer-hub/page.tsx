@@ -44,10 +44,10 @@ export default function DeveloperHubPage() {
             <div className="creator-hero-actions"><Link href="/download" className="button button-primary"><DownloadIcon size={17} /> Download & Availability</Link><a href="#resources" className="button button-secondary"><BookIcon size={17} /> Explore Resources</a></div>
           </div>
 
-          <div className="creator-code-window creator-workflow-window" aria-label="ESB Studio development workflow preview">
+          <div className="creator-code-window creator-workflow-window" aria-label="ESB Studio development workflow">
             <div className="creator-code-titlebar"><span className="creator-window-dots"><i /><i /><i /></span><span>ESB Studio · In development</span></div>
             <div className="creator-code-body creator-workflow-body"><p><strong>01</strong><span>Build</span><small>Create worlds, systems, interfaces and effects.</small></p><p><strong>02</strong><span>Test</span><small>Review projects before wider release.</small></p><p><strong>03</strong><span>Prepare</span><small>Publishing and moderation workflows are being developed.</small></p></div>
-            <div className="creator-code-status"><CheckIcon size={16} /> Product capability preview</div>
+            <div className="creator-code-status"><CheckIcon size={16} /> Development workflow</div>
           </div>
         </div>
       </section>
@@ -66,7 +66,7 @@ export default function DeveloperHubPage() {
         <aside className="creator-studio-directory"><header><span className="eyebrow">Planned collaboration</span><h2>Find specialist <span className="gradient-text">skills.</span></h2></header>{collaborationAreas.map(([title, meta, text]) => <article className="creator-studio-card" key={title}><div className="creator-studio-card-head"><h3>{title}</h3><span className="creator-planned-pill">Planned</span></div><strong><span>{meta}</span></strong><p>{text}</p></article>)}<Link href="/trust" className="creator-directory-link">Read creator trust &amp; safety information →</Link></aside>
       </div></section>
 
-      <section className="creator-section" id="studio"><div className="creator-container"><article className="creator-studio-showcase"><div className="creator-studio-copy"><span className="eyebrow">ESB Studio · Product preview</span><h2>Worlds without <span className="gradient-text">limits.</span></h2><p>Scripting, animation, VFX, sound, UI and project tools are being brought together in one creation environment.</p><div className="creator-platform-buttons"><Link href="/download" className="button button-primary">View ESB Studio availability</Link></div><small>ESB Studio is in development. Public downloads are not available yet.</small></div><div className="creator-studio-image"><Image src="/hero-studio-preview.png" alt="Product preview of ESB Studio creation tools" fill sizes="(max-width: 900px) 92vw, 620px" /></div></article></div></section>
+      <section className="creator-section" id="studio"><div className="creator-container"><article className="creator-studio-showcase"><div className="creator-studio-copy"><span className="eyebrow">ESB Studio · In development</span><h2>Worlds without <span className="gradient-text">limits.</span></h2><p>Scripting, animation, VFX, sound, UI and project tools are being brought together in one creation environment.</p><div className="creator-platform-buttons"><Link href="/download" className="button button-primary">View ESB Studio availability</Link></div><small>ESB Studio is in development. Public downloads are not available yet.</small></div><div className="creator-studio-image"><Image src="/hero-studio-platform.png" alt="ESB Studio creation tools" fill sizes="(max-width: 900px) 92vw, 620px" /></div></article></div></section>
 
       <section className="creator-section creator-final-section"><div className="creator-container"><div className="creator-final-cta"><div><span className="eyebrow">Creator future</span><h2>Ready to build the next big <span className="gradient-text">world?</span></h2><p>Follow ESB Studio availability as creator testing, publishing and discovery systems progress.</p></div><a href="https://esbgames.com" className="button button-primary"><RocketIcon size={17} /> Explore ESB Games</a></div></div></section>
     </PageShell>

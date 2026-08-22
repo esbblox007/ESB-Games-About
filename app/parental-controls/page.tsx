@@ -57,7 +57,7 @@ const linkingSteps = [
 
 function FamilyDashboardMockup() {
   return (
-    <div className="parental-product" aria-label="Product concept preview of the ESB Games Family Centre dashboard">
+    <div className="parental-product" aria-label="ESB Games Family Centre dashboard concept">
       <div className="parental-laptop">
         <div className="parental-laptop-screen">
           <aside>
@@ -67,9 +67,9 @@ function FamilyDashboardMockup() {
             ))}
           </aside>
           <section>
-            <header><b>Overview</b><small>Illustrative preview</small></header>
+            <header><b>Overview</b><small>Family Centre concept</small></header>
             <div className="parental-profile-row">
-              <article className="parental-profile-card"><i>ES</i><div><strong>Child profile</strong><span>Linked account</span><small>Illustrative preview</small></div></article>
+              <article className="parental-profile-card"><i>ES</i><div><strong>Child profile</strong><span>Linked account</span><small>Family Centre concept</small></div></article>
               <article><span>Screen Time</span><strong>Daily limit</strong><small>Parent-managed control</small><b className="mini-progress"><i /></b></article>
               <article><span>Spending</span><strong>Monthly limit</strong><small>Approval controls planned</small><b className="mini-progress purple"><i /></b></article>
             </div>
@@ -96,7 +96,7 @@ function FamilyDashboardMockup() {
       <div className="parental-phone">
         <div className="parental-phone-notch" />
         <header><b>Family Centre</b></header>
-        <div className="parental-phone-profile"><i>ES</i><span><b>Child profile</b><small>Illustrative preview</small></span></div>
+        <div className="parental-phone-profile"><i>ES</i><span><b>Child profile</b><small>Family Centre concept</small></span></div>
         {["Screen Time", "Spending", "Communication", "Content & Privacy", "Approvals"].map((item, index) => (
           <div className="parental-phone-item" key={item}><span>{["◷", "▣", "▢", "◇", "✓"][index]}</span><b>{item}</b><em>›</em></div>
         ))}
@@ -117,7 +117,7 @@ export default function ParentalControlsPage() {
               <h1>A safer universe<br />for <span className="gradient-text">every</span> player.</h1>
               <p>Family Centre is being designed to help parents and guardians manage screen time, spending, communication and account safety as ESB Games develops.</p>
               <div className="parental-actions">
-                <a href="https://family.esbgames.com" className="button button-primary"><ShieldIcon size={17} /> Open Family Centre preview</a>
+                <a href="https://family.esbgames.com" className="button button-primary"><ShieldIcon size={17} /> Open Family Centre</a>
                 <a href="#linking-steps" className="button button-secondary">How linking works <ArrowIcon size={16} /></a>
               </div>
               <div className="parental-trust-row">
@@ -127,7 +127,7 @@ export default function ParentalControlsPage() {
                 <span><UsersIcon size={17} /> Built for families</span>
               </div>
             </div>
-            <div className="parental-preview-wrap"><span className="product-preview-label">Product concept · Final controls may change</span><FamilyDashboardMockup /></div>
+            <div className="parental-product-wrap"><span className="product-status-label">Family Centre · In development</span><FamilyDashboardMockup /></div>
           </div>
         </section>
 

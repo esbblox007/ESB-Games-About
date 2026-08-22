@@ -20,8 +20,8 @@ function forceImportantStyle(element: HTMLElement, property: string, value: stri
 
 function removeInjectedTranslateChrome() {
   // Google Translate can inject a banner directly under <body>. When that
-  // happens before a sticky header, the banner's layout space becomes the
-  // large blank strip visible above the ESB navigation after client routing.
+  // happens, the banner can reserve layout space above the viewport content.
+  // Removing that injected chrome keeps the fixed ESB navigation flush to the top.
   // The translator host itself is excluded so language switching still works.
   document.querySelectorAll<HTMLElement>([
     "body > .skiptranslate:not(.google-translate-host)",

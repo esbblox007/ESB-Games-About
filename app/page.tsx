@@ -122,7 +122,7 @@ export default function HomePage() {
 
             </div>
 
-            <div className="home-hero-visual" aria-label="ESB Games product preview">
+            <div className="home-hero-visual" aria-label="ESB Games product interface">
               <div className="home-aurora"/>
 
               <div className="home-device-scene">
@@ -131,8 +131,8 @@ export default function HomePage() {
                     <div className="home-laptop-camera"/>
                     <div className="home-laptop-display">
                       <Image
-                        src="/hero-studio-preview.png"
-                        alt="Preview of the ESB Studio creator tools"
+                        src="/hero-studio-platform.png"
+                        alt="ESB Studio creator tools"
                         fill
                         sizes="(max-width: 960px) 88vw, 700px"
                         className="home-device-image"
@@ -149,8 +149,8 @@ export default function HomePage() {
                     <div className="home-tablet-camera"/>
                     <div className="home-tablet-screen">
                       <Image
-                        src="/hero-discover-preview.png"
-                        alt="Preview of the ESB Games discover experience"
+                        src="/hero-discover-platform.png"
+                        alt="ESB Games discover experience"
                         fill
                         sizes="(max-width: 960px) 78vw, 500px"
                         className="home-device-image home-tablet-image"

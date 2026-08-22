@@ -1,5 +1,4 @@
 import "server-only";
-import { previewNewsArticles } from "./previewNews";
 import { contentBackendConfigured, contentSelect, contentSelectPage } from "./supabase";
 import type { ArticleBlock, NewsArticle, NewsListResult, PublicationState, RichText } from "./types";
 
@@ -32,7 +31,6 @@ interface ArticleRow {
   reading_time?: number | null;
 }
 
-const previewEnabled = process.env.NEXT_PUBLIC_CONTENT_PREVIEW === "true";
 
 function cleanText(value: unknown, maxLength = 12000) {
   return typeof value === "string" ? value.slice(0, maxLength) : "";
@@ -168,9 +166,6 @@ function mapRow(row: ArticleRow): NewsArticle {
   };
 }
 
-function previewFor(locale: string) {
-  return previewNewsArticles.filter((article) => article.locale === locale || (locale !== "en" && article.locale === "en"));
-}
 
 export async function getPublishedArticles(options?: {
   locale?: string;
@@ -186,23 +181,7 @@ export async function getPublishedArticles(options?: {
   const pageSize = Math.min(24, Math.max(1, options?.pageSize || 9));
 
   if (!contentBackendConfigured) {
-    const source = previewEnabled ? previewFor(locale) : [];
-    const filtered = source.filter((article) => {
-      const categoryMatches = !options?.category || article.category === options.category;
-      const tagMatches = !options?.tag || article.tags.some((tag) => tag.toLowerCase() === options.tag!.toLowerCase());
-      const excludeTagMatches = !options?.excludeTag || !article.tags.some((tag) => tag.toLowerCase() === options.excludeTag!.toLowerCase());
-      const haystack = `${article.title} ${article.excerpt} ${article.category} ${article.tags.join(" ")}`.toLowerCase();
-      const queryMatches = !options?.query || haystack.includes(options.query.toLowerCase());
-      return categoryMatches && tagMatches && excludeTagMatches && queryMatches;
-    });
-    const start = (page - 1) * pageSize;
-    return {
-      articles: filtered.slice(start, start + pageSize),
-      total: filtered.length,
-      categories: [...new Set(source.map((article) => article.category))],
-      configured: false,
-      unavailable: false,
-    };
+    return { articles: [], total: 0, categories: [], configured: false, unavailable: false };
   }
 
   try {
@@ -261,12 +240,7 @@ export async function getPublishedArticles(options?: {
 
 export async function getArticleBySlug(slug: string, locale = "en"):
   Promise<{ article: NewsArticle | null; unavailable: boolean }> {
-  if (!contentBackendConfigured) {
-    const article = previewEnabled
-      ? previewFor(locale).find((item) => item.slug === slug) || null
-      : null;
-    return { article, unavailable: false };
-  }
+  if (!contentBackendConfigured) return { article: null, unavailable: false };
 
   try {
     const now = encodeURIComponent(new Date().toISOString());
@@ -301,9 +275,7 @@ export async function getRelatedArticles(article: NewsArticle, limit = 3): Promi
 
 
 export async function getPublishedArticleIndex(locale = "en"): Promise<Array<{ slug: string; publishedAt: string; updatedAt?: string; featured: boolean }>> {
-  if (!contentBackendConfigured) {
-    return (previewEnabled ? previewFor(locale) : []).map((article) => ({ slug: article.slug, publishedAt: article.publishedAt, updatedAt: article.updatedAt, featured: article.featured }));
-  }
+  if (!contentBackendConfigured) return [];
   try {
     const now = encodeURIComponent(new Date().toISOString());
     const rows = await contentSelect<Pick<ArticleRow, "slug" | "published_at" | "updated_at" | "featured" | "sitemap">>(
@@ -319,11 +291,7 @@ export async function getPublishedArticleIndex(locale = "en"): Promise<Array<{ s
 }
 
 export async function getPublishedDocumentationIndex(locale = "en"): Promise<Array<{ slug: string; publishedAt: string; updatedAt?: string; featured: boolean }>> {
-  if (!contentBackendConfigured) {
-    return (previewEnabled ? previewFor(locale) : [])
-      .filter((article) => article.tags.some((tag) => tag.toLowerCase() === "documentation"))
-      .map((article) => ({ slug: article.slug, publishedAt: article.publishedAt, updatedAt: article.updatedAt, featured: article.featured }));
-  }
+  if (!contentBackendConfigured) return [];
   try {
     const now = encodeURIComponent(new Date().toISOString());
     const rows = await contentSelect<Pick<ArticleRow, "slug" | "published_at" | "updated_at" | "featured" | "sitemap">>(

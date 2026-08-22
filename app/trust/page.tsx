@@ -1,59 +1,58 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageShell from "@/components/PageShell";
-import { ArrowIcon, BookIcon, GlobeIcon, ShieldIcon, UsersIcon } from "@/components/Icons";
-import { PRODUCT_STATE } from "@/lib/site-config";
+import { ArrowIcon, BookIcon, ShieldIcon } from "@/components/Icons";
 import { trustSections } from "@/lib/content/trust";
 
 export const metadata: Metadata = {
   title: "Trust, Safety & Legal",
-  description: "Explore ESB Games safety, family, privacy, creator and legal resources in the public Trust Centre.",
+  description: "The essential ESB Games policies, safety guidance and rights information in one clear Trust Centre.",
   alternates: { canonical: "/trust" },
   openGraph: {
     title: "Trust, Safety & Legal | ESB Games",
-    description: "Building an environment where everyone can discover, belong and build safely.",
+    description: "Essential policies and safety information for ESB Games.",
     url: "/trust",
   },
 };
 
-const icons = [<BookIcon key="legal" />, <ShieldIcon key="safety" />, <UsersIcon key="families" />, <GlobeIcon key="creators" />, <ShieldIcon key="privacy" />, <BookIcon key="support" />];
+const icons = [<BookIcon key="rules" />, <ShieldIcon key="safety" />];
 
 export default function TrustPage() {
   return (
     <PageShell>
-      <div className="trust-page">
-        <section className="trust-hero">
-          <div className="trust-container trust-hero-grid">
+      <div className="trust-page trust-page-compact">
+        <section className="trust-hero trust-hero-compact">
+          <div className="trust-container trust-hero-grid-compact">
             <div>
               <span className="eyebrow">ESB Games Trust Centre</span>
-              <h1>Trust, Safety<br />&amp; <span className="gradient-text">Legal.</span></h1>
-              <p>Building an environment where everyone can discover, belong and build safely. This centre brings together the public resources available for the ESB Games ecosystem.</p>
-              <div className="trust-hero-actions"><Link href="/trust/safety" className="button button-primary"><ShieldIcon size={17} /> Safety Centre</Link><Link href="/parental-controls" className="button button-secondary">Family Centre <ArrowIcon size={16} /></Link></div>
+              <h1>Clear rules.<br /><span className="gradient-text">Safer play.</span></h1>
+              <p>The essential rules, privacy information and safety routes in one place.</p>
+              <div className="trust-hero-actions">
+                <Link href="/trust/safety" className="button button-primary"><ShieldIcon size={17} /> Safety Centre</Link>
+                <Link href="/help" className="button button-secondary">Help Centre <ArrowIcon size={16} /></Link>
+              </div>
             </div>
-            <aside className="trust-truth-card" aria-label="Document availability guide">
-              <span className="eyebrow">Resource status</span>
-              <h2>Clear about what is available.</h2>
-              <dl>
-                <div><dt><i className="trust-state-dot available" /> Available now</dt><dd>Public resources or services that can be used today.</dd></div>
-                <div><dt><i className="trust-state-dot development" /> In development</dt><dd>Active work that is not yet a final public release.</dd></div>
-                <div><dt><i className="trust-state-dot planned" /> Planned</dt><dd>Future capability that should not be treated as available yet.</dd></div>
-              </dl>
+            <aside className="trust-compact-note">
+              <strong>Need a specialist document?</strong>
+              <p>Use site search by policy name. Account, payment, Creator and technical questions belong in the Help Centre.</p>
             </aside>
           </div>
         </section>
 
-        <section className="trust-resource-section">
+        <section className="trust-resource-section trust-resource-section-compact">
           <div className="trust-container">
-            <header className="trust-section-heading"><span className="eyebrow">Public resources</span><h2>Everything in one <span className="gradient-text">trusted place.</span></h2><p>The policy and guidance library is available here. If a source document still contains pre-launch legal placeholders or a draft notice, the document page identifies that clearly rather than hiding it.</p></header>
+            <header className="trust-section-heading trust-section-heading-compact">
+              <span className="eyebrow">Core resources</span>
+              <h2>The essentials.</h2>
+            </header>
             <div className="trust-section-grid">
               {trustSections.map((section, index) => (
-                <article className="trust-section-card" key={section.id} id={section.id}>
+                <article className="trust-section-card trust-section-card-compact" key={section.id} id={section.id}>
                   <header><span className="trust-section-icon">{icons[index]}</span><div><h3>{section.title}</h3><p>{section.description}</p></div></header>
                   <div className="trust-resource-list">
-                    {section.resources.map((resource) => {
-                      const content = <><span><strong>{resource.title}</strong><small>{resource.description}</small></span><span className={`trust-state-pill ${resource.state}`}>{PRODUCT_STATE[resource.state]}</span><ArrowIcon size={15} /></>;
-                      return resource.external ? <a key={resource.slug} href={resource.href} target="_blank" rel="noreferrer" className="trust-resource-row">{content}</a> : <Link key={resource.slug} href={resource.href || `/legal/${resource.slug}`} className="trust-resource-row">{content}</Link>;
-                    })}
+                    {section.resources.map((item) => (
+                      <Link key={item.slug} href={item.href} className="trust-resource-row trust-resource-row-compact"><span><strong>{item.title}</strong><small>{item.description}</small></span><ArrowIcon size={15} /></Link>
+                    ))}
                   </div>
                 </article>
               ))}
@@ -61,8 +60,8 @@ export default function TrustPage() {
           </div>
         </section>
 
-        <section className="trust-final-band">
-          <div className="trust-container"><div className="trust-final-card"><div><span className="eyebrow">Need help now?</span><h2>Support and safety concerns have a clear route.</h2><p>Use ESB Games Support for account, billing, technical or safety requests. Emergency situations should be reported to the appropriate local emergency service.</p></div><Link href="/support" className="button button-primary">Go to Support <ArrowIcon size={16} /></Link></div></div>
+        <section className="trust-final-band trust-final-band-compact">
+          <div className="trust-container"><div className="trust-final-card"><div><span className="eyebrow">Need practical help?</span><h2>Go straight to the Help Centre.</h2><p>Account, payment, safety and Creator questions are easier to solve through task-based help than through policy documents.</p></div><Link href="/help" className="button button-primary">Open Help Centre <ArrowIcon size={16} /></Link></div></div>
         </section>
       </div>
     </PageShell>

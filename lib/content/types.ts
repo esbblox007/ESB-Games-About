@@ -59,7 +59,6 @@ export interface NewsArticle {
   locale: string;
   translationGroupId?: string;
   readingTime: number;
-  preview?: boolean;
 }
 
 export interface NewsListResult {
