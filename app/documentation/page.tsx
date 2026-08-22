@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   description: "Official ESB Games product, creator, platform and technical documentation.",
   alternates: { canonical: "/documentation" },
   openGraph: { title: "Documentation | ESB Games", description: "Official ESB Games product, creator, platform and technical documentation.", url: "/documentation", type: "website" },
+  twitter: { card: "summary_large_image", title: "Documentation | ESB Games", description: "Official ESB Games product, creator, platform and technical documentation." },
 };
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -28,8 +29,8 @@ export default async function DocumentationPage({ searchParams }: { searchParams
         <section className="news-index-content"><div className="news-index-container">
           <div className="news-filter-toolbar"><form className="news-search-form" action="/documentation" role="search"><label htmlFor="docs-search">Search documentation</label><div><input id="docs-search" name="q" defaultValue={query} placeholder="Search documentation"/><button className="button button-primary" type="submit">Search</button></div></form></div>
           <div className="documentation-explainer"><strong>Official resources</strong><span>Browse guides, technical notes, creator resources and product information published by the ESB Games team.</span></div>
-          {result.unavailable ? <div className="content-state content-state-error"><h2>Documentation is temporarily unavailable.</h2><p>We couldn&apos;t load documentation right now. Please try again shortly.</p></div>
-          : result.articles.length === 0 ? <div className="content-state"><h2>{query ? "No matching documentation found." : "No documentation has been published yet."}</h2><p>{query ? "Try a broader search." : "Official documentation will appear here when it is published."}</p><div><Link className="button button-secondary" href="/documentation">View all documentation</Link></div></div>
+          {result.unavailable ? <div className="content-state content-state-error"><h2>Documentation is temporarily unavailable.</h2><p>We couldn&apos;t load documentation right now. Please try again shortly.</p><div><Link className="button button-primary" href="/documentation">Retry</Link></div></div>
+          : result.articles.length === 0 ? <div className="content-state"><h2>{query ? "No matching documentation found." : "No documentation has been published yet."}</h2><p>{query ? "Try a broader search." : "Official documentation will appear here when it is published."}</p><div>{query ? <Link className="button button-secondary" href="/documentation">Clear search</Link> : <Link className="button button-secondary" href="/developer-hub">Visit Creator Hub</Link>}</div></div>
           : <><div className="article-grid documentation-grid">{result.articles.map((article) => <ArticleCard article={article} href={`/documentation/${article.slug}`} key={article.id}/>)}</div>{totalPages > 1 && <nav className="news-pagination" aria-label="Documentation pages">{page > 1 && <Link href={`/documentation?page=${page-1}${query?`&q=${encodeURIComponent(query)}`:""}`}>← Previous</Link>}<span>Page {page} of {totalPages}</span>{page < totalPages && <Link href={`/documentation?page=${page+1}${query?`&q=${encodeURIComponent(query)}`:""}`}>Next →</Link>}</nav>}</>}
         </div></section>
       </div>
