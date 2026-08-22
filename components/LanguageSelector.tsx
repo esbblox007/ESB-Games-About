@@ -35,7 +35,6 @@ export function resolvePreferredLocale() {
   const saved = window.localStorage.getItem("esb-language");
   if (saved && languages.some((language) => language.locale === saved)) return saved;
 
-
   const browserLocales = [...new Set([...(navigator.languages || []), navigator.language, document.documentElement.lang].filter(Boolean))];
   for (const browserLocale of browserLocales) {
     const lower = browserLocale.toLowerCase();
@@ -63,6 +62,8 @@ export default function LanguageSelector({ variant = "footer" }: { variant?: "fo
 
   const selectLanguage = useCallback((nextLocale: string, source: "manual" | "auto" = "manual") => {
     const language = languages.find((item) => item.locale === nextLocale) || languages[0];
+    const previousLocale = document.documentElement.lang || "en";
+
     setLocale(language.locale);
     setOpen(false);
     setQuery("");
@@ -73,10 +74,15 @@ export default function LanguageSelector({ variant = "footer" }: { variant?: "fo
     window.dispatchEvent(new CustomEvent("esb-language-change", { detail: { locale: language.locale, google: language.google } }));
 
     const googleSelect = document.querySelector<HTMLSelectElement>(".goog-te-combo");
-    if (googleSelect) {
+    if (googleSelect && language.google !== "en") {
       googleSelect.value = language.google;
       googleSelect.dispatchEvent(new Event("change"));
-    } else if (source === "manual") {
+    }
+
+    // Returning from an already translated DOM to English is the one case
+    // where a clean reload is desirable. Non-English selections no longer
+    // reload the page; SiteTranslator lazy-loads Google Translate on demand.
+    if (source === "manual" && language.google === "en" && previousLocale.toLowerCase() !== "en") {
       window.setTimeout(() => window.location.reload(), 80);
     }
   }, []);
