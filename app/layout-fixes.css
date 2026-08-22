@@ -1,22 +1,9 @@
 /* Production layout corrections.
- * Keep a single header model: sticky header in normal document flow.
- * Google Translate chrome/offset cleanup remains handled by SiteTranslator.
+ * Header positioning is intentionally owned by the final header block in
+ * globals.css. Do not redefine .site-header or #main-content here: previous
+ * sticky/fixed overrides fought each other and could expose the root background
+ * above the navigation during overscroll or Google Translate DOM changes.
  */
-.site-header{
-  position: sticky !important;
-  inset: auto !important;
-  top: 0 !important;
-  width: auto !important;
-  margin: 0 !important;
-  transform: none !important;
-  translate: none !important;
-  z-index: 80;
-}
-
-#main-content{
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-}
 
 /* Help Centre hierarchy */
 .help-centre-page-structured{
