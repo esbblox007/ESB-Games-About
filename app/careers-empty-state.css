@@ -1,0 +1,109 @@
+/* Full-width Careers recruitment empty state. */
+.career-job-browser-list-only {
+  display: block;
+  width: 100%;
+}
+
+.career-job-browser-list-only .career-job-results {
+  width: 100%;
+  min-width: 0;
+}
+
+.career-empty-state {
+  width: 100%;
+  min-height: 190px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  padding: 32px 34px;
+  border: 1px solid rgba(132, 145, 187, .18);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 85% 25%, rgba(114, 67, 226, .10), transparent 26rem),
+    linear-gradient(135deg, rgba(10, 15, 31, .96), rgba(7, 11, 25, .96));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .025);
+}
+
+.career-empty-state-icon {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(157, 118, 255, .28);
+  border-radius: 15px;
+  background: rgba(119, 73, 226, .10);
+  color: #b9a5ff;
+}
+
+.career-empty-state-icon svg { width: 25px; height: 25px; }
+.career-empty-state > div:nth-child(2) { max-width: 720px; }
+.career-empty-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: #a995ff;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.career-empty-state h3 {
+  margin: 0;
+  color: #f5f6ff;
+  font-size: clamp(20px, 2vw, 27px);
+  letter-spacing: -.035em;
+}
+.career-empty-state p {
+  max-width: 680px;
+  margin: 9px 0 0;
+  color: #9ba7c1;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.career-empty-state-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 13px;
+  border: 1px solid rgba(132, 145, 187, .16);
+  border-radius: 999px;
+  background: rgba(8, 12, 27, .78);
+  color: #a7b3cb;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.career-empty-state-status span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #7e8aa4;
+  box-shadow: 0 0 0 4px rgba(126, 138, 164, .10);
+}
+.career-empty-state-error {
+  border-color: rgba(239, 96, 120, .22);
+}
+.career-empty-state-error .career-empty-state-icon {
+  border-color: rgba(239, 96, 120, .22);
+  background: rgba(141, 42, 61, .10);
+  color: #ff9eb0;
+}
+
+@media (max-width: 860px) {
+  .career-empty-state {
+    grid-template-columns: auto 1fr;
+    padding: 26px;
+  }
+  .career-empty-state-status { grid-column: 2; justify-self: start; }
+}
+
+@media (max-width: 560px) {
+  .career-empty-state {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    min-height: 0;
+    padding: 23px 21px;
+  }
+  .career-empty-state-status { grid-column: 1; }
+}
