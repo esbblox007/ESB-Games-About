@@ -8,7 +8,9 @@ export type PolicyPublicationState = "prelaunch" | "published";
  * the ESB Games approval process. Draft source text remains available to the team
  * without being exposed as an effective public agreement.
  */
-const PUBLISHED_POLICY_SLUGS = new Set<string>([]);
+const PUBLISHED_POLICY_SLUGS = new Set<string>([
+  "terms-of-service",
+]);
 
 export function getPolicyPublicationState(slug: string): PolicyPublicationState {
   return PUBLISHED_POLICY_SLUGS.has(slug) ? "published" : "prelaunch";
