@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowIcon, SearchIcon, ShieldIcon, TicketIcon, UsersIcon } from "@/components/Icons";
 
-// Shared public routing map: self-service, private case handling, trust/safety, and family controls.
+// Shared public routing map: self-service guidance, private case handling, Trust & Safety guidance, and family controls.
 type Area = "help" | "support" | "trust" | "family";
 
 const areas = [
@@ -23,17 +23,17 @@ const areas = [
   },
   {
     id: "trust" as const,
-    title: "Trust & Safety",
-    eyebrow: "Rules and safety",
-    description: "Find the Safety Centre, policies, privacy information, reporting principles and enforcement guidance.",
-    href: "/trust",
+    title: "Trust & Safety guidance",
+    eyebrow: "Inside Help Centre",
+    description: "Safety systems, policies, privacy information, reporting principles and enforcement guidance.",
+    href: "/help/trust-safety",
     icon: <ShieldIcon size={19} />,
   },
   {
     id: "family" as const,
     title: "Family Centre",
     eyebrow: "Parents and guardians",
-    description: "Understand linked-account, parental-control and family safety features being developed for ESB Games.",
+    description: "Linked-account, parental-control and family safety features being developed for ESB Games.",
     href: "/parental-controls",
     icon: <UsersIcon size={19} />,
   },
@@ -45,7 +45,7 @@ export default function ServicePathways({ current, title = "Choose the right pla
       <div className="service-pathways-heading">
         <span className="eyebrow">ESB Games guidance</span>
         <h2 id={`service-pathways-${current || "all"}`}>{title}</h2>
-        <p>Each area has one job, so you do not need to guess whether a question belongs in Help, Support, Trust or Family Centre.</p>
+        <p>Choose the area that matches what you need. Every option opens its own page; Trust &amp; Safety guidance now lives inside Help Centre.</p>
       </div>
       <div className="service-pathways-grid">
         {areas.map((area) => (

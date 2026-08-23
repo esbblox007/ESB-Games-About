@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { SearchIcon, ArrowIcon } from "./Icons";
 import { helpSections } from "@/lib/content/help-centre";
@@ -14,17 +15,10 @@ export default function HelpCentreBrowser() {
     return helpSections
       .map((section) => {
         const sectionMatch = `${section.eyebrow} ${section.title} ${section.description}`.toLowerCase().includes(normalized);
-        const categories = section.categories
-          .map((category) => {
-            const categoryMatch = `${category.title} ${category.description} ${category.badge || ""}`.toLowerCase().includes(normalized);
-            const articles = category.articles.filter((article) => article.title.toLowerCase().includes(normalized));
-            return {
-              ...category,
-              articles: sectionMatch || categoryMatch ? category.articles : articles,
-            };
-          })
-          .filter((category) => category.articles.length > 0);
-
+        const categories = section.categories.filter((category) => {
+          const categoryText = `${category.title} ${category.description} ${category.badge || ""} ${category.articles.map((article) => article.title).join(" ")}`.toLowerCase();
+          return sectionMatch || categoryText.includes(normalized);
+        });
         return { ...section, categories };
       })
       .filter((section) => section.categories.length > 0);
@@ -39,7 +33,7 @@ export default function HelpCentreBrowser() {
           type="search"
           value={query}
           onChange={(event) => setQuery(event.currentTarget.value)}
-          placeholder="Search accounts, safety, payments, Creator help and more"
+          placeholder="Search accounts, safety, payments, creator help and more"
           autoComplete="off"
         />
       </label>
@@ -57,24 +51,14 @@ export default function HelpCentreBrowser() {
 
             <div className="help-category-grid">
               {section.categories.map((category) => (
-                <article className="help-category-card" key={category.id}>
-                  <header>
-                    <div>
-                      <h3>{category.title}</h3>
-                      <p>{category.description}</p>
-                      {category.badge && <span className="help-route-badge">{category.badge}</span>}
-                    </div>
-                  </header>
-                  <ul>
-                    {category.articles.map((article) => (
-                      <li key={`${category.id}-${article.title}`}>
-                        <a href={article.href} target={article.external ? "_blank" : undefined} rel={article.external ? "noreferrer" : undefined}>
-                          <span>{article.title}</span><ArrowIcon size={14} />
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </article>
+                <Link className="help-category-card help-category-card-link" href={`/help/${category.id}`} key={category.id}>
+                  <span className="help-category-card-copy">
+                    <span className="help-category-card-heading"><strong>{category.title}</strong>{category.badge && <span className="help-route-badge">{category.badge}</span>}</span>
+                    <span>{category.description}</span>
+                    <small>{category.articles.length} {category.articles.length === 1 ? "route" : "routes"}</small>
+                  </span>
+                  <ArrowIcon size={16} />
+                </Link>
               ))}
             </div>
           </section>
@@ -82,7 +66,7 @@ export default function HelpCentreBrowser() {
       </div>
 
       {filtered.length === 0 && (
-        <div className="help-empty-state">No matching help route was found. Contact Support and we’ll route your request to the right team.</div>
+        <div className="help-empty-state">No matching Help Centre topic was found. You can still open Support and we’ll route the request to the right team.</div>
       )}
     </>
   );

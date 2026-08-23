@@ -47,12 +47,12 @@ export default function SupportPage() {
         <div className="support-page-container">
           <span className="eyebrow">ESB Games Support</span>
           <h1>Private help when an issue <span className="gradient-text">needs staff.</span></h1>
-          <p>Support is for account-specific or evidence-based cases that need an authorised ESB Games staff member. For common how-to questions, start in Help Centre; for rules and safety guidance, use Trust Centre.</p>
+          <p>Support is for account-specific or evidence-based cases that need an authorised ESB Games staff member. For guides, policies, safety information and common questions, start in Help Centre.</p>
           <div className="support-page-trust"><span><SearchIcon size={15} /> Category-based routing</span><span><ShieldIcon size={15} /> Department-restricted access</span><span><CheckIcon size={15} /> Private ticket conversations</span></div>
         </div>
       </section>
 
-      <div className="support-page-container service-pathways-wrap"><ServicePathways current="support" title="Support is the private case-handling route" /></div>
+      <div className="support-page-container service-pathways-wrap"><ServicePathways current="support" title="Choose the right place for help" /></div>
 
       <section className="support-page-section support-page-main">
         <div className="support-page-container">
@@ -60,13 +60,13 @@ export default function SupportPage() {
 
           <div className="support-routing-note">
             <ShieldIcon size={20} />
-            <div><strong>Your ticket is a private support conversation.</strong><p>When you submit a ticket, ESB Games routes it to the appropriate authorised team. Once an eligible staff member claims the case, the conversation is between you and the authorised staff handling it. Access is restricted by staff permissions; for example, safety and abuse cases are routed to authorised Trust &amp; Safety staff.</p></div>
+            <div><strong>Your ticket is a private support conversation.</strong><p>Tickets are routed to the appropriate authorised team. Once an eligible staff member claims the case, access remains restricted by staff permissions; for example, safety and abuse cases are routed to authorised Trust &amp; Safety staff.</p></div>
           </div>
 
           <div className="support-info-grid" id="quick-help">
             <article className="support-quick-panel">
               <h2>Quick Help</h2>
-              <p className="support-panel-intro">These self-service routes may solve the issue without opening a private case.</p>
+              <p className="support-panel-intro">Try a common self-service route before opening a private case.</p>
               <div className="support-quick-links" role="list">
                 {quickHelpLinks.map(([label, href]) => (
                   <a key={label} href={href} role="listitem" className="support-quick-link"><span>{label}</span><ArrowIcon size={16} /></a>
@@ -76,13 +76,13 @@ export default function SupportPage() {
 
             <div className="support-side-stack">
               <article className="support-status-panel">
-                <div><h2>Service Status</h2><span>Official live status is maintained separately</span></div>
-                <p>Current availability, maintenance and incident updates are published on the dedicated ESB Games Status site rather than duplicated inside Support.</p>
-                <a className="button button-secondary" href={statusUrl} target="_blank" rel="noopener noreferrer">View current service status <ArrowIcon size={15} /></a>
+                <div><h2>Service Status</h2><span>Live status is maintained separately</span></div>
+                <p>Check incidents, maintenance and availability on the dedicated ESB Games Status site.</p>
+                <a className="button button-secondary" href={statusUrl} target="_blank" rel="noopener noreferrer">View service status <ArrowIcon size={15} /></a>
               </article>
               <article className="support-community-panel">
                 <span><CheckIcon size={19} /></span>
-                <div><h3>Need guidance instead?</h3><p>Use Help Centre for how-to articles and Trust Centre for policies, Safety Centre guidance, reporting principles and privacy information.</p><a href="/help">Open Help Centre <ArrowIcon size={15} /></a></div>
+                <div><h3>Looking for guidance?</h3><p>Help Centre now contains how-to articles, Trust &amp; Safety guidance, policies, privacy information and reporting routes.</p><a href="/help">Open Help Centre <ArrowIcon size={15} /></a></div>
               </article>
             </div>
           </div>

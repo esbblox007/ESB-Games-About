@@ -1,0 +1,320 @@
+/* Phase 4.1 correction pass.
+ * Deliberately limited to Support, Help Centre, Service Pathways and Family Centre scaling.
+ */
+
+/* Support: restore spacing between the primary cards and the routing notice. */
+.support-page-main .support-cards{
+  margin: 0 0 24px !important;
+  gap: 18px;
+}
+.support-page-main .support-card{ min-height: 220px; }
+.support-routing-note{ margin: 0 0 26px; }
+
+/* Support: compact the lower information area instead of stretching both right-side panels. */
+.support-info-grid{
+  grid-template-columns: minmax(0, 1.18fr) minmax(320px, .82fr);
+  align-items: start;
+  gap: 18px;
+}
+.support-quick-panel, .support-status-panel{ padding: 22px; }
+.support-quick-panel h2, .support-status-panel h2{ margin-bottom: 10px; }
+.support-panel-intro{ margin: 0 0 14px; }
+.support-quick-links{
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+.support-quick-link{
+  min-height: 52px !important;
+  padding: 11px 14px !important;
+  column-gap: 14px;
+}
+.support-side-stack{
+  grid-template-rows: auto auto;
+  align-content: start;
+  gap: 12px;
+}
+.support-status-panel > div{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.support-status-panel > div span{
+  font-size: 9.5px;
+  line-height: 1.35;
+  text-align: right;
+}
+.support-status-panel p{
+  display: block;
+  margin: 10px 0 14px;
+  padding: 0;
+  color: #98a4bd;
+  font-size: 12px;
+  line-height: 1.55;
+}
+.support-status-panel > .button{
+  min-height: 40px;
+  margin-top: 0;
+  padding-inline: 14px;
+  font-size: 11.5px;
+}
+.support-community-panel{
+  min-height: 0;
+  padding: 16px 18px;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(74, 28, 105, .20), rgba(8, 12, 27, .92));
+}
+.support-community-panel > span{
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+}
+.support-community-panel h3{ font-size: 15px; }
+.support-community-panel p{
+  margin: 0 0 7px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.support-community-panel a{ font-size: 11px; }
+
+/* Help Centre: simpler hero actions and topic cards that route to dedicated pages. */
+.help-centre-page-structured .help-centre-hero{ padding: 62px 0 54px; }
+.help-centre-page-structured .help-centre-hero-copy{ max-width: 900px; }
+.help-centre-page-structured .help-centre-hero h1{
+  max-width: 850px;
+  font-size: clamp(50px, 5.5vw, 76px);
+}
+.help-centre-page-structured .help-centre-hero p{ max-width: 790px; }
+.help-quick-actions{ gap: 9px; }
+.help-quick-actions .button{
+  min-height: 42px;
+  padding: 0 15px;
+  border-radius: 9px;
+  font-size: 12px;
+}
+.help-quick-actions .button-secondary{
+  color: #e6ebf7;
+  border-color: rgba(130, 145, 190, .20);
+  background: #080d1c;
+  box-shadow: none;
+}
+.help-quick-actions .button-secondary:hover{
+  border-color: rgba(160, 127, 230, .34);
+  background: #0d1325;
+}
+.help-browser-intro{ max-width: 820px; }
+.help-browser-intro h2{ font-size: clamp(34px, 3.5vw, 48px); }
+.help-topic-section{ padding: 22px; }
+.help-topic-section-header{
+  grid-template-columns: minmax(0, 1fr) minmax(240px, .72fr);
+  gap: 26px;
+  padding-bottom: 18px;
+}
+.help-topic-section .help-category-grid{
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.help-topic-section .help-category-card{
+  min-height: 0;
+  padding: 0;
+}
+.help-category-card-link{
+  min-height: 150px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 20px !important;
+  color: inherit !important;
+  background: rgba(7, 12, 27, .82) !important;
+  text-decoration: none;
+}
+.help-category-card-link:hover{
+  border-color: rgba(151, 102, 240, .36);
+  background: linear-gradient(145deg, rgba(18, 20, 46, .96), rgba(8, 12, 27, .96)) !important;
+  transform: translateY(-1px) !important;
+}
+.help-category-card-link > svg{ color: #9d86d8; }
+.help-category-card-copy, .help-category-card-copy > span, .help-category-card-copy > small{ display: block; }
+.help-category-card-heading{
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.help-category-card-heading strong{
+  color: #f3f6ff;
+  font-size: 16px;
+}
+.help-category-card-copy > span:nth-child(2){
+  margin-top: 9px;
+  color: #8f9bb7;
+  font-size: 12px;
+  line-height: 1.55;
+}
+.help-category-card-copy > small{
+  margin-top: 12px;
+  color: #6f7d99;
+  font-size: 10px;
+  font-weight: 750;
+}
+.help-category-card-heading .help-route-badge{ margin-top: 0; }
+
+/* Dedicated Help Centre topic pages. */
+.help-category-page{ background: #030610; }
+.help-category-hero{
+  padding: 64px 0 54px;
+  border-bottom: 1px solid rgba(135, 148, 192, .12);
+  background: radial-gradient(circle at 18% 20%, rgba(127, 60, 226, .20), transparent 30rem), radial-gradient(circle at 86% 16%, rgba(10, 176, 210, .12), transparent 30rem), #050815;
+}
+.help-category-breadcrumb{
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+  color: #7f8da8;
+  font-size: 11px;
+}
+.help-category-breadcrumb a{ color: #b99aff; }
+.help-category-hero h1{
+  max-width: 900px;
+  margin: 12px 0 14px;
+  font-size: clamp(44px, 5vw, 68px);
+  line-height: 1;
+  letter-spacing: -.05em;
+}
+.help-category-hero p{
+  max-width: 720px;
+  margin: 0;
+  color: #a3aec6;
+  font-size: 16px;
+  line-height: 1.7;
+}
+.help-category-content{ padding: 64px 0 86px; }
+.help-category-content-heading{ max-width: 720px; margin-bottom: 26px; }
+.help-category-content-heading h2{ margin: 8px 0 10px; font-size: clamp(32px, 3.5vw, 46px); letter-spacing: -.045em; }
+.help-category-content-heading p{ margin: 0; color: #94a1bc; line-height: 1.65; }
+.help-category-link-list{ display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.help-category-link-card{
+  min-height: 82px;
+  padding: 17px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border: 1px solid rgba(135, 148, 192, .15);
+  border-radius: 13px;
+  background: #080d1c;
+  color: inherit;
+  text-decoration: none;
+}
+.help-category-link-card:hover{ border-color: rgba(151, 102, 240, .38); background: #0d1325; }
+.help-category-link-card strong, .help-category-link-card small{ display: block; }
+.help-category-link-card strong{ color: #eef2fb; font-size: 14px; }
+.help-category-link-card small{ margin-top: 5px; color: #77849f; font-size: 10px; }
+.help-category-link-card > svg{ color: #9b85d3; flex: 0 0 auto; }
+.help-category-support-band{
+  margin-top: 28px;
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border: 1px solid rgba(122, 93, 219, .24);
+  border-radius: 15px;
+  background: linear-gradient(135deg, rgba(63, 33, 123, .18), rgba(7, 16, 30, .92));
+}
+.help-category-support-band strong{ font-size: 16px; }
+.help-category-support-band p{ margin: 5px 0 0; color: #8e9bb6; font-size: 12px; line-height: 1.55; }
+.help-category-support-band .button{ min-height: 42px; flex: 0 0 auto; }
+
+/* Service pathway cards remain navigation, with a quieter selected state. */
+.service-pathways-wrap{ padding-top: 30px; }
+.service-pathways{ padding: 22px; }
+.service-pathways-heading{ margin-bottom: 16px; }
+.service-pathways-grid{ gap: 10px; }
+.service-pathway-card{ padding: 14px 15px; }
+.service-pathway-card.is-current{
+  border-color: rgba(111, 93, 214, .28);
+  background: rgba(11, 15, 31, .90);
+  box-shadow: inset 3px 0 0 rgba(132, 91, 238, .55);
+}
+
+/* Family Centre: increase usable width and correct desktop proportions without redesigning the page. */
+.parental-container{ width: min(calc(100% - 64px), 1320px); }
+.parental-hero{ min-height: 620px; }
+.parental-hero-grid{
+  grid-template-columns: minmax(0, .9fr) minmax(520px, 1.1fr);
+  gap: 62px;
+  padding: 66px 0 60px;
+}
+.parental-hero-copy{ max-width: 630px; }
+.parental-hero h1{ font-size: clamp(62px, 5.2vw, 92px); }
+.parental-hero-copy > p{ max-width: 610px; font-size: 17px; }
+.parental-product-wrap{ min-width: 0; }
+.parental-concept-card{
+  min-height: 0 !important;
+  padding: 28px !important;
+}
+.parental-concept-heading strong{ font-size: 15px; }
+.parental-concept-grid{ gap: 12px; }
+.parental-concept-grid article{ padding: 14px; }
+.parental-concept-grid article strong{ font-size: 12px; }
+.parental-concept-grid article small{ font-size: 9.5px; }
+.parental-concept-card > p{ font-size: 12px; }
+.parental-feature-shell, .parental-linking-section, .parental-band-section{ padding: 78px 0; }
+.parental-section-heading{ max-width: 830px; margin-bottom: 40px; }
+.parental-feature-grid{ gap: 18px; }
+.parental-feature-grid article{
+  min-height: 220px;
+  padding: 26px;
+}
+.parental-linking-grid{
+  grid-template-columns: minmax(360px, .95fr) minmax(0, 1.05fr);
+  gap: 24px;
+}
+.parental-linking-copy{ padding: 34px; }
+.parental-step-grid{ gap: 14px; }
+.parental-step-grid article{
+  min-height: 170px;
+  padding: 24px;
+}
+.parental-band-grid article{ padding: 30px; }
+.parental-safety-band{ padding-bottom: 78px; }
+.parental-safety-card{ padding: 24px 28px; }
+
+@media (max-width: 1050px){
+  .support-info-grid{ grid-template-columns: 1fr; }
+  .support-side-stack{ grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto; }
+  .help-topic-section .help-category-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .parental-hero-grid{ grid-template-columns: 1fr; gap: 34px; }
+}
+
+@media (max-width: 760px){
+  .support-quick-links, .support-side-stack, .help-topic-section .help-category-grid, .help-category-link-list{ grid-template-columns: 1fr; }
+  .support-status-panel > div{ align-items: flex-start; flex-direction: column; gap: 4px; }
+  .support-status-panel > div span{ text-align: left; }
+  .help-topic-section-header{ grid-template-columns: 1fr; gap: 8px; }
+  .help-category-support-band{ align-items: stretch; flex-direction: column; }
+  .help-category-support-band .button{ width: 100%; }
+  .parental-container{ width: min(calc(100% - 30px), 1320px); }
+  .parental-feature-shell, .parental-linking-section, .parental-band-section{ padding: 68px 0; }
+  .parental-linking-grid{ grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px){
+  .support-page-main .support-card{ min-height: auto; }
+  .support-info-grid{ gap: 12px; }
+  .support-quick-panel, .support-status-panel{ padding: 18px; }
+  .help-centre-page-structured .help-centre-hero{ padding: 48px 0 42px; }
+  .help-quick-actions{ display: grid; }
+  .help-quick-actions .button{ width: 100%; }
+  .help-topic-section{ padding: 17px; }
+  .help-category-card-link{ min-height: 128px; padding: 17px !important; }
+  .help-category-hero{ padding: 48px 0 42px; }
+  .parental-hero{ min-height: auto; }
+  .parental-hero h1{ font-size: 50px; }
+  .parental-concept-card{ padding: 20px !important; }
+}

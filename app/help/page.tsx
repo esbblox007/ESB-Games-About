@@ -7,7 +7,7 @@ import { SearchIcon } from "@/components/Icons";
 
 export const metadata: Metadata = {
   title: "Help Centre",
-  description: "Self-service ESB Games guidance for accounts, safety, payments, creator tools, families and technical issues. Private cases belong in Support.",
+  description: "Self-service ESB Games guidance for accounts, safety, policies, payments, creator tools, families and technical issues. Private cases belong in Support.",
   alternates: { canonical: "/help" },
 };
 
@@ -19,11 +19,10 @@ export default function HelpCentrePage() {
           <div className="help-centre-container">
             <div className="help-centre-hero-copy">
               <span className="eyebrow">ESB Games Help Centre</span>
-              <h1>Find the answer.<br/><span className="gradient-text">Then escalate only if needed.</span></h1>
-              <p>Help Centre is the self-service knowledge base for common tasks and questions. It does not hold private case conversations; if an issue needs account-specific investigation or evidence review, open Support instead.</p>
+              <h1>Find help fast.<br/><span className="gradient-text">Get support when you need it.</span></h1>
+              <p>Use Help Centre for step-by-step guidance, safety information, policies and common questions. If your issue needs account-specific investigation, evidence review or an authorised staff response, open a private Support case.</p>
               <div className="help-quick-actions">
-                <Link className="button button-secondary" href="/support/help/reset-password">Reset password</Link>
-                <Link className="button button-secondary" href="/support/help/report-player-or-game">Reporting guide</Link>
+                <Link className="button button-secondary" href="/help/safety-reporting">Reporting &amp; safety</Link>
                 <a className="button button-secondary" href="https://status.esbgames.com" target="_blank" rel="noreferrer">Service status</a>
                 <Link className="button button-primary" href="/support#contact-support">Open private Support</Link>
               </div>
@@ -31,14 +30,14 @@ export default function HelpCentrePage() {
           </div>
         </section>
 
-        <div className="help-centre-container service-pathways-wrap"><ServicePathways current="help" title="Use the right ESB Games help surface" /></div>
+        <div className="help-centre-container service-pathways-wrap"><ServicePathways current="help" title="Choose the right place for help" /></div>
 
         <section className="help-centre-section">
           <div className="help-centre-container">
             <header className="help-browser-intro">
               <span className="eyebrow">Browse Help</span>
-              <h2>Find the right route without the clutter.</h2>
-              <p>Help is grouped by the type of problem rather than one long list. Open a section, choose the closest task, or search across everything.</p>
+              <h2>Browse by topic.</h2>
+              <p>Choose a topic to open its own Help Centre page, or search for the subject you need. Guidance is kept separate so you are not faced with one long page of links.</p>
             </header>
             <HelpCentreBrowser />
           </div>

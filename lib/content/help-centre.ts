@@ -24,8 +24,8 @@ export const helpSections: HelpSection[] = [
   {
     id: "account-safety",
     eyebrow: "Account & Safety",
-    title: "Get back in, stay secure and get help quickly.",
-    description: "Account access, harmful behaviour, reports and moderation decisions live together so the safest route is easy to find.",
+    title: "Account access, reports and safety guidance.",
+    description: "Choose the area that best matches what you need. Each topic opens its own page so the Help Centre stays easy to scan.",
     categories: [
       {
         id: "account-login",
@@ -47,13 +47,26 @@ export const helpSections: HelpSection[] = [
           { title: "Appeal an account action", href: "/support/help/appeal-account-action" },
         ],
       },
+      {
+        id: "trust-safety",
+        title: "Trust, Safety & Policies",
+        description: "Safety systems, platform rules, privacy information and policy guidance.",
+        badge: "Trust & safety",
+        articles: [
+          { title: "Open the Safety Centre", href: "/trust/safety" },
+          { title: "Browse Trust, Safety & Legal", href: "/trust" },
+          { title: "Read the Community Standards", href: "/community-standards" },
+          { title: "Read the Privacy Policy", href: "/privacy-policy" },
+          { title: "Read the Terms of Service", href: "/terms-of-service" },
+        ],
+      },
     ],
   },
   {
     id: "payments-creation",
     eyebrow: "Payments & Creation",
-    title: "Manage purchases and keep building.",
-    description: "Billing questions and Creator support are separated from ordinary account help so commercial and publishing issues reach the right place faster.",
+    title: "Payments, subscriptions and creator help.",
+    description: "Billing and creator guidance are kept separate from ordinary account help so each route is easier to understand.",
     categories: [
       {
         id: "payments",
@@ -81,8 +94,8 @@ export const helpSections: HelpSection[] = [
   {
     id: "family-privacy-service",
     eyebrow: "Family, Privacy & Service",
-    title: "Controls, privacy rights and service information.",
-    description: "Family settings, data requests and service availability are grouped here because they are usually about managing the wider ESB Games experience rather than one isolated ticket.",
+    title: "Family settings, privacy and service information.",
+    description: "Use these topics for family controls, privacy requests and checking whether a technical issue is affecting the wider service.",
     categories: [
       {
         id: "family-privacy",
