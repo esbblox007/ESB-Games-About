@@ -6,6 +6,7 @@ import "./careers-empty-state.css";
 import SiteTranslator from "@/components/SiteTranslator";
 import { ESB_BRAND } from "@/lib/site-config";
 
+// Preview-only source touch: compile the complete post-decision Phase 2 legal tree.
 export const metadata: Metadata = {
   title: { default: `ESB Games — ${ESB_BRAND.tagline}`, template: "%s | ESB Games" },
   description: "Discover ESB Games, a connected gaming and creator ecosystem being built for players, creators, families and communities.",
