@@ -41,7 +41,7 @@ export default function CareerApplicationForm({ job }: { job: LiveJob }) {
     if (!form.reportValidity()) return;
     const requiredConsentIds = job.consents.filter((consent) => consent.required).map((consent) => consent.id);
     if (requiredConsentIds.some((id) => !acceptedConsents.includes(id))) {
-      setState({ tone: "error", message: "Accept the required application privacy statements before submitting." });
+      setState({ tone: "error", message: "Confirm that you have read the required application privacy notices before submitting." });
       return;
     }
 
@@ -142,7 +142,7 @@ export default function CareerApplicationForm({ job }: { job: LiveJob }) {
           <label className="career-upload-field full"><span>CV or résumé *</span><input required type="file" name="cv" accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.webp" onChange={(event) => setCv(event.target.files?.[0] ?? null)} /><b>{cv?.name || "Choose a PDF, DOC, DOCX, TXT or image file"}</b><small>Maximum 15 MB. Files are stored privately and are only available to authorised recruitment staff.</small></label>
 
           {job.consents.map((consent) => (
-            <label className="career-consent full" key={consent.id}><input type="checkbox" required={consent.required} checked={acceptedConsents.includes(consent.id)} onChange={(event) => setAcceptedConsents((current) => event.target.checked ? [...current, consent.id] : current.filter((id) => id !== consent.id))} /><span><strong>{consent.title}{consent.required ? " *" : ""}</strong> I have read the <Link href="/careers/privacy" target="_blank">Careers Application Privacy Notice</Link> and agree to the required recruitment processing described for this application.</span></label>
+            <label className="career-consent full" key={consent.id}><input type="checkbox" required={consent.required} checked={acceptedConsents.includes(consent.id)} onChange={(event) => setAcceptedConsents((current) => event.target.checked ? [...current, consent.id] : current.filter((id) => id !== consent.id))} /><span><strong>{consent.title}{consent.required ? " *" : ""}</strong> I have read the <Link href="/careers/privacy" target="_blank">Careers Application Privacy Notice</Link> and understand how ESB Games will use my information to receive, assess and manage this application.</span></label>
           ))}
         </div>
 
