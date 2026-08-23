@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent as ReactKeyboardEvent } from "react";
-import { GlobeIcon } from "./Icons";
+import { CheckIcon, ChevronIcon, GlobeIcon } from "./Icons";
 
 export const languages = [
   { locale: "en", google: "en", label: "English" },
@@ -79,9 +79,6 @@ export default function LanguageSelector({ variant = "footer" }: { variant?: "fo
       googleSelect.dispatchEvent(new Event("change"));
     }
 
-    // Returning from an already translated DOM to English is the one case
-    // where a clean reload is desirable. Non-English selections no longer
-    // reload the page; SiteTranslator lazy-loads Google Translate on demand.
     if (source === "manual" && language.google === "en" && previousLocale.toLowerCase() !== "en") {
       window.setTimeout(() => window.location.reload(), 80);
     }
@@ -133,7 +130,7 @@ export default function LanguageSelector({ variant = "footer" }: { variant?: "fo
       <button type="button" className="language-trigger" aria-haspopup="listbox" aria-expanded={open} aria-controls={`${id}-menu`} onClick={() => setOpen((value) => !value)}>
         <span className="language-globe" aria-hidden="true"><GlobeIcon size={15} /></span>
         <span>{selected.label}</span>
-        <span className="language-chevron" aria-hidden="true">⌄</span>
+        <span className="language-chevron" aria-hidden="true"><ChevronIcon size={14} /></span>
       </button>
       {open && (
         <div id={`${id}-menu`} className="language-menu" role="listbox" aria-label="Choose language">
@@ -142,7 +139,7 @@ export default function LanguageSelector({ variant = "footer" }: { variant?: "fo
             {filtered.map((language, index) => (
               <button id={`${id}-option-${index}`} type="button" role="option" aria-selected={language.locale === locale} className={`${index === activeIndex ? "active" : ""}${language.locale === locale ? " selected" : ""}`} key={language.locale} onMouseEnter={() => setActiveIndex(index)} onClick={() => selectLanguage(language.locale)}>
                 <span lang={language.locale}>{language.label}</span>
-                {language.locale === locale && <span aria-hidden="true">✓</span>}
+                {language.locale === locale && <CheckIcon size={14} />}
               </button>
             ))}
           </div>
