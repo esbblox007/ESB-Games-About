@@ -26,7 +26,8 @@ export const trustSections: TrustSection[] = [
       resource("cookies", "Cookie Policy", "How cookies and similar technologies are used.", "/cookie-policy"),
       resource("refunds", "Refund Policy", "Refund and cancellation principles for eligible purchases.", "/refund-policy"),
       resource("subscription-terms", "Subscription Terms", "Terms for recurring ESB Games memberships and plans.", "/subscription-terms"),
-      resource("esbucks", "ESBucks & Virtual Currency", "Rules for ESBucks and other virtual-value features.", "/esbucks-virtual-currency-policy"),
+      resource("gift-cards", "Gift Card Terms", "Rules for purchasing, protecting and redeeming non-expiring ESB Games gift cards.", "/gift-card-terms"),
+      resource("esbucks", "ESBucks & Virtual Currency", "Rules for ESBucks, peer-to-peer transfers and virtual-value features.", "/esbucks-virtual-currency-policy"),
       resource("payments", "Payment Terms", "Terms applying to payments and eligible transactions.", "/payment-terms"),
     ],
   },
@@ -51,7 +52,7 @@ export const trustSections: TrustSection[] = [
       resource("parental-guide", "Parental Guide", "An overview of ESB Games for parents and guardians.", "/parental-guide"),
       resource("family-centre", "Family Centre Guide", "How the Family Centre and linked-account controls are designed to work.", "/family-centre-guide"),
       resource("screen-time", "Screen Time & Digital Wellbeing", "Guidance for healthy, balanced use of ESB Games.", "/screen-time-digital-wellbeing-guide"),
-      resource("age-ratings", "Age Ratings & Content Guide", "How content labels and age-appropriate access are designed.", "/age-ratings-content-guide"),
+      resource("age-ratings", "Age Ratings & Content Guide", "How advisory content labels and legally required access controls are designed.", "/age-ratings-content-guide"),
     ],
   },
   {
