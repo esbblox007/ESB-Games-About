@@ -140,6 +140,21 @@ export async function uploadPrivateObject(input: {
   }
 }
 
+export async function deletePrivateObject(bucket: string, path: string) {
+  const config = getSupabaseServerConfig();
+  if (!config) throw new Error("File storage is not configured.");
+  const objectPath = path.split("/").map(encodeURIComponent).join("/");
+  const response = await fetch(`${config.url}/storage/v1/object/${encodeURIComponent(bucket)}/${objectPath}`, {
+    method: "DELETE",
+    headers: apiKeyHeaders(config.serviceKey),
+    cache: "no-store",
+  });
+  if (!response.ok && response.status !== 404) {
+    const details = await response.text().catch(() => "");
+    throw new Error(`Secure file cleanup failed${details ? `: ${details.slice(0, 180)}` : ""}`);
+  }
+}
+
 export async function createSignedObjectUrl(bucket: string, path: string, expiresIn = 300) {
   const config = getSupabaseServerConfig();
   if (!config) throw new Error("File storage is not configured.");
