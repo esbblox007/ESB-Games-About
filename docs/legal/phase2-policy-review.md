@@ -2,6 +2,8 @@
 
 Status: **Internal review only — no policy in this Phase 2 branch is approved for legal effect solely by being drafted here.**
 
+Review vehicle: **Draft PR #4 — Phase 2: legal and privacy hardening.**
+
 ## Publication rule
 
 `lib/content/policy-publication.ts` remains fail-closed with an empty published set. Policy review pages are `noindex` until a document is explicitly approved for publication.
