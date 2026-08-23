@@ -72,11 +72,12 @@ function clean(value: unknown) { return String(value ?? "").trim(); }
 function mapRow(row: JobRow): LiveJob {
   const blocks = blockLists(row.content_blocks);
   const slug = clean(row.public_slug);
+  const departments = Array.from(new Set([clean(row.department), clean(row.category)].filter(Boolean)));
   return {
     slug,
     jobId: clean(row.job_id),
     title: clean(row.title),
-    departments: [clean(row.department ?? row.category)].filter(Boolean),
+    departments,
     location: clean(row.location),
     type: clean(row.employment_type),
     reportsTo: clean(row.reports_to),
