@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowIcon, SearchIcon, ShieldIcon, TicketIcon, UsersIcon } from "@/components/Icons";
 
+// Shared public routing map: self-service, private case handling, trust/safety, and family controls.
 type Area = "help" | "support" | "trust" | "family";
 
 const areas = [
