@@ -1,1 +1,0 @@
-The 20260823_012 candidate upload privilege migration was applied to the shared production Supabase project before merge and verified using SET LOCAL ROLE service_role inside a rolled-back transaction.
