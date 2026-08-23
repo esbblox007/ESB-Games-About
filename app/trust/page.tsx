@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageShell from "@/components/PageShell";
+import ServicePathways from "@/components/ServicePathways";
 import { ArrowIcon, BookIcon, ShieldIcon } from "@/components/Icons";
 import { trustSections } from "@/lib/content/trust";
 import { getPolicyPublicationState, isKnownPolicySlug } from "@/lib/content/policy-publication";
 
 export const metadata: Metadata = {
   title: "Trust, Safety & Legal",
-  description: "ESB Games policies, safety guidance, family resources, creator rules and privacy information in one Trust Centre.",
+  description: "The ESB Games home for policies, Safety Centre guidance, privacy information, family resources and governance—not a replacement for private Support.",
   alternates: { canonical: "/trust" },
   openGraph: { title: "Trust, Safety & Legal | ESB Games", description: "Policies, safety and rights information for the ESB Games ecosystem.", url: "/trust", type: "website" },
   twitter: { card: "summary_large_image", title: "Trust, Safety & Legal | ESB Games", description: "Policies, safety and rights information for the ESB Games ecosystem." },
@@ -29,12 +30,14 @@ export default function TrustPage() {
             <div>
               <span className="eyebrow">ESB Games Trust Centre</span>
               <h1>Clear rules.<br /><span className="gradient-text">Safer play.</span></h1>
-              <p>Find legal terms, safety guidance, family resources, creator policies, privacy information and support routes for ESB Games.</p>
+              <p>Trust Centre is the source of truth for policies, safety guidance, privacy information and governance. For step-by-step fixes use Help Centre; for a private case that needs staff, use Support.</p>
               <div className="trust-hero-actions"><Link href="/trust/safety" className="button button-primary"><ShieldIcon size={17} /> Safety Centre</Link><Link href="/help" className="button button-secondary">Help Centre <ArrowIcon size={16} /></Link></div>
             </div>
-            <aside className="trust-compact-note"><strong>Pre-launch policy review</strong><p>Policy routes are available for discoverability, but draft wording is not presented as effective policy. Publication status is shown before you open each document.</p></aside>
+            <aside className="trust-compact-note"><strong>Policies and guidance, not a ticket queue</strong><p>Use this area to understand rules, safety systems, privacy and rights. Private reports and account-specific investigations belong in Support, where access can be restricted to the authorised team.</p></aside>
           </div>
         </section>
+
+        <div className="trust-container service-pathways-wrap"><ServicePathways current="trust" title="Trust, Help, Support and Family Centre have different jobs" /></div>
 
         <section className="trust-resource-section">
           <div className="trust-container">
@@ -60,7 +63,7 @@ export default function TrustPage() {
           </div>
         </section>
 
-        <section className="trust-final-band"><div className="trust-container"><div className="trust-final-card"><div><span className="eyebrow">Need practical help?</span><h2>Go straight to the Help Centre.</h2><p>Account, billing, safety and creator questions are easier to solve through task-based help than through policy documents.</p></div><Link href="/help" className="button button-primary">Open Help Centre <ArrowIcon size={16} /></Link></div></div></section>
+        <section className="trust-final-band"><div className="trust-container"><div className="trust-final-card"><div><span className="eyebrow">Need something resolved?</span><h2>Choose self-service or a private case.</h2><p>Use Help Centre for task-based guidance. If the issue needs account-specific investigation, evidence review or an authorised department, open a private Support ticket.</p></div><div className="trust-hero-actions"><Link href="/help" className="button button-secondary">Open Help Centre</Link><Link href="/support#contact-support" className="button button-primary">Contact Support <ArrowIcon size={16} /></Link></div></div></div></section>
       </div>
     </PageShell>
   );
