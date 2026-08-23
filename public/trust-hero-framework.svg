@@ -1,0 +1,46 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="80" x2="1050" y2="820" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#121031"/>
+      <stop offset="0.48" stop-color="#071529"/>
+      <stop offset="1" stop-color="#062536"/>
+    </linearGradient>
+    <linearGradient id="shield" x1="420" y1="200" x2="780" y2="710" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A855F7"/>
+      <stop offset="0.52" stop-color="#6366F1"/>
+      <stop offset="1" stop-color="#22D3EE"/>
+    </linearGradient>
+    <linearGradient id="line" x1="150" y1="120" x2="1050" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A78BFA" stop-opacity="0.15"/>
+      <stop offset="0.5" stop-color="#7C3AED" stop-opacity="0.65"/>
+      <stop offset="1" stop-color="#22D3EE" stop-opacity="0.18"/>
+    </linearGradient>
+    <filter id="glow" x="250" y="90" width="700" height="720" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="30"/>
+    </filter>
+  </defs>
+  <rect x="1" y="1" width="1198" height="898" rx="46" fill="url(#bg)" stroke="#7894B3" stroke-opacity="0.16" stroke-width="2"/>
+  <circle cx="600" cy="450" r="330" stroke="url(#line)" stroke-width="2" stroke-dasharray="8 12"/>
+  <circle cx="600" cy="450" r="255" stroke="#7284B0" stroke-opacity="0.14" stroke-width="2"/>
+  <circle cx="600" cy="450" r="184" fill="#7C3AED" fill-opacity="0.11" filter="url(#glow)"/>
+  <path d="M600 183L812 260V421C812 566 724 681 600 732C476 681 388 566 388 421V260L600 183Z" fill="#07182A" stroke="url(#shield)" stroke-width="7"/>
+  <path d="M600 238L754 294V419C754 523 695 610 600 655C505 610 446 523 446 419V294L600 238Z" fill="url(#shield)" fill-opacity="0.12" stroke="#B7C8E2" stroke-opacity="0.16" stroke-width="2"/>
+  <path d="M521 444L574 497L687 376" stroke="url(#shield)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+  <g stroke="#8AA5BF" stroke-opacity="0.34" stroke-width="2">
+    <path d="M362 247L260 184"/><path d="M836 247L944 182"/><path d="M352 626L239 694"/><path d="M847 624L964 692"/>
+  </g>
+  <g>
+    <circle cx="243" cy="173" r="56" fill="#0A1B31" stroke="#A855F7" stroke-opacity="0.62" stroke-width="2"/>
+    <path d="M220 172H266M226 157H260M231 187H255" stroke="#C4B5FD" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="961" cy="171" r="56" fill="#071D30" stroke="#22D3EE" stroke-opacity="0.55" stroke-width="2"/>
+    <path d="M941 177C941 162 951 151 961 151C971 151 981 162 981 177V191H941V177Z" stroke="#8BE7F7" stroke-width="4"/><path d="M951 151V145C951 139 956 134 961 134C966 134 971 139 971 145V151" stroke="#8BE7F7" stroke-width="4"/>
+    <circle cx="223" cy="705" r="56" fill="#11152F" stroke="#8B5CF6" stroke-opacity="0.55" stroke-width="2"/>
+    <circle cx="211" cy="692" r="11" stroke="#C4B5FD" stroke-width="4"/><circle cx="238" cy="692" r="9" stroke="#C4B5FD" stroke-width="4"/><path d="M194 722C197 708 207 703 218 703C230 703 239 710 241 722M231 708C243 707 251 713 253 722" stroke="#C4B5FD" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="979" cy="704" r="56" fill="#071D30" stroke="#38BDF8" stroke-opacity="0.55" stroke-width="2"/>
+    <path d="M956 686H1002V721H956V686Z" stroke="#9BDBFA" stroke-width="4"/><path d="M967 699H991M967 709H984" stroke="#9BDBFA" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <g fill="#D9E7F7">
+    <circle cx="600" cy="99" r="6"/><circle cx="1080" cy="449" r="6"/><circle cx="600" cy="801" r="6"/><circle cx="119" cy="449" r="6"/>
+  </g>
+  <text x="600" y="820" fill="#8CA6BE" font-family="Inter, Arial, sans-serif" font-size="24" text-anchor="middle" letter-spacing="5">RULES · SAFETY · PRIVACY · REVIEW</text>
+</svg>
