@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./layout-fixes.css";
+import "./careers-empty-state.css";
 import SiteTranslator from "@/components/SiteTranslator";
 import { ESB_BRAND } from "@/lib/site-config";
 
