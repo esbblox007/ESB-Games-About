@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { PublicRateLimitError, publicNetworkKey, takePublicRateLimit } from "@/lib/server/public-rate-limit";
-import { supabaseInsert, uploadPrivateObject } from "@/lib/server/supabase";
+import { deletePrivateObject, supabaseInsert, uploadPrivateObject } from "@/lib/server/supabase";
 
 const allowedTypes = new Set([
   "application/pdf",
@@ -31,21 +31,33 @@ export async function POST(request: NextRequest) {
     const objectPath = `${publicSlug}/${idempotencyKey}/${randomUUID()}-${safeName}`;
     const bucket = process.env.RECRUITMENT_STORAGE_BUCKET ?? "recruitment-candidate-files";
     await uploadPrivateObject({ bucket, path: objectPath, file });
+
     const fileReference = `candidate-file:${randomUUID()}`;
-    await supabaseInsert("candidate_uploads", {
-      upload_reference: fileReference,
-      idempotency_key: idempotencyKey,
-      public_slug: publicSlug,
-      storage_bucket: bucket,
-      storage_object_path: objectPath,
-      file_name: safeName,
-      file_category: category,
-      mime_type: file.type,
-      size_bytes: file.size,
-      scan_state: "Pending",
-      access_classification: "Recruitment Restricted",
-      uploaded_at: new Date().toISOString(),
-    });
+    try {
+      await supabaseInsert("candidate_uploads", {
+        upload_reference: fileReference,
+        idempotency_key: idempotencyKey,
+        public_slug: publicSlug,
+        storage_bucket: bucket,
+        storage_object_path: objectPath,
+        file_name: safeName,
+        file_category: category,
+        mime_type: file.type,
+        size_bytes: file.size,
+        scan_state: "Pending",
+        access_classification: "Recruitment Restricted",
+        uploaded_at: new Date().toISOString(),
+      });
+    } catch (metadataError) {
+      // Do not leave a private CV/résumé object behind when its opaque application
+      // reference could not be registered. Cleanup is best-effort; the original
+      // metadata error remains the one surfaced to server logging.
+      await deletePrivateObject(bucket, objectPath).catch((cleanupError) => {
+        console.error("[careers-upload] Failed to clean up unregistered candidate object", cleanupError);
+      });
+      throw metadataError;
+    }
+
     return NextResponse.json({ ok: true, fileReference, fileName: safeName, scanState: "Pending" }, { status: 201 });
   } catch (error) {
     if (error instanceof PublicRateLimitError) return NextResponse.json({ error: error.message, retryAfterSeconds: error.retryAfterSeconds }, { status: 429, headers: { "Retry-After": String(error.retryAfterSeconds) } });

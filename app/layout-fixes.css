@@ -133,6 +133,15 @@
   width: 100%;
   justify-content: center;
 }
+/* Links inherit surrounding text colour by default. The newsletter primary CTA
+ * sits inside a muted form panel, so lock its label to high-contrast white. */
+.home-newsletter-input-row .button-primary,
+.home-newsletter-input-row .button-primary:visited,
+.home-newsletter-input-row .button-primary:hover,
+.home-newsletter-input-row .button-primary:focus-visible{
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(20, 5, 40, .34);
+}
 
 @media (max-width: 820px){
   .help-centre-page-structured .help-centre-hero{ padding: 58px 0 48px; }
