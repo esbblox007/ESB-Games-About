@@ -35,12 +35,12 @@ export const trustSections: TrustSection[] = [
     title: "Safety",
     description: "Rules, safeguards, reporting and review processes designed to protect the community.",
     resources: [
+      resource("safety-centre", "Safety Centre", "Safety guidance, prevention, reporting and support information.", "/trust/safety"),
       resource("community-standards", "Community Standards", "The rules for behaviour and content across ESB Games.", "/community-standards"),
       resource("child-safety", "Child Safety", "Safeguards and expectations for children, families and creators.", "/child-safety"),
       resource("reporting-enforcement", "Reporting & Enforcement", "How reports are reviewed and platform rules are enforced.", "/reporting-enforcement-policy"),
       resource("appeals", "Appeals Policy", "How eligible platform decisions can be challenged.", "/appeals-policy"),
-      resource("safety-centre", "Safety Centre", "Safety guidance, prevention, reporting and support information.", "/safety-centre"),
-      resource("transparency", "Transparency", "Public transparency information will be published as ESB Games moves through launch.", "/trust/safety"),
+      resource("transparency", "Transparency Reports", "Public transparency reporting will be published as ESB Games moves through launch.", "/transparency-reports"),
     ],
   },
   {
