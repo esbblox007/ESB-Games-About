@@ -1,0 +1,62 @@
+.overview {
+  display: grid;
+  gap: 22px;
+}
+
+.statusPanel {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+  padding: 22px 24px;
+  border: 1px solid rgba(128, 148, 209, 0.17);
+  border-radius: 18px;
+  background: rgba(9, 15, 29, 0.72);
+}
+.statusPanel strong { display: block; color: #f4f6ff; margin-bottom: 7px; font-size: 1rem; }
+.statusPanel p { max-width: 760px; margin: 0; color: #91a0be; line-height: 1.62; }
+.statusBadge {
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  border: 1px solid rgba(113, 143, 255, .25);
+  border-radius: 999px;
+  background: rgba(67, 92, 205, .12);
+  color: #a9bcff;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.card {
+  min-height: 190px;
+  padding: 22px;
+  border: 1px solid rgba(128, 148, 209, 0.16);
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(10, 17, 33, .82), rgba(7, 12, 24, .9));
+}
+.icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 18px;
+  border-radius: 12px;
+  background: rgba(76, 99, 220, .14);
+  color: #92a9ff;
+}
+.card h3 { margin: 0 0 8px; color: #f5f7ff; font-size: 1rem; }
+.card p { margin: 0 0 14px; color: #8f9dbb; font-size: .85rem; line-height: 1.62; }
+.card small { color: #6f7d9c; font-size: .72rem; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 10px; padding-top: 4px; }
+
+@media (max-width: 760px) {
+  .grid { grid-template-columns: 1fr; }
+  .statusPanel { flex-direction: column; }
+}
