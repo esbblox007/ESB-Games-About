@@ -3,7 +3,7 @@ import PageShell from "@/components/PageShell";
 import SupportClient from "@/components/SupportClient";
 import SupportFAQ from "@/components/SupportFAQ";
 import SupportPageFreshness from "@/components/SupportPageFreshness";
-import { ArrowIcon } from "@/components/Icons";
+import { ArrowIcon, CheckIcon, SearchIcon, ShieldIcon } from "@/components/Icons";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -33,8 +33,8 @@ export default function SupportPage() {
         <div className="support-page-container">
           <span className="eyebrow">ESB Games Support</span>
           <h1>How can we <span className="gradient-text">help?</span></h1>
-          <p>Support for players, parents and creators. Browse help options, start a private support conversation or check the official service status website.</p>
-          <div className="support-page-trust"><span>◷ Help organised by topic</span><span>● Safety concerns prioritised</span><span>◎ Official service updates</span></div>
+          <p>Support for players, parents and creators. Browse help options, open a private ticket conversation or check the official service status website.</p>
+          <div className="support-page-trust"><span><SearchIcon size={15} /> Help organised by topic</span><span><ShieldIcon size={15} /> Safety concerns routed securely</span><span><CheckIcon size={15} /> Private ticket conversations</span></div>
         </div>
       </section>
 
@@ -42,47 +42,37 @@ export default function SupportPage() {
         <div className="support-page-container">
           <SupportClient />
 
+          <div className="support-routing-note">
+            <ShieldIcon size={20} />
+            <div><strong>Your ticket is a private support conversation.</strong><p>When you submit a ticket, ESB Games routes it to the appropriate authorised team. Once an eligible staff member claims the case, the conversation is between you and the authorised staff handling it. Access is restricted by staff permissions; for example, safety and abuse cases are routed to authorised Trust &amp; Safety staff.</p></div>
+          </div>
+
           <div className="support-info-grid" id="quick-help">
             <article className="support-quick-panel">
               <h2>Quick Help</h2>
               <div className="support-quick-links" role="list">
                 {quickHelpLinks.map(([label, href]) => (
-                  <a key={label} href={href} role="listitem" className="support-quick-link">
-                    <span>{label}</span>
-                    <ArrowIcon size={16} />
-                  </a>
+                  <a key={label} href={href} role="listitem" className="support-quick-link"><span>{label}</span><ArrowIcon size={16} /></a>
                 ))}
               </div>
             </article>
 
             <div className="support-side-stack">
               <article className="support-status-panel">
-                <div><h2>Service Status</h2><span>● Pre-launch status information</span></div>
-                <p><span>ESB Games platform</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View service status</a></p>
-                <p><span>ESB Studio</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View service status</a></p>
-                <p><span>Authentication</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View service status</a></p>
-                <p><span>Family Centre</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View service status</a></p>
-                <p><span>Support services</span><a href={statusUrl} target="_blank" rel="noopener noreferrer">View service status</a></p>
+                <div><h2>Service Status</h2><span>Official live status is maintained separately</span></div>
+                <p>To avoid showing stale or duplicated service information here, current availability, maintenance and incident updates are published on the dedicated ESB Games Status site.</p>
+                <a className="button button-secondary" href={statusUrl} target="_blank" rel="noopener noreferrer">View current service status <ArrowIcon size={15} /></a>
               </article>
               <article className="support-community-panel">
-                <span>◉</span>
-                <div>
-                  <h3>ESB Games Status</h3>
-                  <p>View service availability, planned maintenance and incident information on the dedicated status website. Status information is published on the dedicated service-status site.</p>
-                  <a href={statusUrl} target="_blank" rel="noopener noreferrer">Open the status website <ArrowIcon size={15} /></a>
-                </div>
+                <span><CheckIcon size={19} /></span>
+                <div><h3>One source of truth</h3><p>The Status site is the official source for service availability, planned maintenance and active incident information.</p><a href={statusUrl} target="_blank" rel="noopener noreferrer">Open the status website <ArrowIcon size={15} /></a></div>
               </article>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="support-page-section support-faq-section" id="faq">
-        <div className="support-page-container">
-          <header><span className="eyebrow">Frequently asked</span><h2>Common <span className="gradient-text">questions.</span></h2></header>
-          <SupportFAQ />
-        </div>
-      </section>
+      <section className="support-page-section support-faq-section" id="faq"><div className="support-page-container"><header><span className="eyebrow">Frequently asked</span><h2>Common <span className="gradient-text">questions.</span></h2></header><SupportFAQ /></div></section>
     </PageShell>
   );
 }
