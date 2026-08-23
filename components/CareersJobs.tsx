@@ -16,7 +16,14 @@ export default function CareersJobs({ jobs, unavailable = false }: { jobs: LiveJ
     return (
       <div className="career-job-browser career-job-browser-list-only">
         <div className="career-job-results">
-          <div className="career-empty-jobs"><strong>Opportunities are temporarily unavailable.</strong><br />We couldn&apos;t load the current role list. Please check again shortly.</div>
+          <div className="career-empty-state career-empty-state-error">
+            <span className="career-empty-state-icon"><BriefcaseIcon /></span>
+            <div>
+              <span className="career-empty-kicker">Recruitment status</span>
+              <h3>Opportunities are temporarily unavailable.</h3>
+              <p>We couldn&apos;t load the current ESB Games vacancy list. Please check again shortly.</p>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -26,15 +33,22 @@ export default function CareersJobs({ jobs, unavailable = false }: { jobs: LiveJ
     return (
       <div className="career-job-browser career-job-browser-list-only">
         <div className="career-job-results">
-          <div className="career-job-results-head"><strong>No roles are open right now</strong><small>This is an intentional empty state, not a filtered result.</small></div>
-          <div className="career-empty-jobs">There are currently no published ESB Games vacancies. New opportunities will appear here when recruitment opens.</div>
+          <div className="career-empty-state">
+            <span className="career-empty-state-icon"><BriefcaseIcon /></span>
+            <div>
+              <span className="career-empty-kicker">No open vacancies</span>
+              <h3>There are no published roles right now.</h3>
+              <p>New ESB Games opportunities will appear here automatically when recruitment opens. Applications are only accepted for roles published on this page.</p>
+            </div>
+            <div className="career-empty-state-status"><span /> Recruitment currently closed</div>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="career-job-browser career-job-browser-list-only">
+    <div className="career-job-browser">
       <aside className="career-job-filters">
         <div className="career-filter-panel"><strong>DEPARTMENT</strong>{departments.map((item) => <button type="button" key={item} className={department === item ? "active" : ""} onClick={() => setDepartment(item)}>{item}</button>)}</div>
         <div className="career-filter-panel"><strong>LOCATION</strong>{locations.map((item) => <button type="button" key={item} className={location === item ? "active" : ""} onClick={() => setLocation(item)}>{item}</button>)}</div>
