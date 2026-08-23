@@ -24,6 +24,12 @@ Messaging, groups, community spaces and other social features can create both be
 
 Where purchases become available, families should review purchase approvals, spending limits and account security. ESB Games will not describe a planned spending control as currently available until the feature has actually launched.
 
+## Content guidance
+
+ESB Games intends content ratings and descriptors primarily to help users and families understand what an experience may contain. An advisory label does not guarantee suitability for every individual and does not replace family judgement, moderation or reporting.
+
+Where law or a specific safety rule requires ESB Games to prevent children from accessing a category of content or feature, an advisory label alone is not sufficient and stronger access controls may be applied.
+
 ## Safety and reports
 
 Use the in-product report tools or Support for harassment, scams, unsafe contact, dangerous content or account-security concerns. Safety and abuse matters may be routed to authorised Trust & Safety staff.
@@ -54,6 +60,8 @@ The intended flow allows a parent or guardian to receive a secure linking reques
 ## Controls
 
 Depending on product status and age, Family Centre may include screen-time controls, communication permissions, spending settings, approval requests and activity information. A control is not considered available merely because it appears in a concept image or product roadmap.
+
+Content-rating preferences may help families guide discovery or access, but ESB Games does not treat every advisory rating as a mandatory age gate. Mandatory safety or legal restrictions can still override a family preference.
 
 ## Access and privacy
 
@@ -99,27 +107,39 @@ If use of games is causing serious distress, conflict or harm, users should cons
     slug: "age-ratings-content-guide",
     title: "Age Ratings & Content Guide",
     category: "Parents & families",
-    markdown: `${reviewHeader("The final guide must reflect the rating framework and regional launch model actually adopted by ESB Games; this draft does not invent a certification system.")}
+    markdown: `${reviewHeader("ESB Games intends to use its own advisory content labels and descriptors rather than claim an external rating certification that has not been obtained. Advisory labels do not replace any access control required by law or safety policy.")}
 
 # Age Ratings & Content Guide
 
-ESB Games intends to use age and content information to help users and families understand experiences and to support age-appropriate access.
+ESB Games intends to use age suggestions and content descriptors to help users and families understand experiences. The normal purpose of a rating is guidance, similar to an audience-suitability recommendation, rather than automatic enforcement solely because an experience displays a particular suggested age.
 
-## Ratings are guidance, not a safety guarantee
+## Advisory by default
 
-A content rating describes expected content and audience suitability. It does not guarantee that every user-generated interaction will be appropriate, and it does not replace moderation, reporting or family settings.
+A label such as 13+, 16+ or 18+ may communicate the intended audience and expected content without automatically preventing every younger account from opening the experience.
+
+This does not mean an age label can override law or platform safety rules. Where ESB Games is legally required to prevent children from encountering a category of content, or where a particular feature has a mandatory eligibility rule, the platform may apply effective age assurance, a hard age gate or another proportionate restriction.
+
+An 18+ label also does not make otherwise prohibited content acceptable. Content banned by the Community Standards remains prohibited regardless of the rating selected by a creator.
+
+## Ratings are not a safety guarantee
+
+A content rating describes expected content and audience suitability. It does not guarantee that every user-generated interaction will be appropriate, and it does not replace moderation, reporting, privacy protections or family settings.
 
 ## Content descriptors
 
-Descriptors may cover themes such as violence, fear, language, sexual content, gambling-like mechanics, user interaction, purchases or other material relevant to audience suitability. The final descriptor set will be published once the rating system is approved.
+Descriptors may cover themes such as violence, fear, language, sexual themes, gambling-like mechanics, user interaction, purchases or other material relevant to audience suitability. The final descriptor set will be published once the rating system is approved.
 
 ## Creator responsibilities
 
-Creators must answer rating and content questions accurately and update them when an experience materially changes. Deliberately understating content to bypass age or discovery controls may result in enforcement.
+Creators must answer rating and content questions accurately and update them when an experience materially changes. Deliberately understating content to manipulate discovery, mislead families or bypass a required access control may result in enforcement.
+
+## Family controls and discovery
+
+Family Centre or account settings may use ratings and descriptors to filter discovery, warn about content or apply family-selected limits. Those optional settings are separate from restrictions ESB Games must apply because of law, safeguarding or a specific product rule.
 
 ## Regional differences
 
-Age-rating requirements and recognised rating bodies vary by country. ESB Games may display different information or apply different access rules by region where required.
+Age-rating requirements, recognised rating bodies and child-protection duties vary by country. ESB Games may display different information or apply different access rules by region where required.
 
 ## Appeals and corrections
 
