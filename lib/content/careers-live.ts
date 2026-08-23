@@ -43,6 +43,7 @@ export type LiveJob = Job & {
   applicationFormVersionId: string;
   applicationFields: ApplicationField[];
   consents: CareerConsent[];
+  publishDate?: string;
   closingDate?: string;
   featured?: boolean;
 };
@@ -68,15 +69,19 @@ function blockLists(value: unknown) {
 
 function asArray<T>(value: unknown): T[] { return Array.isArray(value) ? value as T[] : []; }
 function clean(value: unknown) { return String(value ?? "").trim(); }
+function unique(values: string[]) { return Array.from(new Set(values.map((value) => value.trim()).filter(Boolean))); }
 
 function mapRow(row: JobRow): LiveJob {
   const blocks = blockLists(row.content_blocks);
   const slug = clean(row.public_slug);
+  const explicitDepartments = asArray<unknown>(row.departments).map(clean);
+  const legacyDepartment = clean(row.department ?? row.category);
+  const departments = unique(explicitDepartments.length ? explicitDepartments : [legacyDepartment]);
   return {
     slug,
     jobId: clean(row.job_id),
     title: clean(row.title),
-    departments: [clean(row.department ?? row.category)].filter(Boolean),
+    departments,
     location: clean(row.location),
     type: clean(row.employment_type),
     reportsTo: clean(row.reports_to),
@@ -89,6 +94,7 @@ function mapRow(row: JobRow): LiveJob {
     applicationFormVersionId: clean(row.application_form_version_id),
     applicationFields: asArray<ApplicationField>(row.application_fields).filter((field) => !field.recruiterOnly),
     consents: asArray<CareerConsent>(row.consents),
+    publishDate: row.publish_date ? clean(row.publish_date) : undefined,
     closingDate: row.closing_date ? clean(row.closing_date) : undefined,
     featured: Boolean(row.featured),
   };
@@ -97,7 +103,7 @@ function mapRow(row: JobRow): LiveJob {
 /**
  * Public careers fails closed. Backend status alone is not sufficient to expose a role:
  * the published version must contain enough real information for an applicant to make
- * an informed decision and must have an application form + privacy consent attached.
+ * an informed decision and must have an application form + privacy acknowledgement attached.
  */
 export function isPublishableJob(job: LiveJob) {
   const marker = `${job.jobId} ${job.slug} ${job.title}`.toLowerCase();
