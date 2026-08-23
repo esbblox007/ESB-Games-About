@@ -4,7 +4,24 @@ import Pricing from "@/components/Pricing";
 import Reveal from "@/components/Reveal";
 import { ClockIcon, GlobeIcon, ShieldIcon } from "@/components/Icons";
 
-export const metadata: Metadata = { title: "Subscriptions", description: "Preview the membership structure being developed for ESB Games. Pricing and benefits are not yet final.", alternates: { canonical: "/subscriptions" } };
+export const metadata: Metadata = {
+  title: "Subscriptions",
+  description: "Preview the membership structure being developed for ESB Games. Pricing and benefits are not yet final.",
+  alternates: { canonical: "/subscriptions" },
+  openGraph: {
+    title: "Subscriptions | ESB Games",
+    description: "Preview the ESB Games membership structure. Pricing, benefits and availability remain pre-launch and are not yet final.",
+    url: "/subscriptions",
+    type: "website",
+    images: [{ url: "/hero-discover-platform.png", alt: "ESB Games subscription preview" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Subscriptions | ESB Games",
+    description: "Preview the ESB Games membership structure. Pricing, benefits and availability remain pre-launch and are not yet final.",
+    images: ["/hero-discover-platform.png"],
+  },
+};
 
 export default function SubscriptionsPage() {
   return (
@@ -33,4 +50,3 @@ export default function SubscriptionsPage() {
     </PageShell>
   );
 }
-
