@@ -95,7 +95,7 @@ export default async function CareersPage() {
         <div className="career-container">
           <header className="career-center-heading"><span className="eyebrow">How we work</span><h2>We put <span className="gradient-text">people</span> first.</h2><p>Great products come from people who feel trusted, supported and able to do their best work.</p></header>
           <div className="career-benefit-grid">
-            {peopleBenefits.map(([title, text]) => <article key={title}><span>✓</span><div><h3>{title}</h3><p>{text}</p></div></article>)}
+            {peopleBenefits.map(([title, text]) => <article key={title}><span><CheckIcon size={17} /></span><div><h3>{title}</h3><p>{text}</p></div></article>)}
           </div>
         </div>
       </section>
