@@ -6,11 +6,15 @@ export const commercialPolicyDrafts: PolicyRecord[] = [
     slug: "payment-terms",
     title: "Payment Terms",
     category: "Legal",
-    markdown: `${reviewHeader("Payments are not treated as fully launched by this draft. Final processor, merchant-of-record and checkout details must be confirmed before publication.")}
+    markdown: `${reviewHeader("Real-money purchases, ESBucks purchases, subscriptions, Marketplace purchases, gift cards and creator payouts are all intended to be available at public launch. Final payment processor, merchant-of-record, supported-country and regulatory-perimeter details still require confirmation before publication.")}
 
 # Payment Terms
 
-These terms apply to purchases made directly through an ESB Games checkout that links to them. Third-party stores or payment platforms may apply their own terms in addition to mandatory rights.
+These terms are intended to apply to eligible purchases made directly through an ESB Games checkout that links to them. Third-party stores, retailers or payment platforms may apply their own terms in addition to mandatory rights.
+
+## Launch payment scope
+
+ESB Games currently intends the public launch payment model to include real-money purchases, purchases of ESBucks, subscriptions, Marketplace purchases, ESB Games gift cards and eligible creator payouts. A feature must not be represented as available until its production checkout, fraud controls, support flow and required legal review are ready.
 
 ## Clear price information
 
@@ -18,7 +22,7 @@ Before a user is charged, checkout should clearly show the item or service, tota
 
 ## Payment authorisation
 
-You must use a payment method you are authorised to use. ESB Games or its payment providers may request authentication, refuse a transaction or reverse a transaction where reasonably necessary to prevent fraud, comply with law or correct an error.
+You must use a payment method you are authorised to use. ESB Games or its payment providers may request authentication, refuse a transaction, place a transaction into review or reverse a transaction where reasonably necessary to prevent fraud, comply with law or correct an error.
 
 ## Payment information
 
@@ -38,7 +42,7 @@ A chargeback does not automatically prove wrongdoing. ESB Games may investigate 
 
 ## Taxes
 
-Prices may include or exclude taxes depending on the jurisdiction and checkout display. Creators or organisations receiving payouts remain responsible for their own tax obligations unless law requires ESB Games to withhold or report amounts.
+Prices may include or exclude taxes depending on the jurisdiction and checkout display. Creators or organisations receiving payouts remain responsible for their own tax obligations unless law requires ESB Games or a payment provider to withhold or report amounts.
 
 ## Consumer rights
 
@@ -46,9 +50,10 @@ These terms do not exclude statutory rights for defective, misdescribed, unautho
 
 ## Decisions required before publication
 
-1. Confirm payment processor(s), merchant-of-record model and supported currencies.
+1. Confirm payment processor(s), merchant-of-record model, supported currencies and launch countries.
 2. Confirm whether ESB Games itself or a third party is the seller for each purchase flow.
-3. Confirm the final fraud, family-approval and receipt processes.
+3. Confirm the final fraud, family-approval, receipt and creator-payout processes.
+4. Complete a UK payments/e-money regulatory-perimeter review of the ESBucks, gift-card, Marketplace and peer-to-peer transfer model before those features are enabled.
 `,
   },
   {
@@ -77,7 +82,11 @@ Some laws allow a consumer to request immediate access to digital content while 
 
 ## Virtual currency and consumed items
 
-Use or consumption of ESBucks or a virtual item may affect discretionary refund eligibility, but it does not remove mandatory remedies. ESB Games may reverse associated virtual value where a purchase is refunded, reversed or found to be fraudulent, provided the action is lawful and proportionate.
+Use or consumption of ESBucks or a virtual item may affect discretionary refund eligibility, but it does not remove mandatory remedies. ESB Games may reverse associated virtual value where a purchase is refunded, reversed or found to be fraudulent, provided the action is lawful, traceable and proportionate.
+
+## Gift cards
+
+ESB Games will not impose an expiry date or dormancy fee on ESB Games gift cards. Refund rights for the original purchase may depend on where and how the card was bought, whether it has been redeemed, and applicable law. A refund or reversal may require associated ESBucks or entitlements to be removed where lawful.
 
 ## Subscriptions
 
@@ -93,18 +102,18 @@ Where law sets a refund deadline or required payment method, ESB Games will foll
 
 ## Third-party stores
 
-Purchases made through an app store, console store or other third-party merchant may need to be refunded through that provider's process. This does not reduce rights the user has against the responsible trader under applicable law.
+Purchases made through an app store, console store, retailer or other third-party merchant may need to be refunded through that provider's process. This does not reduce rights the user has against the responsible trader under applicable law.
 `,
   },
   {
     slug: "subscription-terms",
     title: "Subscription Terms",
     category: "Legal",
-    markdown: `${reviewHeader("Subscriptions are not treated as public/live by this draft. These terms must be updated against the checkout implementation and laws in force immediately before launch.")}
+    markdown: `${reviewHeader("Subscriptions are intended to be available at public launch. These terms must still be checked against the final checkout implementation, plan catalogue, billing providers and laws in force immediately before recurring billing is enabled.")}
 
 # Subscription Terms
 
-These terms will apply to recurring ESB Games plans only when a subscription checkout expressly links to them.
+These terms will apply to recurring ESB Games plans when a subscription checkout expressly links to them.
 
 ## Before subscribing
 
@@ -118,7 +127,7 @@ If a plan renews automatically, ESB Games will provide renewal information and r
 
 ## Cancellation
 
-The final product should provide an accessible online cancellation route for subscriptions purchased directly from ESB Games. Cancellation should stop future renewal charges subject to any clearly disclosed minimum term and mandatory law.
+The product should provide an accessible online cancellation route for subscriptions purchased directly from ESB Games. Cancellation should stop future renewal charges subject to any clearly disclosed minimum term and mandatory law.
 
 Where law requires an end-of-contract acknowledgement, cooling-off notice, refund of overpayment or other confirmation, ESB Games will provide it within the required timeframe.
 
@@ -151,55 +160,124 @@ Subscriptions bought through an app store or other merchant may be managed and c
 `,
   },
   {
+    slug: "gift-card-terms",
+    title: "Gift Card Terms",
+    category: "Legal",
+    markdown: `${reviewHeader("ESB Games gift cards are intended to be purchasable with real-world money and to have no expiry date. Retail, processor, fraud and jurisdiction-specific terms still require final implementation review.")}
+
+# Gift Card Terms
+
+ESB Games gift cards are intended to let a purchaser obtain prepaid value that can be redeemed into eligible ESB Games value or entitlements.
+
+## No expiry
+
+ESB Games will not impose an expiry date on an ESB Games gift card. ESB Games will also not impose a dormancy fee merely because a valid card has not yet been redeemed.
+
+Once a gift card is redeemed into ESBucks, those ESBucks do not expire.
+
+## Purchase and redemption
+
+The purchase page, packaging or receipt should clearly identify the value, currency, redemption method, regional restrictions if any and where to obtain support. A card may be subject to activation or anti-fraud checks before redemption.
+
+## Protect the code
+
+A gift-card code should be treated like a bearer credential until redeemed. Users should not share the code publicly. ESB Games may be unable to replace value that was voluntarily disclosed and redeemed by another person unless applicable law or the facts require a different result.
+
+## Fraud and stolen cards
+
+ESB Games may delay, block, reverse or investigate redemption where there is evidence of theft, unauthorised payment, chargeback, duplication, tampering or fraud. Any action should be supported by records and preserve mandatory consumer rights.
+
+## Cash redemption
+
+Gift cards and redeemed ESBucks are intended for use within the ESB Games ecosystem and are not generally redeemable for cash merely because an eligible creator payout programme exists. Any cash-redemption right required by applicable law will be honoured.
+
+## Retail partners
+
+Where a gift card is sold by a retailer or third-party merchant, that seller may have separate purchase or refund obligations. ESB Games should clearly identify which party is responsible for the original retail transaction.
+`,
+  },
+  {
     slug: "esbucks-virtual-currency-policy",
     title: "ESBucks & Virtual Currency Policy",
     category: "Legal",
-    markdown: `${reviewHeader("This draft deliberately avoids promising convertibility, payout rates or transfer rights before the ESBucks economy and creator-payout programme are final.")}
+    markdown: `${reviewHeader("ESBucks are intended to launch with purchase, gift-card redemption, earning, Marketplace use and peer-to-peer transfer. ESBucks never expire. The final UK regulatory perimeter, transfer controls and creator-payout separation require specialist review before launch.")}
 
 # ESBucks & Virtual Currency Policy
 
-ESBucks are intended to be a virtual feature used within the ESB Games ecosystem. The final product design, purchase availability, transfer rules and creator-economy connections must be confirmed before this policy becomes effective.
+ESBucks are intended to be transferable virtual platform value used within the ESB Games ecosystem for eligible digital features, Marketplace activity and peer-to-peer transfers.
 
 ## Nature of ESBucks
 
-Unless applicable law requires otherwise, ESBucks are a limited licence to access eligible digital features. They are not legal tender, a bank deposit, an investment, electronic money representation or ownership interest in ESB Games.
+Unless applicable law requires otherwise, ESBucks are a limited platform entitlement for use within ESB Games. ESB Games does not market an ESBucks balance as a bank account, savings product, legal tender or investment.
 
-Users do not have a general right to exchange ESBucks for cash merely because a separate creator payout programme may allow eligible creators to receive real-world payouts under different terms.
+Users do not have a general right to exchange an ordinary ESBucks balance for cash merely because a separate creator payout programme may allow eligible creators to receive real-world payouts under different terms.
+
+The legal and regulatory classification of the final launch model must be reviewed before purchased stored value and peer-to-peer transfers are enabled.
+
+## How ESBucks are obtained
+
+A user's visible ESBucks balance may include value obtained in three principal ways:
+
+1. **Gift Card** — ESBucks credited from redemption of an ESB Games gift card purchased with real-world money.
+2. **Purchased** — ESBucks bought directly through an authorised ESB Games purchase flow.
+3. **Earned** — ESBucks awarded or earned through eligible creator, Marketplace, platform, event or reward activity.
+
+These are user-facing economic source categories. Internal technical corrections, refunds and reversals are audit events rather than a new economic source category.
+
+## Immutable transaction lineage
+
+Every ESBucks credit, debit and transfer should create an auditable ledger record. The internal ledger should preserve the source of value, relevant prior transaction references, sender and recipient account references where applicable, amount, time, status and reason or product context.
+
+A peer-to-peer transfer should not erase where the transferred value originated. Where a balance contains more than one source category, the system should preserve the source composition or underlying lots according to a documented accounting rule so investigators can trace the value chain.
+
+## No expiry
+
+ESBucks do not expire, regardless of whether they were obtained from a gift card, purchased directly or earned. ESB Games will not apply a dormancy fee simply because ESBucks remain unused.
+
+If an account is lawfully closed or restricted, that does not convert ESBucks into cash. Any treatment of remaining value must follow applicable law, the reason for closure and the relevant account or enforcement process.
 
 ## Purchasing ESBucks
 
-If direct purchases launch, checkout must show the amount of ESBucks, real-money price, currency, taxes or fees where required and material restrictions. Promotional or bonus ESBucks should be clearly distinguished where their rules differ.
+Checkout must show the amount of ESBucks, real-money price, currency, taxes or fees where required and material restrictions before purchase.
 
-## Spending and virtual items
+## Peer-to-peer transfers
+
+Users are intended to be able to transfer ESBucks directly to other eligible ESB Games users. Small, ordinary and low-risk transfers may complete immediately. Higher-value, unusual or higher-risk transfers may enter a **Pending** state while automated or staff checks are completed.
+
+Transfer review can consider amount, velocity, account age, compromise indicators, unusual recipient patterns, chargeback exposure, fraud reports, sanctions or legal restrictions and other proportionate risk signals. ESB Games does not need to publish one universal fraud threshold that would make controls easier to evade.
+
+A transfer may be delayed, rejected, reversed or frozen where reasonably necessary to investigate fraud, account compromise, unlawful activity, an erroneous transaction or a valid payment reversal. Records should explain the action and preserve available appeal or support routes where appropriate.
+
+## Marketplace and spending
 
 ESBucks may be used only for eligible platform features identified by ESB Games. Virtual items and entitlements are licensed for use within the service and do not give the user ownership of ESB Games software or another creator's intellectual property.
 
-## Transfers and trading
+Marketplace purchases and creator proceeds should remain traceable to the underlying transaction. Users must not use coordinated transfers, fake sales, wash trading, account networks or circular transactions to disguise the source of value or manipulate creator earnings.
 
-Transfers, gifts, Marketplace transactions or group funds may be limited by age, fraud controls, account standing, product rules and regional requirements. Users must not create unauthorised exchanges, sell accounts, launder value, manipulate prices or use ESBucks to facilitate scams.
+## Creator payouts are a separate earnings system
+
+A creator payout programme is intended to be available at launch, but payout eligibility must be based on qualifying creator proceeds rather than treating every transferred ESBucks balance as cash-redeemable.
+
+Purchased ESBucks, gift-card-funded ESBucks and ordinary peer-to-peer transfers do not automatically become eligible for real-world withdrawal simply because the recipient is a creator. The creator earnings ledger should separately identify qualifying proceeds from legitimate eligible activity and apply identity, tax, fraud, minimum-balance, holding-period and payment-provider requirements.
 
 ## Errors, fraud and reversals
 
-ESB Games may correct balances resulting from duplicate credits, technical errors, refunded transactions, unauthorised purchases, fraud or prohibited activity. Corrections should be supported by records and applied proportionately. Mandatory consumer rights remain unaffected.
-
-## Expiry and inactive accounts
-
-The final policy must state whether purchased or promotional ESBucks can expire. ESB Games should not introduce expiry silently after purchase. Any dormancy rule must be disclosed before it applies and reviewed for consumer-law fairness.
-
-## Creator payouts are separate
-
-A creator payout programme, if launched, will have eligibility, identity, tax, fraud, minimum-balance and payment-provider requirements. An ESBucks balance alone does not guarantee payout eligibility or a fixed cash conversion rate.
+ESB Games may correct balances resulting from duplicate credits, technical errors, refunded transactions, unauthorised purchases, fraud or prohibited activity. Corrections should be supported by immutable records and applied proportionately. Mandatory consumer rights remain unaffected.
 
 ## Minors
 
 Purchases and transfers involving minors may be subject to parental approvals, spending controls and additional restrictions. Those controls do not remove rights relating to unauthorised purchases.
 
+## Regulatory review gate
+
+Before public launch, ESB Games should obtain specialist advice on whether the final UK model falls within the Payment Services Regulations, Electronic Money Regulations or an available exclusion such as a limited-network arrangement, including any notification obligations triggered by transaction volume.
+
 ## Decisions required before publication
 
-1. Confirm whether purchased ESBucks expire.
-2. Confirm transfer/gifting rules and whether peer-to-peer transfer will exist.
-3. Confirm creator-payout eligibility and whether any public conversion rate will be promised.
-4. Confirm refund/reversal handling for Marketplace transactions.
+1. Confirm the operational transfer-risk thresholds and who can release a pending transfer.
+2. Confirm the exact creator-payout eligibility calculation and whether a public conversion rate will be promised.
+3. Confirm Marketplace refund/reversal handling and how reversed source lots propagate through the ledger.
+4. Complete and document the UK payments/e-money perimeter review before enabling public purchase and peer-to-peer transfer.
 `,
   },
 ];
