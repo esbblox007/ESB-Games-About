@@ -1,6 +1,7 @@
 import type { PolicyRecord } from "./policy-types";
 import { reviewHeader } from "./policy-types";
 import { corePolicyDrafts } from "./policy-drafts/core";
+import { cookiePolicyDraft } from "./policy-drafts/cookie";
 import { safetyPolicyDrafts } from "./policy-drafts/safety";
 import { familyPolicyDrafts } from "./policy-drafts/families";
 import { commercialPolicyDrafts } from "./policy-drafts/commercial";
@@ -23,8 +24,11 @@ This legacy route should not become a second competing Safety Centre. It remains
 `,
 };
 
+const coreWithoutCookie = corePolicyDrafts.filter((policy) => policy.slug !== "cookie-policy");
+
 export const policyDocuments: PolicyRecord[] = [
-  ...corePolicyDrafts,
+  ...coreWithoutCookie,
+  cookiePolicyDraft,
   ...commercialPolicyDrafts,
   ...safetyPolicyDrafts,
   interimSafetyCentreRecord,
