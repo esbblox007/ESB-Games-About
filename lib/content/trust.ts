@@ -70,8 +70,10 @@ export const trustSections: TrustSection[] = [
   {
     id: "privacy-security",
     title: "Privacy & security",
-    description: "Information about data rights, retention, security, disclosure and accessibility.",
+    description: "Information about privacy notices, data rights, retention, security, disclosure and accessibility.",
     resources: [
+      resource("support-privacy", "Support Privacy Notice", "How private support tickets, evidence and access-controlled case information are handled.", "/support/privacy"),
+      resource("careers-privacy", "Careers Application Privacy Notice", "How applicant information and private recruitment files are handled.", "/careers/privacy"),
       resource("data-requests", "Data Requests", "How to make eligible privacy and personal-data requests.", "/data-requests"),
       resource("retention", "Data Retention", "How retention principles are documented across ESB Games.", "/data-retention-policy"),
       resource("security", "Security Policy", "Security principles and expectations across the ecosystem.", "/security-policy"),
