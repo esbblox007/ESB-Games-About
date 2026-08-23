@@ -32,22 +32,11 @@ function setTranslationCookie(googleCode: string) {
 }
 
 export function resolvePreferredLocale() {
+  // Privacy-by-default: do not load a third-party translation service merely
+  // because the browser reports a non-English locale. A non-English language
+  // is restored only after the user has deliberately selected and saved it.
   const saved = window.localStorage.getItem("esb-language");
   if (saved && languages.some((language) => language.locale === saved)) return saved;
-
-  const browserLocales = [...new Set([...(navigator.languages || []), navigator.language, document.documentElement.lang].filter(Boolean))];
-  for (const browserLocale of browserLocales) {
-    const lower = browserLocale.toLowerCase();
-    const exact = languages.find((language) => language.locale.toLowerCase() === lower || language.google.toLowerCase() === lower);
-    if (exact) return exact.locale;
-    const base = languages.find((language) => {
-      const localeBase = language.locale.toLowerCase().split("-")[0];
-      const googleBase = language.google.toLowerCase().split("-")[0];
-      return lower.startsWith(`${localeBase}-`) || lower === localeBase || lower.startsWith(`${googleBase}-`) || lower === googleBase;
-    });
-    if (base) return base.locale;
-  }
-
   return "en";
 }
 
@@ -60,15 +49,17 @@ export default function LanguageSelector({ variant = "footer" }: { variant?: "fo
   const [locale, setLocale] = useState("en");
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const selectLanguage = useCallback((nextLocale: string, source: "manual" | "auto" = "manual") => {
+  const selectLanguage = useCallback((nextLocale: string, source: "manual" | "saved" = "manual") => {
     const language = languages.find((item) => item.locale === nextLocale) || languages[0];
     const previousLocale = document.documentElement.lang || "en";
 
     setLocale(language.locale);
     setOpen(false);
     setQuery("");
-    window.localStorage.setItem("esb-language", language.locale);
-    window.localStorage.setItem("esb-language-source", source);
+    if (source === "manual") {
+      window.localStorage.setItem("esb-language", language.locale);
+      window.localStorage.setItem("esb-language-source", "manual");
+    }
     document.documentElement.lang = language.locale;
     setTranslationCookie(language.google);
     window.dispatchEvent(new CustomEvent("esb-language-change", { detail: { locale: language.locale, google: language.google } }));
@@ -79,22 +70,20 @@ export default function LanguageSelector({ variant = "footer" }: { variant?: "fo
       googleSelect.dispatchEvent(new Event("change"));
     }
 
-    // Returning from an already translated DOM to English is the one case
-    // where a clean reload is desirable. Non-English selections no longer
-    // reload the page; SiteTranslator lazy-loads Google Translate on demand.
     if (source === "manual" && language.google === "en" && previousLocale.toLowerCase() !== "en") {
       window.setTimeout(() => window.location.reload(), 80);
     }
   }, []);
 
   useEffect(() => {
-    const preferred = resolvePreferredLocale();
+    const saved = window.localStorage.getItem("esb-language");
+    const preferred = saved && languages.some((language) => language.locale === saved) ? saved : "en";
     setLocale(preferred);
     document.documentElement.lang = preferred;
 
-    const language = languages.find((item) => item.locale === preferred) || languages[0];
-    setTranslationCookie(language.google);
-  }, [selectLanguage]);
+    // Restore Google Translate only for a language the user previously chose.
+    if (saved && preferred !== "en") setTranslationCookie((languages.find((item) => item.locale === preferred) || languages[0]).google);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
