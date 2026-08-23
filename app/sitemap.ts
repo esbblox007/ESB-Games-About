@@ -4,7 +4,13 @@ import { publishedPolicyDocuments } from "@/lib/content/policy-publication";
 import { supportArticles } from "@/lib/content/support";
 import { getLiveJobs } from "@/lib/content/careers-live";
 
-const STATIC_CONTENT_LAST_REVIEWED = new Date("2026-08-22T00:00:00Z");
+const STATIC_CONTENT_LAST_REVIEWED = new Date("2026-08-23T00:00:00Z");
+
+function validDate(value?: string) {
+  if (!value) return undefined;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? undefined : date;
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://about.esbgames.com";
@@ -56,6 +62,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const careerEntries: MetadataRoute.Sitemap = careers.jobs.map((job) => ({
     url: `${base}/careers/${job.slug}`,
+    lastModified: validDate(job.publishDate) ?? STATIC_CONTENT_LAST_REVIEWED,
     changeFrequency: "weekly",
     priority: 0.75,
   }));
