@@ -72,6 +72,12 @@ export const ClockIcon = (props: IconProps) => (
 export const ShieldIcon = (props: IconProps) => (
   <IconBase {...props}><path d="M12 2.5 20 6v5.5c0 5.1-3.2 8.4-8 10-4.8-1.6-8-4.9-8-10V6l8-3.5Z" fill="currentColor"/><path d="m8.5 12 2.2 2.2 4.8-5" stroke="#050817" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></IconBase>
 );
+export const ScaleIcon = (props: IconProps) => (
+  <IconBase {...props}><path d="M12 3v17M7 20h10M5 6h14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="m5 6-3 6h6L5 6Zm14 0-3 6h6l-3-6Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/><path d="M2 12c.4 2 1.4 3 3 3s2.6-1 3-3m8 0c.4 2 1.4 3 3 3s2.6-1 3-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/></IconBase>
+);
+export const LockIcon = (props: IconProps) => (
+  <IconBase {...props}><rect x="4" y="10" width="16" height="11" rx="2.5" stroke="currentColor" strokeWidth="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><circle cx="12" cy="15.5" r="1.4" fill="currentColor"/></IconBase>
+);
 export const ChevronIcon = (props: IconProps) => (
   <IconBase {...props}><path d="m8 10 4 4 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></IconBase>
 );
