@@ -6,17 +6,25 @@ export const creatorPolicyDrafts: PolicyRecord[] = [
     slug: "creator-terms",
     title: "Creator Terms",
     category: "Creators",
-    markdown: `${reviewHeader("These draft Creator Terms cover Studio, publishing, collaboration and future monetisation without treating unpublished payout or marketplace terms as already available.")}
+    markdown: `${reviewHeader("These draft Creator Terms cover Studio, publishing, collaboration, Marketplace activity and creator payouts. Individual creators and eligible verified groups/organisations are intended to be able to own projects. Final payout, publishing and plugin/API implementation still requires launch review.")}
 
 # Creator Terms
 
-These terms apply to creator and developer features that expressly link to them, including ESB Studio, publishing, creator collaboration, assets, analytics and eligible monetisation features.
+These terms apply to creator and developer features that expressly link to them, including ESB Studio, publishing, creator collaboration, assets, analytics, Marketplace activity and eligible monetisation features.
 
 ## Your content and rights
 
 You keep the rights you lawfully hold in original games, code, art, audio, models and other creator content. You are responsible for having the licences or permissions needed for third-party material you import, publish or monetise.
 
 Importing a project from another platform does not transfer or expand third-party rights. You must review licences for code, music, fonts, meshes, images, trademarks and other assets before publishing them on ESB Games.
+
+## Project ownership
+
+A creator project is intended to be ownable by either an eligible individual creator account or an eligible verified group or organisation account.
+
+The recorded project owner controls ownership-level permissions subject to platform rules and any independently binding agreement between collaborators or organisation members. A group or organisation ownership model must not silently convert the personal account of a member into organisation property.
+
+Ownership transfers should require appropriate authorisation, create an auditable record and clearly identify the new owner. Where the owner is a minor or otherwise lacks capacity to enter a required commercial agreement, additional parent, guardian or authorised organisation involvement may be required by law or the applicable payout/publishing terms.
 
 ## Licence to operate creator content
 
@@ -32,13 +40,17 @@ A collaborator does not automatically obtain ownership of a project merely becau
 
 ## Publishing and review
 
-Publishing may be subject to automated checks, manual review, age/content classification, security checks and Community Standards. ESB Games may hold, restrict or remove an experience where necessary for safety, rights, security or legal compliance.
+Publishing may be subject to automated checks, manual review, advisory age/content classification, security checks and Community Standards. ESB Games may hold, restrict or remove an experience where necessary for safety, rights, security or legal compliance.
 
-## Monetisation
+A content rating is not permission to publish content that is otherwise prohibited, and ESB Games may apply mandatory access controls where law or a specific safety rule requires them.
 
-Creator monetisation, Marketplace sales, revenue shares, promotion tools and payout programmes are subject to separate eligibility and commercial terms. Draft percentages, internal forecasts and marketing concepts are not binding rates.
+## Monetisation and Marketplace
 
-Before a creator commits to a paid programme, the applicable fee, platform share, taxes, payout conditions and material restrictions should be disclosed.
+Creator monetisation, Marketplace sales and creator payout programmes are intended to be available at public launch, subject to production readiness, eligibility and the separate commercial terms shown to creators.
+
+Draft percentages, internal forecasts and marketing concepts are not binding rates. Before a creator commits to a paid programme, the applicable fee, platform share, taxes, payout conditions and material restrictions should be disclosed.
+
+Creator payouts must be based on qualifying creator proceeds rather than treating every ESBucks balance as cash-redeemable. Purchased, gift-card-funded or peer-to-peer-transferred ESBucks do not automatically become payout-eligible merely because the recipient is a creator.
 
 ## Security and technical integrity
 
@@ -50,13 +62,13 @@ Analytics may include engagement and performance information subject to privacy 
 
 ## Suspension and appeals
 
-Creator privileges may be restricted for serious or repeated breaches, fraud, rights violations, unsafe content or security abuse. Significant enforcement should provide an appropriate review route where required or reasonably possible.
+Creator privileges may be restricted for serious or repeated breaches, fraud, rights violations, unsafe content or security abuse. Significant enforcement should provide an appropriate review route where required or reasonably possible. ESB Games does not promise one universal appeal response SLA; applicable legal deadlines take priority.
 
 ## Decisions required before publication
 
-1. Confirm public publishing eligibility and review model.
-2. Confirm creator monetisation and payout launch status.
-3. Confirm whether organisations/groups can legally own creator projects or only manage them.
+1. Confirm public publishing eligibility and the final review model.
+2. Confirm the creator payout calculation, platform share and payment-provider flow.
+3. Confirm the exact verification and authority rules for groups/organisations that own projects.
 4. Confirm any plugin/API-specific licence terms before those systems are public.
 `,
   },
@@ -64,11 +76,11 @@ Creator privileges may be restricted for serious or repeated breaches, fraud, ri
     slug: "marketplace-policy",
     title: "Marketplace Policy",
     category: "Creators",
-    markdown: `${reviewHeader("The Marketplace is treated as conditional until listing, payment, moderation, refund and creator-payout flows are production-ready.")}
+    markdown: `${reviewHeader("The Marketplace is intended to be available at public launch. Listing, payment, moderation, refund, ESBucks lineage and creator-payout flows must be production-ready before this policy becomes operative.")}
 
 # Marketplace Policy
 
-The Marketplace is intended to support eligible virtual items, creator assets and other digital listings when those features are released.
+The Marketplace is intended to support eligible virtual items, creator assets and other digital listings at public launch.
 
 ## Listing requirements
 
@@ -88,6 +100,8 @@ Creators must not manipulate Marketplace rankings, reviews, sales, scarcity, pri
 
 The checkout or listing must identify the item, price, currency or ESBucks amount, licence or usage rights where material, and relevant limitations. A buyer should not need to infer essential restrictions from an unrelated document.
 
+Marketplace ESBucks transactions should remain auditable so ESB Games can trace the relevant buyer, seller, amount, source lineage, entitlement and reversal history where needed for support, fraud prevention or legal obligations.
+
 ## Moderation
 
 ESB Games may review, restrict or remove listings for safety, rights, fraud, technical or legal reasons. Serious Marketplace enforcement should be auditable and eligible for review where appropriate.
@@ -100,9 +114,11 @@ Refunds, payment reversals and fraudulent transactions may require associated vi
 
 A Marketplace sale does not guarantee immediate real-money payout. Creator proceeds may be subject to platform fees, eligibility, fraud review, payout thresholds, tax information, payment-provider requirements and waiting periods disclosed in the applicable creator-payout terms.
 
+Marketplace proceeds that qualify for creator payout should be recorded separately from ordinary purchased, gift-card-funded and peer-to-peer ESBucks so an ordinary transferable balance does not become a general cash-withdrawal facility.
+
 ## Final launch requirements
 
-Before this policy is published, ESB Games must approve the seller agreement, buyer licence model, platform fee, refund flow, moderation categories and creator-payout handling.
+Before this policy is published, ESB Games must approve the seller agreement, buyer licence model, platform fee, refund flow, moderation categories, ESBucks transaction-accounting rules and creator-payout handling.
 `,
   },
   {
@@ -121,7 +137,9 @@ Use original work, appropriately licensed material or content you otherwise have
 
 ## Content safety
 
-UGC must comply with the Community Standards. Creators should consider the intended audience, age rating, user interaction and whether an experience introduces foreseeable risks through chat, trading, purchases, external links or user-generated uploads.
+UGC must comply with the Community Standards. Creators should consider the intended audience, advisory age rating, user interaction and whether an experience introduces foreseeable risks through chat, trading, purchases, external links or user-generated uploads.
+
+An advisory age label does not authorise prohibited content and does not override a mandatory access restriction that ESB Games must apply under law or safety policy.
 
 ## Accurate metadata
 
@@ -137,7 +155,7 @@ Where automated or generative tools are used, the creator remains responsible fo
 
 ## Moderation
 
-Content may be limited, age-restricted, demonetised, removed or otherwise actioned where it breaches applicable rules. Repeated attempts to re-upload prohibited material or bypass moderation may lead to account or creator restrictions.
+Content may be limited, age-restricted where required, demonetised, removed or otherwise actioned where it breaches applicable rules. Repeated attempts to re-upload prohibited material or bypass moderation may lead to account or creator restrictions.
 `,
   },
   {
