@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import PageShell from "@/components/PageShell";
 import SupportClient from "@/components/SupportClient";
 import SupportFAQ from "@/components/SupportFAQ";
@@ -12,6 +13,8 @@ export const metadata: Metadata = {
   title: "Support",
   description: "Browse ESB Games help resources, start a private support conversation and visit the official service status website.",
   alternates: { canonical: "/support" },
+  openGraph: { title: "Support | ESB Games", description: "Browse help resources and start a private ESB Games support conversation.", url: "/support", type: "website" },
+  twitter: { card: "summary_large_image", title: "Support | ESB Games", description: "Browse help resources and start a private ESB Games support conversation." },
 };
 
 const quickHelpLinks = [
@@ -40,6 +43,11 @@ export default function SupportPage() {
 
       <section className="support-page-section support-page-main">
         <div className="support-page-container">
+          <div className="support-routing-note support-privacy-notice">
+            <ShieldIcon size={20} />
+            <div><strong>Before you submit: your ticket and evidence are private support records.</strong><p>ESB Games uses the information to authenticate, route, investigate and respond to the case. Access is permission-based and restricted to staff who need the information for the relevant function. Do not include passwords, one-time codes or full payment-card numbers. <Link href="/support/privacy">Read the Support Privacy Notice</Link>.</p></div>
+          </div>
+
           <SupportClient />
 
           <div className="support-routing-note">

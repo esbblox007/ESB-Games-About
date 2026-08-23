@@ -9,17 +9,20 @@ import { isPublishedPolicy } from "@/lib/content/policy-publication";
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return policyDocuments.map(({ slug }) => ({ policy: slug }));
+  return policyDocuments
+    .filter(({ slug }) => slug !== "support-privacy-notice")
+    .map(({ slug }) => ({ policy: slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ policy: string }> }): Promise<Metadata> {
   const { policy: slug } = await params;
+  if (slug === "support-privacy-notice") return { title: "Policy not found", robots: { index: false, follow: false } };
   const item = policyBySlug[slug];
   if (!item) return { title: "Policy not found", robots: { index: false, follow: false } };
   const published = isPublishedPolicy(slug);
   const description = published
     ? `${item.title} for the ESB Games ecosystem.`
-    : `${item.title} is being finalised ahead of the public launch of ESB Games.`;
+    : `Review draft of the ESB Games ${item.title}. This document is not yet in effect.`;
   return {
     title: item.title,
     description,
@@ -32,6 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<{ policy: s
 
 export default async function PolicyPage({ params }: { params: Promise<{ policy: string }> }) {
   const { policy: slug } = await params;
+  if (slug === "support-privacy-notice") notFound();
   const item = policyBySlug[slug];
   if (!item) notFound();
   const published = isPublishedPolicy(slug);
@@ -48,16 +52,13 @@ export default async function PolicyPage({ params }: { params: Promise<{ policy:
         </header>
         <section className="policy-content-section">
           <div className="policy-container policy-document-card">
-            {published ? (
-              <PolicyMarkdown markdown={item.markdown} />
-            ) : (
-              <div className="content-state policy-prelaunch-state" role="status">
-                <span className="page-eyebrow">Pre-launch document</span>
-                <h2>This document is being finalised.</h2>
-                <p>ESB Games is completing the final review of this document ahead of public launch. Draft wording, internal implementation notes and incomplete legal details are not published as effective policy.</p>
-                <p>Once the document has completed the required review and approval process, the approved version will be published here with its version and effective date.</p>
+            {!published && (
+              <div className="policy-review-banner" role="note" aria-label="Review draft status">
+                <strong>Review draft · not currently in effect</strong>
+                <p>This page is intentionally excluded from search indexing while ESB Games completes factual, operational and legal review. It is shown here so the full wording can be reviewed before publication.</p>
               </div>
             )}
+            <PolicyMarkdown markdown={item.markdown} />
             <div className="policy-end-actions"><Link href="/trust" className="button button-secondary">Back to Trust Centre</Link><Link href="/support" className="button button-primary">Contact Support</Link></div>
           </div>
         </section>
