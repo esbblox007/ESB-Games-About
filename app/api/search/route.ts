@@ -3,6 +3,7 @@ import { staticSearchDocuments } from "@/lib/search/static-index";
 import { rankSearchResults } from "@/lib/search/search";
 import { getPublishedArticles } from "@/lib/content/news";
 import { getDownloadProducts } from "@/lib/content/downloads";
+import { staticDocumentationArticles } from "@/lib/content/static-documentation";
 import { contentBackendConfigured, contentSelect } from "@/lib/content/supabase";
 import type { SearchDocument } from "@/lib/content/types";
 
@@ -22,6 +23,30 @@ function safeSearchRoute(value: unknown) {
 function stringList(value: unknown) {
   return Array.isArray(value) ? value.slice(0, 100).map((item) => String(item).slice(0, 500)).filter(Boolean) : [];
 }
+
+function blockText(block: (typeof staticDocumentationArticles)[number]["body"][number]) {
+  if ("text" in block) return typeof block.text === "string" ? block.text : block.text.map((span) => span.text).join(" ");
+  if ("items" in block) return block.items.join(" ");
+  if ("code" in block) return block.code;
+  if ("rows" in block) return `${block.headers.join(" ")} ${block.rows.flat().join(" ")}`;
+  if ("label" in block) return block.label;
+  return "";
+}
+
+const starterDocumentationSearchDocuments: SearchDocument[] = staticDocumentationArticles.map((article) => ({
+  id: `documentation:${article.slug}`,
+  type: "Creator",
+  title: article.title,
+  description: article.excerpt,
+  route: `/documentation/${article.slug}`,
+  category: `Documentation · ${article.category}`,
+  locale: article.locale,
+  keywords: [article.title, article.category, ...article.tags, "documentation", "docs"],
+  synonyms: article.slug.split("-").join(" ").split(" "),
+  questions: [],
+  content: `${article.subtitle || ""} ${article.excerpt} ${article.body.map(blockText).join(" ")}`,
+  priority: article.featured ? 96 : 90,
+}));
 
 export const dynamic = "force-dynamic";
 
@@ -91,10 +116,10 @@ export async function GET(request: NextRequest) {
       })),
     ];
 
-    const results = rankSearchResults([...staticSearchDocuments, ...dynamicDocuments], query);
+    const results = rankSearchResults([...staticSearchDocuments, ...starterDocumentationSearchDocuments, ...dynamicDocuments], query);
     return NextResponse.json({ query, results, state: results.length ? "ready" : "empty" });
   } catch {
-    const results = rankSearchResults(staticSearchDocuments, query);
+    const results = rankSearchResults([...staticSearchDocuments, ...starterDocumentationSearchDocuments], query);
     return NextResponse.json({ query, results, state: results.length ? "partial" : "unavailable" }, { status: 200 });
   }
 }

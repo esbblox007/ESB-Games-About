@@ -33,14 +33,13 @@ export const trustSections: TrustSection[] = [
   {
     id: "safety",
     title: "Safety",
-    description: "Rules, safeguards, reporting and review processes designed to protect the community.",
+    description: "Practical safety guidance plus the rules, reporting and review processes that support the community.",
     resources: [
+      resource("safety-centre", "Safety Centre", "The canonical home for prevention, detection, reporting, enforcement, appeals and family-safety guidance.", "/trust/safety"),
       resource("community-standards", "Community Standards", "The rules for behaviour and content across ESB Games.", "/community-standards"),
       resource("child-safety", "Child Safety", "Safeguards and expectations for children, families and creators.", "/child-safety"),
       resource("reporting-enforcement", "Reporting & Enforcement", "How reports are reviewed and platform rules are enforced.", "/reporting-enforcement-policy"),
       resource("appeals", "Appeals Policy", "How eligible platform decisions can be challenged.", "/appeals-policy"),
-      resource("safety-centre", "Safety Centre", "Safety guidance, prevention, reporting and support information.", "/safety-centre"),
-      resource("transparency", "Transparency", "Public transparency information will be published as ESB Games moves through launch.", "/trust/safety"),
     ],
   },
   {
@@ -48,6 +47,7 @@ export const trustSections: TrustSection[] = [
     title: "Parents & families",
     description: "Guidance for families, parental controls, wellbeing and age-appropriate experiences.",
     resources: [
+      resource("family-centre-page", "Family Centre", "Product information for linked accounts and parental controls.", "/parental-controls"),
       resource("parental-guide", "Parental Guide", "An overview of ESB Games for parents and guardians.", "/parental-guide"),
       resource("family-centre", "Family Centre Guide", "How the Family Centre and linked-account controls are designed to work.", "/family-centre-guide"),
       resource("screen-time", "Screen Time & Digital Wellbeing", "Guidance for healthy, balanced use of ESB Games.", "/screen-time-digital-wellbeing-guide"),
@@ -59,6 +59,8 @@ export const trustSections: TrustSection[] = [
     title: "Creators",
     description: "Rules and guidance for creators, Marketplace activity, user-generated content and brand use.",
     resources: [
+      resource("creator-hub", "Creator Hub", "Public product information for ESB Studio and creator tools.", "/developer-hub"),
+      resource("creator-documentation", "Creator Documentation", "Getting-started, Studio, scripting and publishing guidance.", "/documentation"),
       resource("creator-terms", "Creator Terms", "Terms applying to creator and developer activity.", "/creator-terms"),
       resource("marketplace", "Marketplace Policy", "Rules for Marketplace listings, assets and transactions.", "/marketplace-policy"),
       resource("ugc", "UGC Guidelines", "Guidance for user-generated content across the ecosystem.", "/ugc-guidelines"),
@@ -72,6 +74,7 @@ export const trustSections: TrustSection[] = [
     title: "Privacy & security",
     description: "Information about data rights, retention, security, disclosure and accessibility.",
     resources: [
+      resource("careers-privacy", "Careers Application Privacy", "How applicant information and private recruitment files are handled.", "/careers/privacy"),
       resource("data-requests", "Data Requests", "How to make eligible privacy and personal-data requests.", "/data-requests"),
       resource("retention", "Data Retention", "How retention principles are documented across ESB Games.", "/data-retention-policy"),
       resource("security", "Security Policy", "Security principles and expectations across the ecosystem.", "/security-policy"),
@@ -81,12 +84,12 @@ export const trustSections: TrustSection[] = [
   },
   {
     id: "support",
-    title: "Support",
-    description: "Help, contact and service-information routes for users and families.",
+    title: "Help & support",
+    description: "Self-service guidance, private case handling and live service information have separate sources of truth.",
     resources: [
-      resource("help-centre", "Help Centre", "Guides and answers for common ESB Games questions.", "/help"),
-      resource("contact-support", "Contact Support", "Create a support request or find the right support route.", "/support#contact-support"),
-      resource("service-status", "Service Status", "Preview and service-status information for ESB Games systems.", "https://status.esbgames.com", true),
+      resource("help-centre", "Help Centre", "Task-based guides and answers for common ESB Games questions.", "/help"),
+      resource("contact-support", "Private Support", "Create a private case when an issue needs authorised staff review.", "/support#contact-support"),
+      resource("service-status", "Service Status", "The dedicated source of truth for incidents, maintenance and availability.", "https://status.esbgames.com", true),
     ],
   },
 ];

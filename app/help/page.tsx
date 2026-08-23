@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageShell from "@/components/PageShell";
 import HelpCentreBrowser from "@/components/HelpCentreBrowser";
+import ServicePathways from "@/components/ServicePathways";
 import { SearchIcon } from "@/components/Icons";
 
 export const metadata: Metadata = {
   title: "Help Centre",
-  description: "Find ESB Games help for Accounts, safety, payments, Creator tools, families and technical issues.",
+  description: "Self-service ESB Games guidance for accounts, safety, payments, creator tools, families and technical issues. Private cases belong in Support.",
   alternates: { canonical: "/help" },
 };
 
@@ -18,17 +19,19 @@ export default function HelpCentrePage() {
           <div className="help-centre-container">
             <div className="help-centre-hero-copy">
               <span className="eyebrow">ESB Games Help Centre</span>
-              <h1>How can we <span className="gradient-text">help?</span></h1>
-              <p>Start with the area that best matches what you need. Search across Account help, safety, payments, Creator support, family controls, privacy and service information.</p>
+              <h1>Find the answer.<br/><span className="gradient-text">Then escalate only if needed.</span></h1>
+              <p>Help Centre is the self-service knowledge base for common tasks and questions. It does not hold private case conversations; if an issue needs account-specific investigation or evidence review, open Support instead.</p>
               <div className="help-quick-actions">
                 <Link className="button button-secondary" href="/support/help/reset-password">Reset password</Link>
-                <Link className="button button-secondary" href="/support/help/report-player-or-game">Report a problem</Link>
+                <Link className="button button-secondary" href="/support/help/report-player-or-game">Reporting guide</Link>
                 <a className="button button-secondary" href="https://status.esbgames.com" target="_blank" rel="noreferrer">Service status</a>
-                <Link className="button button-primary" href="/support#contact-support">Contact Support</Link>
+                <Link className="button button-primary" href="/support#contact-support">Open private Support</Link>
               </div>
             </div>
           </div>
         </section>
+
+        <div className="help-centre-container service-pathways-wrap"><ServicePathways current="help" title="Use the right ESB Games help surface" /></div>
 
         <section className="help-centre-section">
           <div className="help-centre-container">
@@ -44,7 +47,7 @@ export default function HelpCentrePage() {
         <section className="help-contact-band help-contact-band-compact">
           <div className="help-centre-container">
             <div className="help-contact-card">
-              <div><span className="eyebrow">Still need help?</span><h2>Contact the right team.</h2><p>Send a private support request and ESB Games will route it using the category and details you provide.</p></div>
+              <div><span className="eyebrow">Still need staff help?</span><h2>Open a private case.</h2><p>Support creates a private conversation and routes the case using the category and details you provide. Staff access is controlled by role and department.</p></div>
               <Link className="button button-primary" href="/support#contact-support"><SearchIcon size={17} /> Contact Support</Link>
             </div>
           </div>
