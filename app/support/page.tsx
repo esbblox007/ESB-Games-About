@@ -3,6 +3,7 @@ import PageShell from "@/components/PageShell";
 import SupportClient from "@/components/SupportClient";
 import SupportFAQ from "@/components/SupportFAQ";
 import SupportPageFreshness from "@/components/SupportPageFreshness";
+import ServicePathways from "@/components/ServicePathways";
 import { ArrowIcon, CheckIcon, SearchIcon, ShieldIcon } from "@/components/Icons";
 
 export const dynamic = "force-dynamic";
@@ -10,7 +11,7 @@ export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Support",
-  description: "Browse ESB Games help resources, start a private support conversation and visit the official service status website.",
+  description: "Open a private ESB Games support case when an account, payment, safety, creator or technical issue needs authorised staff review.",
   alternates: { canonical: "/support" },
 };
 
@@ -32,11 +33,13 @@ export default function SupportPage() {
       <section className="support-page-hero">
         <div className="support-page-container">
           <span className="eyebrow">ESB Games Support</span>
-          <h1>How can we <span className="gradient-text">help?</span></h1>
-          <p>Support for players, parents and creators. Browse help options, open a private ticket conversation or check the official service status website.</p>
-          <div className="support-page-trust"><span><SearchIcon size={15} /> Help organised by topic</span><span><ShieldIcon size={15} /> Safety concerns routed securely</span><span><CheckIcon size={15} /> Private ticket conversations</span></div>
+          <h1>Private help when an issue <span className="gradient-text">needs staff.</span></h1>
+          <p>Support is for account-specific or evidence-based cases that need an authorised ESB Games staff member. For common how-to questions, start in Help Centre; for rules and safety guidance, use Trust Centre.</p>
+          <div className="support-page-trust"><span><SearchIcon size={15} /> Category-based routing</span><span><ShieldIcon size={15} /> Department-restricted access</span><span><CheckIcon size={15} /> Private ticket conversations</span></div>
         </div>
       </section>
+
+      <div className="support-page-container service-pathways-wrap"><ServicePathways current="support" title="Support is the private case-handling route" /></div>
 
       <section className="support-page-section support-page-main">
         <div className="support-page-container">
@@ -50,6 +53,7 @@ export default function SupportPage() {
           <div className="support-info-grid" id="quick-help">
             <article className="support-quick-panel">
               <h2>Quick Help</h2>
+              <p className="support-panel-intro">These self-service routes may solve the issue without opening a private case.</p>
               <div className="support-quick-links" role="list">
                 {quickHelpLinks.map(([label, href]) => (
                   <a key={label} href={href} role="listitem" className="support-quick-link"><span>{label}</span><ArrowIcon size={16} /></a>
@@ -60,12 +64,12 @@ export default function SupportPage() {
             <div className="support-side-stack">
               <article className="support-status-panel">
                 <div><h2>Service Status</h2><span>Official live status is maintained separately</span></div>
-                <p>To avoid showing stale or duplicated service information here, current availability, maintenance and incident updates are published on the dedicated ESB Games Status site.</p>
+                <p>Current availability, maintenance and incident updates are published on the dedicated ESB Games Status site rather than duplicated inside Support.</p>
                 <a className="button button-secondary" href={statusUrl} target="_blank" rel="noopener noreferrer">View current service status <ArrowIcon size={15} /></a>
               </article>
               <article className="support-community-panel">
                 <span><CheckIcon size={19} /></span>
-                <div><h3>One source of truth</h3><p>The Status site is the official source for service availability, planned maintenance and active incident information.</p><a href={statusUrl} target="_blank" rel="noopener noreferrer">Open the status website <ArrowIcon size={15} /></a></div>
+                <div><h3>Need guidance instead?</h3><p>Use Help Centre for how-to articles and Trust Centre for policies, Safety Centre guidance, reporting principles and privacy information.</p><a href="/help">Open Help Centre <ArrowIcon size={15} /></a></div>
               </article>
             </div>
           </div>
