@@ -13,6 +13,19 @@ export const metadata: Metadata = {
   title: "Support",
   description: "Open a private ESB Games support case when an account, payment, safety, creator or technical issue needs authorised staff review.",
   alternates: { canonical: "/support" },
+  openGraph: {
+    title: "Support | ESB Games",
+    description: "Private, category-routed support for account, payment, safety, creator and technical cases.",
+    url: "/support",
+    type: "website",
+    images: [{ url: "/hero-discover-platform.png", alt: "ESB Games Support" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Support | ESB Games",
+    description: "Private, category-routed support for account, payment, safety, creator and technical cases.",
+    images: ["/hero-discover-platform.png"],
+  },
 };
 
 const quickHelpLinks = [
