@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageShell from "@/components/PageShell";
-import { ArrowIcon, CheckIcon, ShieldIcon, UsersIcon } from "@/components/Icons";
+import { ActivityIcon, ApprovalIcon, ArrowIcon, ChatIcon, CheckIcon, OverviewIcon, PrivacyIcon, ScreenTimeIcon, SettingsIcon, ShieldIcon, UsersIcon, WalletIcon } from "@/components/Icons";
 
 export const metadata: Metadata = {
   title: "Family Centre",
@@ -12,12 +12,31 @@ export const metadata: Metadata = {
 };
 
 const features = [
-  { icon: "◷", tone: "purple", title: "Screen Time Controls", text: "Planned controls include daily limits, bedtimes and break reminders designed to support healthy play habits." },
-  { icon: "▣", tone: "blue", title: "Spending Management", text: "Planned controls include monthly budgets, purchase approvals and clearer spending notifications." },
-  { icon: "◎", tone: "teal", title: "Communication Controls", text: "Communication permissions and privacy settings are being designed for linked family accounts." },
-  { icon: "◇", tone: "purple", title: "Content & Privacy", text: "Content and privacy controls are being developed to support age-appropriate experiences." },
-  { icon: "✓", tone: "orange", title: "Approvals & Requests", text: "Approval flows are planned for selected requests, spending and account actions." },
-  { icon: "⌁", tone: "blue", title: "Activity Reports", text: "Weekly reporting and activity visibility are being developed for supported family accounts." },
+  { icon: <ScreenTimeIcon />, tone: "purple", title: "Screen Time Controls", text: "Planned controls include daily limits, bedtimes and break reminders designed to support healthy play habits." },
+  { icon: <WalletIcon />, tone: "blue", title: "Spending Management", text: "Planned controls include monthly budgets, purchase approvals and clearer spending notifications." },
+  { icon: <ChatIcon />, tone: "teal", title: "Communication Controls", text: "Communication permissions and privacy settings are being designed for linked family accounts." },
+  { icon: <PrivacyIcon />, tone: "purple", title: "Content & Privacy", text: "Content and privacy controls are being developed to support age-appropriate experiences." },
+  { icon: <ApprovalIcon />, tone: "orange", title: "Approvals & Requests", text: "Approval flows are planned for selected requests, spending and account actions." },
+  { icon: <ActivityIcon />, tone: "blue", title: "Activity Reports", text: "Weekly reporting and activity visibility are being developed for supported family accounts." },
+] as const;
+
+const dashboardNav = [
+  ["Overview", <OverviewIcon size={12} />],
+  ["Screen Time", <ScreenTimeIcon size={12} />],
+  ["Spending", <WalletIcon size={12} />],
+  ["Communication", <ChatIcon size={12} />],
+  ["Content & Privacy", <PrivacyIcon size={12} />],
+  ["Approvals", <ApprovalIcon size={12} />],
+  ["Activity Log", <ActivityIcon size={12} />],
+  ["Family Members", <UsersIcon size={12} />],
+] as const;
+
+const phoneItems = [
+  ["Screen Time", <ScreenTimeIcon size={14} />],
+  ["Spending", <WalletIcon size={14} />],
+  ["Communication", <ChatIcon size={14} />],
+  ["Content & Privacy", <PrivacyIcon size={14} />],
+  ["Approvals", <ApprovalIcon size={14} />],
 ] as const;
 
 const linkingSteps = [
@@ -34,8 +53,8 @@ function FamilyDashboardMockup() {
         <div className="parental-laptop-screen">
           <aside>
             <strong>Family Centre</strong>
-            {["Overview", "Screen Time", "Spending", "Communication", "Content & Privacy", "Approvals", "Activity Log", "Family Members"].map((item, index) => (
-              <span className={index === 0 ? "active" : ""} key={item}>{index === 0 ? "▣" : "○"} {item}</span>
+            {dashboardNav.map(([item, icon], index) => (
+              <span className={index === 0 ? "active" : ""} key={item}>{icon} {item}</span>
             ))}
           </aside>
           <section>
@@ -47,7 +66,7 @@ function FamilyDashboardMockup() {
             </div>
             <div className="parental-dashboard-lower">
               <article className="parental-activity-card"><strong>Recent Activity</strong><p><i className="activity-thumb one" /> <span><b>Experience activity</b><small>Example visibility</small></span></p><p><i className="activity-thumb two" /> <span><b>Play-time activity</b><small>Example visibility</small></span></p><p><i className="activity-thumb three" /> <span><b>Safety information</b><small>Example visibility</small></span></p></article>
-              <article className="parental-quick-card"><strong>Quick Controls</strong><p><span>◷ <b>Screen Time</b><small>Daily limits planned</small></span><i className="toggle on" /></p><p><span>▣ <b>Spending Limit</b><small>Parent-managed limit</small></span><i className="toggle on" /></p><p><span>▢ <b>Chat &amp; Communication</b><small>Permission controls planned</small></span><em>›</em></p><p><span>◇ <b>Content Restrictions</b><small>Age-aware settings planned</small></span><em>›</em></p></article>
+              <article className="parental-quick-card"><strong>Quick Controls</strong><p><span><ScreenTimeIcon size={13} /> <b>Screen Time</b><small>Daily limits planned</small></span><i className="toggle on" /></p><p><span><WalletIcon size={13} /> <b>Spending Limit</b><small>Parent-managed limit</small></span><i className="toggle on" /></p><p><span><ChatIcon size={13} /> <b>Chat &amp; Communication</b><small>Permission controls planned</small></span><ArrowIcon size={12} /></p><p><span><PrivacyIcon size={13} /> <b>Content Restrictions</b><small>Age-aware settings planned</small></span><ArrowIcon size={12} /></p></article>
             </div>
           </section>
         </div>
@@ -56,8 +75,8 @@ function FamilyDashboardMockup() {
       <div className="parental-phone">
         <div className="parental-phone-notch" /><header><b>Family Centre</b></header>
         <div className="parental-phone-profile"><i>ES</i><span><b>Child profile</b><small>Family Centre concept</small></span></div>
-        {["Screen Time", "Spending", "Communication", "Content & Privacy", "Approvals"].map((item, index) => <div className="parental-phone-item" key={item}><span>{["◷", "▣", "▢", "◇", "✓"][index]}</span><b>{item}</b><em>›</em></div>)}
-        <nav><span className="active">▣<small>Overview</small></span><span>⌁<small>Activity</small></span><span>⚙<small>Settings</small></span></nav>
+        {phoneItems.map(([item, icon]) => <div className="parental-phone-item" key={item}><span>{icon}</span><b>{item}</b><ArrowIcon size={12} /></div>)}
+        <nav><span className="active"><OverviewIcon size={14} /><small>Overview</small></span><span><ActivityIcon size={14} /><small>Activity</small></span><span><SettingsIcon size={14} /><small>Settings</small></span></nav>
       </div>
     </div>
   );
@@ -74,7 +93,7 @@ export default function ParentalControlsPage() {
               <h1>A safer universe<br />for <span className="gradient-text">every</span> player.</h1>
               <p>Family Centre is being designed to help parents and guardians manage screen time, spending, communication and account safety as ESB Games develops.</p>
               <div className="parental-actions"><a href="https://family.esbgames.com" className="button button-primary"><ShieldIcon size={17} /> Visit Family Centre</a><a href="#linking-steps" className="button button-secondary">View planned linking <ArrowIcon size={16} /></a></div>
-              <div className="parental-trust-row"><span><ShieldIcon size={17} /> Privacy-focused design</span><span><CheckIcon size={17} /> Age-appropriate controls</span><span>◌ Parent-managed settings</span><span><UsersIcon size={17} /> Built for families</span></div>
+              <div className="parental-trust-row"><span><ShieldIcon size={17} /> Privacy-focused design</span><span><CheckIcon size={17} /> Age-appropriate controls</span><span><SettingsIcon size={17} /> Parent-managed settings</span><span><UsersIcon size={17} /> Built for families</span></div>
             </div>
             <div className="parental-product-wrap"><span className="product-status-label">Family Centre · In development</span><FamilyDashboardMockup /></div>
           </div>
