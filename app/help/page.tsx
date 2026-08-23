@@ -6,8 +6,21 @@ import { SearchIcon } from "@/components/Icons";
 
 export const metadata: Metadata = {
   title: "Help Centre",
-  description: "Find ESB Games help for Accounts, safety, payments, Creator tools, families and technical issues.",
+  description: "Find ESB Games help for accounts, safety, payments, Creator tools, families and technical issues.",
   alternates: { canonical: "/help" },
+  openGraph: {
+    title: "Help Centre | ESB Games",
+    description: "Find official ESB Games help for accounts, safety, payments, Creator tools, families and technical issues.",
+    url: "/help",
+    type: "website",
+    images: [{ url: "/hero-discover-platform.png", alt: "ESB Games Help Centre" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Help Centre | ESB Games",
+    description: "Find official ESB Games help for accounts, safety, payments, Creator tools, families and technical issues.",
+    images: ["/hero-discover-platform.png"],
+  },
 };
 
 export default function HelpCentrePage() {
@@ -19,7 +32,7 @@ export default function HelpCentrePage() {
             <div className="help-centre-hero-copy">
               <span className="eyebrow">ESB Games Help Centre</span>
               <h1>How can we <span className="gradient-text">help?</span></h1>
-              <p>Start with the area that best matches what you need. Search across Account help, safety, payments, Creator support, family controls, privacy and service information.</p>
+              <p>Start with the area that best matches what you need. Search across account help, safety, payments, Creator support, family controls, privacy and service information.</p>
               <div className="help-quick-actions">
                 <Link className="button button-secondary" href="/support/help/reset-password">Reset password</Link>
                 <Link className="button button-secondary" href="/support/help/report-player-or-game">Report a problem</Link>
