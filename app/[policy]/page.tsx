@@ -9,11 +9,14 @@ import { isPublishedPolicy } from "@/lib/content/policy-publication";
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return policyDocuments.map(({ slug }) => ({ policy: slug }));
+  return policyDocuments
+    .filter(({ slug }) => slug !== "support-privacy-notice")
+    .map(({ slug }) => ({ policy: slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ policy: string }> }): Promise<Metadata> {
   const { policy: slug } = await params;
+  if (slug === "support-privacy-notice") return { title: "Policy not found", robots: { index: false, follow: false } };
   const item = policyBySlug[slug];
   if (!item) return { title: "Policy not found", robots: { index: false, follow: false } };
   const published = isPublishedPolicy(slug);
@@ -32,6 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<{ policy: s
 
 export default async function PolicyPage({ params }: { params: Promise<{ policy: string }> }) {
   const { policy: slug } = await params;
+  if (slug === "support-privacy-notice") notFound();
   const item = policyBySlug[slug];
   if (!item) notFound();
   const published = isPublishedPolicy(slug);
