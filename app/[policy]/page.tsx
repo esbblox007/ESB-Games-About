@@ -12,6 +12,16 @@ export function generateStaticParams() {
   return policyDocuments.map(({ slug }) => ({ policy: slug }));
 }
 
+function reviewSafeMarkdown(markdown: string) {
+  return markdown
+    .replace(/\*\*Effective date:\*\*\s*22 August 2026/gi, "**Effective date:** Not yet effective — review draft")
+    .replace(/(^|\n)Effective date:\s*22 August 2026/gi, "$1Effective date: Not yet effective — review draft")
+    .replace(
+      "This summary helps explain the agreement. The full Terms below are legally controlling.",
+      "This summary helps explain the proposed agreement. This review draft is not currently binding. Once formally approved and published, the full Terms will control over the summary.",
+    );
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ policy: string }> }): Promise<Metadata> {
   const { policy: slug } = await params;
   const item = policyBySlug[slug];
@@ -35,6 +45,7 @@ export default async function PolicyPage({ params }: { params: Promise<{ policy:
   const item = policyBySlug[slug];
   if (!item) notFound();
   const published = isPublishedPolicy(slug);
+  const displayedMarkdown = published ? item.markdown : reviewSafeMarkdown(item.markdown);
 
   return (
     <PageShell>
@@ -62,7 +73,7 @@ export default async function PolicyPage({ params }: { params: Promise<{ policy:
             )}
 
             <div className={!published ? "policy-review-document" : undefined}>
-              <PolicyMarkdown markdown={item.markdown} />
+              <PolicyMarkdown markdown={displayedMarkdown} />
             </div>
 
             {!published && (
