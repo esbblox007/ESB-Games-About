@@ -4,7 +4,14 @@ import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 
 type Account = { id: string; username: string; displayName: string; email: string | null };
-type AppealResult = { ticketReference: string; privatePath: string; requiresEmailVerification: boolean; reviewStatus: string };
+type AppealResult = {
+  ticketReference: string;
+  privatePath: string;
+  requiresEmailVerification: boolean;
+  reviewStatus: string;
+  structuredRecordPending?: boolean;
+  attachmentUploadFailed?: boolean;
+};
 
 const actionTypes = [
   "Warning",
@@ -69,6 +76,8 @@ export default function EnforcementAppealClient() {
         <h2>{result.ticketReference}</h2>
         <p>Your appeal has been securely recorded and routed to the Trust & Safety review queue. Its current review status is <strong>{result.reviewStatus}</strong>.</p>
         {result.requiresEmailVerification && <p className="form-alert info">Because you submitted while signed out, verify your email when you open the private ticket before continuing the conversation.</p>}
+        {result.structuredRecordPending && <p className="form-alert info">Your appeal is safely in the Trust & Safety ticket queue. Its structured Appeals index is still catching up, but you do not need to submit it again.</p>}
+        {result.attachmentUploadFailed && <p className="form-alert info">Your appeal was submitted, but one or more evidence files did not finish uploading. Open the private appeal ticket to add the files without creating another appeal.</p>}
         <div className="support-created-actions">
           <Link className="button button-primary" href={result.privatePath}>Open private appeal ticket</Link>
           <Link className="button button-secondary" href="/support">Return to Support</Link>
