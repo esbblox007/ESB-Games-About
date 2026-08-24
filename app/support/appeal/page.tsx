@@ -7,6 +7,7 @@ import { ArrowIcon, ShieldIcon } from "@/components/Icons";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+// Production appeal route: kept dynamic so account/session state is never cached.
 export const metadata: Metadata = {
   title: "Appeal an Enforcement Action",
   description: "Request an ESB Games review of a warning, restriction, suspension, ban, content removal or other enforcement action.",
