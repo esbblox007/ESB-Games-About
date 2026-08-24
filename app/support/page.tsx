@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageShell from "@/components/PageShell";
+import SupportAccountBridge from "@/components/SupportAccountBridge";
 import SupportClient from "@/components/SupportClient";
 import SupportFAQ from "@/components/SupportFAQ";
 import SupportPageFreshness from "@/components/SupportPageFreshness";
@@ -32,7 +33,7 @@ const quickHelpLinks = [
   ["Reset your password", "/support/help/reset-password"],
   ["Cancel or change a subscription", "/support/help/manage-subscription"],
   ["Request a refund", "/support/help/request-refund"],
-  ["Appeal an account action", "/support/help/appeal-account-action"],
+  ["Appeal a warning, restriction or ban", "/support/appeal"],
   ["Report a player or game", "/support/help/report-player-or-game"],
   ["Creator payout planning guide", "/support/help/creator-payout-guide"],
 ] as const;
@@ -43,6 +44,7 @@ export default function SupportPage() {
   return (
     <PageShell>
       <SupportPageFreshness />
+      <SupportAccountBridge />
       <section className="support-page-hero">
         <div className="support-page-container">
           <Link href="/help" className="help-back-link"><ArrowIcon size={15} /> Back to Help</Link>
@@ -55,6 +57,16 @@ export default function SupportPage() {
 
       <section className="support-page-section support-page-main">
         <div className="support-page-container">
+          <article className="support-appeal-banner">
+            <span className="support-appeal-icon"><ShieldIcon size={22} /></span>
+            <div>
+              <span className="eyebrow">Enforcement review</span>
+              <h2>Appeal a warning, restriction or ban</h2>
+              <p>Request a review of warnings, temporary or permanent bans, account restrictions, communication restrictions, content removals and other disciplinary actions.</p>
+            </div>
+            <Link className="button button-primary" href="/support/appeal">Start an appeal <ArrowIcon size={15} /></Link>
+          </article>
+
           <SupportClient />
 
           <div className="support-info-grid" id="quick-help">
