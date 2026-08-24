@@ -5,7 +5,13 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 export async function GET(request: NextRequest) {
-  const account = await verifySupabaseAccessToken(request.headers.get("authorization"));
+  const sharedAccessToken = request.cookies.get("esb_access")?.value
+    ?? request.cookies.get("__Host-esb_access")?.value
+    ?? null;
+  const authorization = request.headers.get("authorization")
+    ?? (sharedAccessToken ? `Bearer ${sharedAccessToken}` : null);
+  const account = await verifySupabaseAccessToken(authorization);
+
   if (!account) {
     return NextResponse.json(
       { authenticated: false },
