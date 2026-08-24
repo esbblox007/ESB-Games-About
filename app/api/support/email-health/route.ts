@@ -12,6 +12,7 @@ export async function GET() {
       configured: result.configured,
       senderDomain: result.senderDomain,
       domainVerified: result.domainVerified,
+      detail: result.detail,
     });
   }
   return NextResponse.json({
