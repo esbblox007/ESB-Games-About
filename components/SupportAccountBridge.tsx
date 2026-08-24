@@ -32,23 +32,29 @@ export default function SupportAccountBridge() {
       if (!nameInput || !emailInput) return;
 
       nameInput.value = account.displayName || account.username;
-      emailInput.value = account.email ?? "linked-account@esbgames.invalid";
       nameInput.dispatchEvent(new Event("input", { bubbles: true }));
-      emailInput.dispatchEvent(new Event("input", { bubbles: true }));
-
       nameInput.required = false;
-      emailInput.required = false;
       const nameField = nameInput.closest<HTMLElement>(".field");
-      const emailField = emailInput.closest<HTMLElement>(".field");
       if (nameField) nameField.hidden = true;
-      if (emailField) emailField.hidden = true;
+
+      const emailField = emailInput.closest<HTMLElement>(".field");
+      if (account.email) {
+        emailInput.value = account.email;
+        emailInput.dispatchEvent(new Event("input", { bubbles: true }));
+        emailInput.required = false;
+        if (emailField) emailField.hidden = true;
+      } else {
+        emailInput.value = "";
+        emailInput.required = true;
+        if (emailField) emailField.hidden = false;
+      }
 
       const group = nameInput.closest<HTMLElement>(".support-field-group");
       if (group && !group.querySelector("[data-esb-account-bridge]")) {
         const card = document.createElement("div");
         card.dataset.esbAccountBridge = "true";
         card.className = "support-account-identity";
-        card.innerHTML = `<div><strong>Signed in as ${escapeHtml(account.username)}</strong><span>${escapeHtml(account.email ?? "Email linked to your ESB Games account")}</span></div><a href="https://esbgames.com/settings">Manage account</a>`;
+        card.innerHTML = `<div><strong>Signed in as ${escapeHtml(account.username)}</strong><span>${escapeHtml(account.email ?? "Add a contact email below to continue")}</span></div><a href="https://esbgames.com/settings">Manage account</a>`;
         group.appendChild(card);
       }
     };
