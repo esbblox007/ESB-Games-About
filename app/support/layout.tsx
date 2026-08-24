@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "./support-fixes.css";
 
 export const metadata: Metadata = {
   openGraph: {
