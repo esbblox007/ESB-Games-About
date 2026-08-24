@@ -38,10 +38,11 @@ export default function EnforcementAppealClient() {
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const formElement = event.currentTarget;
     setSubmitting(true);
     setError(null);
     try {
-      const form = new FormData(event.currentTarget);
+      const form = new FormData(formElement);
       const response = await fetch("/api/support/appeals", {
         method: "POST",
         credentials: "include",
@@ -52,7 +53,7 @@ export default function EnforcementAppealClient() {
         throw new Error(`${body.error ?? "Your appeal could not be submitted."}${body.incidentReference ? ` Reference: ${body.incidentReference}.` : ""}`);
       }
       setResult(body);
-      event.currentTarget.reset();
+      formElement.reset();
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Your appeal could not be submitted.");
     } finally {
@@ -85,10 +86,13 @@ export default function EnforcementAppealClient() {
         {!sessionChecked ? (
           <div className="form-alert info">Checking your ESB Games session…</div>
         ) : account ? (
-          <div className="support-account-identity">
-            <div><strong>Signed in as {account.username}</strong><span>{account.email ?? "Email linked to this ESB Games account"}</span></div>
-            <a href="https://esbgames.com/settings">Manage account</a>
-          </div>
+          <>
+            <div className="support-account-identity">
+              <div><strong>Signed in as {account.username}</strong><span>{account.email ?? "No contact email is currently available for this account"}</span></div>
+              <a href="https://esbgames.com/settings">Manage account</a>
+            </div>
+            {!account.email && <div className="field"><label htmlFor="appeal-email">Contact email</label><input id="appeal-email" className="input" name="email" type="email" required autoComplete="email" /><small>This is only required because the signed-in account does not currently expose a contact email.</small></div>}
+          </>
         ) : (
           <>
             <div className="form-alert info">Sign in to link this appeal directly to your ESB Games account, or continue using a verified email address.</div>
