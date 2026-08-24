@@ -6,12 +6,17 @@ import { getLiveJobs } from "@/lib/content/careers-live";
 import { staticDocumentationArticles, staticDocumentationSlugs } from "@/lib/content/static-documentation";
 import { helpCategories } from "@/lib/content/help-centre";
 
-const STATIC_CONTENT_LAST_REVIEWED = new Date("2026-08-24T08:45:00Z");
+const STATIC_CONTENT_LAST_REVIEWED = new Date("2026-08-24T21:45:00Z");
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://about.esbgames.com";
-  const paths = ["", "/about", "/developer-hub", "/parental-controls", "/news", "/documentation", "/download", "/careers", "/careers/privacy", "/support", "/help", "/help/centre", "/help/trust-safety", "/subscriptions"];
-  const staticEntries: MetadataRoute.Sitemap = paths.map((path) => ({ url: `${base}${path}`, lastModified: STATIC_CONTENT_LAST_REVIEWED, changeFrequency: path === "" || path === "/news" || path === "/careers" ? "weekly" : "monthly", priority: path === "" ? 1 : path === "/news" || path === "/download" ? 0.9 : 0.8 }));
+  const paths = ["", "/about", "/developer-hub", "/game-creation-platform", "/parental-controls", "/news", "/documentation", "/download", "/careers", "/careers/privacy", "/support", "/help", "/help/centre", "/help/trust-safety", "/subscriptions"];
+  const staticEntries: MetadataRoute.Sitemap = paths.map((path) => ({
+    url: `${base}${path}`,
+    lastModified: STATIC_CONTENT_LAST_REVIEWED,
+    changeFrequency: path === "" || path === "/news" || path === "/careers" ? "weekly" : "monthly",
+    priority: path === "" ? 1 : path === "/news" || path === "/download" || path === "/developer-hub" || path === "/game-creation-platform" ? 0.9 : 0.8,
+  }));
   const helpEntries: MetadataRoute.Sitemap = helpCategories.map((category) => ({ url: `${base}/help/centre/${category.id}`, lastModified: STATIC_CONTENT_LAST_REVIEWED, changeFrequency: "monthly", priority: 0.68 }));
   const [news, documentation, careers] = await Promise.all([getPublishedArticleIndex(), getPublishedDocumentationIndex(), getLiveJobs()]);
   const articleEntries: MetadataRoute.Sitemap = news.map((article) => ({ url: `${base}/news/${article.slug}`, lastModified: new Date(article.updatedAt || article.publishedAt), changeFrequency: "monthly", priority: article.featured ? 0.85 : 0.75 }));
