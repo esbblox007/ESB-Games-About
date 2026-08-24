@@ -1,0 +1,33 @@
+/* Final Support layout balance: compact Quick Help without stretching Status cards. */
+@media (min-width:901px){
+  .support-info-grid{
+    align-items:start;
+  }
+  .support-side-stack{
+    height:auto;
+    grid-template-rows:auto auto;
+  }
+  .support-quick-links{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+  }
+  .support-quick-link{
+    min-height:76px;
+    padding:0 18px !important;
+    display:flex !important;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    border:1px solid rgba(132,145,187,.14);
+    border-radius:12px;
+    background:rgba(5,9,21,.48);
+  }
+  .support-quick-link:hover{
+    border-color:rgba(162,121,247,.28);
+    background:rgba(12,17,34,.78);
+  }
+  .support-status-panel{
+    justify-content:flex-start;
+  }
+}
