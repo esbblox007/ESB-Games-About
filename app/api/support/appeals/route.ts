@@ -29,7 +29,13 @@ export async function POST(request: NextRequest) {
     const form = await request.formData();
     if (String(form.get("website") ?? "")) return NextResponse.json({ ok: true }, { status: 202 });
 
-    const account = await verifySupabaseAccessToken(request.headers.get("authorization"));
+    const sharedAccessToken = request.cookies.get("esb_access")?.value
+      ?? request.cookies.get("__Host-esb_access")?.value
+      ?? null;
+    const authorization = request.headers.get("authorization")
+      ?? (sharedAccessToken ? `Bearer ${sharedAccessToken}` : null);
+    const account = await verifySupabaseAccessToken(authorization);
+
     const name = String(form.get("name") ?? "").trim();
     const email = String(form.get("email") ?? "").trim();
     const actionType = String(form.get("actionType") ?? "").trim();
@@ -92,32 +98,55 @@ export async function POST(request: NextRequest) {
       description,
     });
 
-    await supabaseInsert("enforcement_appeals", {
-      ticket_id: ticket.ticketId,
-      requester_account_id: ticket.requesterAccountId,
-      enforcement_reference: enforcementReference || null,
-      action_type: actionType,
-      action_scope: actionScope || null,
-      action_issued_at: normaliseDate(actionIssuedAt),
-      action_expires_at: normaliseDate(actionExpiresAt),
-      appeal_reason: appealReason,
-      requested_outcome: requestedOutcome,
-      review_status: "Submitted",
-    });
+    let structuredRecordPending = false;
+    let attachmentUploadFailed = false;
+
+    try {
+      await supabaseInsert("enforcement_appeals", {
+        ticket_id: ticket.ticketId,
+        requester_account_id: ticket.requesterAccountId,
+        enforcement_reference: enforcementReference || null,
+        action_type: actionType,
+        action_scope: actionScope || null,
+        action_issued_at: normaliseDate(actionIssuedAt),
+        action_expires_at: normaliseDate(actionExpiresAt),
+        appeal_reason: appealReason,
+        requested_outcome: requestedOutcome,
+        review_status: "Submitted",
+      });
+    } catch (error) {
+      structuredRecordPending = true;
+      console.error("[support-appeal] Ticket created but structured appeal indexing failed", {
+        incidentReference,
+        ticketId: ticket.ticketId,
+        ticketReference: ticket.ticketReference,
+        error,
+      });
+    }
 
     if (files.length) {
-      const messages = await supabaseSelect<{ id: string }>(
-        "support_ticket_messages",
-        `select=id&ticket_id=eq.${encodeURIComponent(ticket.ticketId)}&order=created_at.asc&limit=1`,
-      );
-      await uploadSupportAttachments({
-        ticketId: ticket.ticketId,
-        messageId: messages[0]?.id ?? null,
-        files,
-        uploaderType: ticket.requiresEmailVerification ? "Guest" : "Account",
-        uploaderAccountId: ticket.requesterAccountId,
-        safetySensitive: false,
-      });
+      try {
+        const messages = await supabaseSelect<{ id: string }>(
+          "support_ticket_messages",
+          `select=id&ticket_id=eq.${encodeURIComponent(ticket.ticketId)}&order=created_at.asc&limit=1`,
+        );
+        await uploadSupportAttachments({
+          ticketId: ticket.ticketId,
+          messageId: messages[0]?.id ?? null,
+          files,
+          uploaderType: ticket.requiresEmailVerification ? "Guest" : "Account",
+          uploaderAccountId: ticket.requesterAccountId,
+          safetySensitive: false,
+        });
+      } catch (error) {
+        attachmentUploadFailed = true;
+        console.error("[support-appeal] Appeal submitted but evidence upload failed", {
+          incidentReference,
+          ticketId: ticket.ticketId,
+          ticketReference: ticket.ticketReference,
+          error,
+        });
+      }
     }
 
     return NextResponse.json({
@@ -126,6 +155,8 @@ export async function POST(request: NextRequest) {
       privatePath: `/support/ticket/${ticket.accessToken}`,
       requiresEmailVerification: ticket.requiresEmailVerification,
       reviewStatus: "Submitted",
+      structuredRecordPending,
+      attachmentUploadFailed,
     }, { status: 201, headers: { "Cache-Control": "private, no-store" } });
   } catch (error) {
     if (error instanceof SupportRateLimitError) {
@@ -134,7 +165,7 @@ export async function POST(request: NextRequest) {
         { status: 429, headers: { "Retry-After": String(error.retryAfterSeconds), "Cache-Control": "private, no-store" } },
       );
     }
-    console.error("[support-appeal] Appeal creation failed", { incidentReference, error });
+    console.error("[support-appeal] Appeal creation failed before ticket completion", { incidentReference, error });
     return NextResponse.json({
       error: "Your appeal could not be submitted right now. Please try again shortly.",
       incidentReference,
