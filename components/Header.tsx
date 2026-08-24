@@ -13,7 +13,6 @@ const nav = [
   ["About", "/about"],
   ["Creator Hub", "/developer-hub"],
   ["Families", "/parental-controls"],
-  ["Trust", "/trust"],
   ["News", "/news"],
   ["Careers", "/careers"],
   ["Support", "/support"],

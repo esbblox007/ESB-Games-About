@@ -38,8 +38,10 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/tos", destination: "/terms-of-service", permanent: true },
-      { source: "/trust-safety", destination: "/trust/safety", permanent: true },
-      { source: "/safety-centre", destination: "/trust/safety", permanent: true },
+      { source: "/trust", destination: "/help/trust-safety", permanent: true },
+      { source: "/trust/safety", destination: "/help/trust-safety", permanent: true },
+      { source: "/trust-safety", destination: "/help/trust-safety", permanent: true },
+      { source: "/safety-centre", destination: "/help/trust-safety", permanent: true },
       { source: "/legal/terms", destination: "/terms-of-service", permanent: true },
       { source: "/legal/privacy", destination: "/privacy-policy", permanent: true },
       { source: "/legal/cookies", destination: "/cookie-policy", permanent: true },
@@ -51,7 +53,7 @@ const nextConfig: NextConfig = {
       { source: "/legal/child-safety", destination: "/child-safety", permanent: true },
       { source: "/legal/reporting-enforcement", destination: "/reporting-enforcement-policy", permanent: true },
       { source: "/legal/appeals", destination: "/appeals-policy", permanent: true },
-      { source: "/legal/safety-centre", destination: "/trust/safety", permanent: true },
+      { source: "/legal/safety-centre", destination: "/help/trust-safety", permanent: true },
       { source: "/legal/parental-guide", destination: "/parental-guide", permanent: true },
       { source: "/legal/family-centre", destination: "/family-centre-guide", permanent: true },
       { source: "/legal/digital-wellbeing", destination: "/screen-time-digital-wellbeing-guide", permanent: true },

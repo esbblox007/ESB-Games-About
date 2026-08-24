@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { SearchIcon, ArrowIcon } from "./Icons";
 import { helpSections } from "@/lib/content/help-centre";
@@ -14,17 +15,10 @@ export default function HelpCentreBrowser() {
     return helpSections
       .map((section) => {
         const sectionMatch = `${section.eyebrow} ${section.title} ${section.description}`.toLowerCase().includes(normalized);
-        const categories = section.categories
-          .map((category) => {
-            const categoryMatch = `${category.title} ${category.description} ${category.badge || ""}`.toLowerCase().includes(normalized);
-            const articles = category.articles.filter((article) => article.title.toLowerCase().includes(normalized));
-            return {
-              ...category,
-              articles: sectionMatch || categoryMatch ? category.articles : articles,
-            };
-          })
-          .filter((category) => category.articles.length > 0);
-
+        const categories = section.categories.filter((category) => {
+          const haystack = `${category.title} ${category.description} ${category.badge || ""} ${category.articles.map((article) => article.title).join(" ")}`.toLowerCase();
+          return sectionMatch || haystack.includes(normalized);
+        });
         return { ...section, categories };
       })
       .filter((section) => section.categories.length > 0);
@@ -55,26 +49,16 @@ export default function HelpCentreBrowser() {
               <p>{section.description}</p>
             </header>
 
-            <div className="help-category-grid">
+            <div className="help-category-grid help-category-route-grid">
               {section.categories.map((category) => (
-                <article className="help-category-card" key={category.id}>
-                  <header>
-                    <div>
-                      <h3>{category.title}</h3>
-                      <p>{category.description}</p>
-                      {category.badge && <span className="help-route-badge">{category.badge}</span>}
-                    </div>
-                  </header>
-                  <ul>
-                    {category.articles.map((article) => (
-                      <li key={`${category.id}-${article.title}`}>
-                        <a href={article.href} target={article.external ? "_blank" : undefined} rel={article.external ? "noreferrer" : undefined}>
-                          <span>{article.title}</span><ArrowIcon size={14} />
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </article>
+                <Link className="help-category-route-card" key={category.id} href={`/help/centre/${category.id}`}>
+                  <span>
+                    <strong>{category.title}</strong>
+                    <small>{category.description}</small>
+                    {category.badge && <em>{category.badge}</em>}
+                  </span>
+                  <ArrowIcon size={16} />
+                </Link>
               ))}
             </div>
           </section>
@@ -82,7 +66,7 @@ export default function HelpCentreBrowser() {
       </div>
 
       {filtered.length === 0 && (
-        <div className="help-empty-state">No matching help route was found. Contact Support and we’ll route your request to the right team.</div>
+        <div className="help-empty-state">No matching Help Centre topic was found. You can go back to Help and open Support if the issue needs staff.</div>
       )}
     </>
   );
