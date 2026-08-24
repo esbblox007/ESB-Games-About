@@ -17,7 +17,7 @@ export type ResendConfigurationState = {
   senderAddress: string;
   senderDomain: string | null;
   domainVerified: boolean | null;
-  state: "not_configured" | "invalid_sender" | "verified" | "unverified" | "provider_unavailable";
+  state: "not_configured" | "invalid_sender" | "verified" | "send_only" | "unverified" | "provider_unavailable";
   detail?: string;
 };
 
@@ -74,6 +74,11 @@ async function parseProviderError(response: Response): Promise<ResendErrorBody> 
   }
 }
 
+function isSendOnlyRestriction(message?: string) {
+  const normalized = message?.toLowerCase() ?? "";
+  return normalized.includes("restricted") && normalized.includes("send emails");
+}
+
 export async function inspectResendConfiguration(): Promise<ResendConfigurationState> {
   const key = process.env.RESEND_API_KEY?.trim();
   const sender = supportSender();
@@ -90,6 +95,17 @@ export async function inspectResendConfiguration(): Promise<ResendConfigurationS
     });
     if (!response.ok) {
       const providerError = await parseProviderError(response);
+      if (isSendOnlyRestriction(providerError.message)) {
+        return {
+          configured: true,
+          sender,
+          senderAddress,
+          senderDomain,
+          domainVerified: null,
+          state: "send_only",
+          detail: "The configured Resend API key is intentionally restricted to sending email, so domain status cannot be inspected with this credential.",
+        };
+      }
       return {
         configured: true,
         sender,
