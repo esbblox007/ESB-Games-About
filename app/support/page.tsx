@@ -57,6 +57,8 @@ export default function SupportPage() {
 
       <section className="support-page-section support-page-main">
         <div className="support-page-container">
+          <SupportClient />
+
           <article className="support-appeal-banner">
             <span className="support-appeal-icon"><ShieldIcon size={22} /></span>
             <div>
@@ -66,8 +68,6 @@ export default function SupportPage() {
             </div>
             <Link className="button button-primary" href="/support/appeal">Start an appeal <ArrowIcon size={15} /></Link>
           </article>
-
-          <SupportClient />
 
           <div className="support-info-grid" id="quick-help">
             <article className="support-quick-panel">
