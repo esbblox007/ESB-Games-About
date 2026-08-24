@@ -1,6 +1,12 @@
 import { randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
-import { createSupportTicket, uploadSupportAttachments } from "@/lib/server/support";
+import {
+  createSupportTicket,
+  SupportRateLimitError,
+  supportNetworkKey,
+  takeSupportRateLimit,
+  uploadSupportAttachments,
+} from "@/lib/server/support";
 import { supabaseInsert, supabaseSelect, verifySupabaseAccessToken } from "@/lib/server/supabase";
 
 export const dynamic = "force-dynamic";
@@ -42,6 +48,21 @@ export async function POST(request: NextRequest) {
     if (appealReason.length < 20 || appealReason.length > 10000) return NextResponse.json({ error: "Explain why the action should be reviewed (20–10,000 characters)." }, { status: 400 });
     if (requestedOutcome.length < 5 || requestedOutcome.length > 3000) return NextResponse.json({ error: "Tell us what outcome you are requesting." }, { status: 400 });
     if (files.some((file) => file.size > 100 * 1024 * 1024)) return NextResponse.json({ error: "Each attachment must be 100 MB or smaller." }, { status: 400 });
+
+    await takeSupportRateLimit({
+      scope: "support-appeal-create-network",
+      key: supportNetworkKey(request),
+      windowSeconds: 3600,
+      maxRequests: 6,
+      blockSeconds: 1800,
+    });
+    await takeSupportRateLimit({
+      scope: "support-appeal-create-identity",
+      key: account?.id ?? email.toLowerCase(),
+      windowSeconds: 3600,
+      maxRequests: 3,
+      blockSeconds: 1800,
+    });
 
     const subject = `Appeal: ${actionType}${enforcementReference ? ` — ${enforcementReference}` : ""}`.slice(0, 160);
     const description = [
@@ -107,6 +128,12 @@ export async function POST(request: NextRequest) {
       reviewStatus: "Submitted",
     }, { status: 201, headers: { "Cache-Control": "private, no-store" } });
   } catch (error) {
+    if (error instanceof SupportRateLimitError) {
+      return NextResponse.json(
+        { error: error.message, retryAfterSeconds: error.retryAfterSeconds },
+        { status: 429, headers: { "Retry-After": String(error.retryAfterSeconds), "Cache-Control": "private, no-store" } },
+      );
+    }
     console.error("[support-appeal] Appeal creation failed", { incidentReference, error });
     return NextResponse.json({
       error: "Your appeal could not be submitted right now. Please try again shortly.",
