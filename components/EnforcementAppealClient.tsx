@@ -1,0 +1,129 @@
+"use client";
+
+import Link from "next/link";
+import { FormEvent, useEffect, useState } from "react";
+
+type Account = { id: string; username: string; displayName: string; email: string | null };
+type AppealResult = { ticketReference: string; privatePath: string; requiresEmailVerification: boolean; reviewStatus: string };
+
+const actionTypes = [
+  "Warning",
+  "Temporary ban",
+  "Permanent ban",
+  "Account restriction",
+  "Communication restriction",
+  "Content or asset removal",
+  "Creator or marketplace enforcement",
+  "Other disciplinary action",
+] as const;
+
+export default function EnforcementAppealClient() {
+  const [account, setAccount] = useState<Account | null>(null);
+  const [sessionChecked, setSessionChecked] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [result, setResult] = useState<AppealResult | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/support/account-session", { credentials: "include", cache: "no-store" })
+      .then((response) => response.json())
+      .then((body: { authenticated?: boolean; account?: Account }) => {
+        if (active && body.authenticated && body.account) setAccount(body.account);
+      })
+      .catch(() => {})
+      .finally(() => { if (active) setSessionChecked(true); });
+    return () => { active = false; };
+  }, []);
+
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmitting(true);
+    setError(null);
+    try {
+      const form = new FormData(event.currentTarget);
+      const response = await fetch("/api/support/appeals", {
+        method: "POST",
+        credentials: "include",
+        body: form,
+      });
+      const body = await response.json() as AppealResult & { error?: string; incidentReference?: string };
+      if (!response.ok) {
+        throw new Error(`${body.error ?? "Your appeal could not be submitted."}${body.incidentReference ? ` Reference: ${body.incidentReference}.` : ""}`);
+      }
+      setResult(body);
+      event.currentTarget.reset();
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Your appeal could not be submitted.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  if (result) {
+    return (
+      <div className="support-ticket-created support-created-enterprise" role="status">
+        <span className="support-success-mark">✓</span>
+        <span className="support-created-label">Appeal submitted</span>
+        <h2>{result.ticketReference}</h2>
+        <p>Your appeal has been securely recorded and routed to the Trust & Safety review queue. Its current review status is <strong>{result.reviewStatus}</strong>.</p>
+        {result.requiresEmailVerification && <p className="form-alert info">Because you submitted while signed out, verify your email when you open the private ticket before continuing the conversation.</p>}
+        <div className="support-created-actions">
+          <Link className="button button-primary" href={result.privatePath}>Open private appeal ticket</Link>
+          <Link className="button button-secondary" href="/support">Return to Support</Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <form className="support-appeal-form" onSubmit={submit}>
+      <input name="website" tabIndex={-1} autoComplete="off" className="support-honeypot" aria-hidden="true" />
+
+      <section className="support-field-group">
+        <div className="support-group-heading"><strong>Identity</strong><span>Appeals are linked to the account where possible.</span></div>
+        {!sessionChecked ? (
+          <div className="form-alert info">Checking your ESB Games session…</div>
+        ) : account ? (
+          <div className="support-account-identity">
+            <div><strong>Signed in as {account.username}</strong><span>{account.email ?? "Email linked to this ESB Games account"}</span></div>
+            <a href="https://esbgames.com/settings">Manage account</a>
+          </div>
+        ) : (
+          <>
+            <div className="form-alert info">Sign in to link this appeal directly to your ESB Games account, or continue using a verified email address.</div>
+            <div className="support-appeal-grid">
+              <div className="field"><label htmlFor="appeal-name">Full name</label><input id="appeal-name" className="input" name="name" required maxLength={120} autoComplete="name" /></div>
+              <div className="field"><label htmlFor="appeal-email">Email address</label><input id="appeal-email" className="input" name="email" type="email" required autoComplete="email" /></div>
+            </div>
+            <a className="button button-secondary" href={`https://esbgames.com/login?returnTo=${encodeURIComponent("https://about.esbgames.com/support/appeal")}`}>Sign in to ESB Games</a>
+          </>
+        )}
+      </section>
+
+      <section className="support-field-group">
+        <div className="support-group-heading"><strong>Enforcement action</strong><span>Tell us exactly what decision you want reviewed.</span></div>
+        <div className="support-appeal-grid">
+          <div className="field"><label htmlFor="appeal-action">Action being appealed</label><select id="appeal-action" className="input" name="actionType" required defaultValue=""><option value="" disabled>Select an action</option>{actionTypes.map((item) => <option key={item} value={item}>{item}</option>)}</select></div>
+          <div className="field"><label htmlFor="appeal-reference">Enforcement/action reference <span>Optional</span></label><input id="appeal-reference" className="input" name="enforcementReference" maxLength={200} placeholder="For example: moderation reference or case ID" /></div>
+          <div className="field full"><label htmlFor="appeal-scope">Affected account, experience, asset or content <span>Optional</span></label><input id="appeal-scope" className="input" name="actionScope" maxLength={500} placeholder="Username, account ID, experience ID, asset ID or other relevant reference" /></div>
+          <div className="field"><label htmlFor="appeal-issued">Date action was issued <span>Optional</span></label><input id="appeal-issued" className="input" name="actionIssuedAt" type="date" /></div>
+          <div className="field"><label htmlFor="appeal-expires">Restriction/ban end date <span>Optional</span></label><input id="appeal-expires" className="input" name="actionExpiresAt" type="date" /></div>
+        </div>
+      </section>
+
+      <section className="support-field-group">
+        <div className="support-group-heading"><strong>Your appeal</strong><span>Give the reviewer enough information to reassess the decision.</span></div>
+        <div className="support-appeal-grid">
+          <div className="field full"><label htmlFor="appeal-reason">Why should this action be reviewed?</label><textarea id="appeal-reason" className="input" name="appealReason" required minLength={20} maxLength={10000} placeholder="Explain what you believe was incorrect or incomplete, including relevant context or evidence." /></div>
+          <div className="field full"><label htmlFor="appeal-outcome">What outcome are you requesting?</label><textarea id="appeal-outcome" className="input" name="requestedOutcome" required minLength={5} maxLength={3000} placeholder="For example: remove the warning, shorten the restriction, restore the account, or reconsider the content decision." /></div>
+          <div className="field full"><label htmlFor="appeal-files">Supporting evidence <span>Optional</span></label><input id="appeal-files" className="input" name="files" type="file" multiple accept="image/*,video/mp4,video/webm,video/quicktime,audio/*,.pdf,.txt,.csv,.json,.zip" /><small>Up to eight files, maximum 100 MB each. Do not upload passwords, one-time codes or backup codes.</small></div>
+        </div>
+      </section>
+
+      <label className="support-consent support-enterprise-consent"><input type="checkbox" required /><span><strong>Confirmation</strong>I confirm the information provided is accurate to the best of my knowledge and understand that submitting an appeal does not guarantee the original action will be changed.</span></label>
+      {error && <div className="form-alert error" role="alert">{error}</div>}
+      <div className="support-wizard-actions"><button className="button button-primary" type="submit" disabled={submitting}>{submitting ? "Submitting appeal…" : "Submit appeal for review"}</button></div>
+    </form>
+  );
+}
