@@ -2,10 +2,25 @@ import type { Metadata } from "next";
 import PageShell from "@/components/PageShell";
 import ServicePathways from "@/components/ServicePathways";
 
+const description = "Choose between the ESB Games Help Centre, private Support, Trust & Safety guidance and Family Centre.";
+
 export const metadata: Metadata = {
   title: "Help",
-  description: "Choose between the ESB Games Help Centre, private Support, Trust & Safety guidance and Family Centre.",
+  description,
   alternates: { canonical: "/help" },
+  openGraph: {
+    title: "Help | ESB Games",
+    description,
+    url: "/help",
+    type: "website",
+    images: [{ url: "/hero-discover-platform.png", alt: "ESB Games Help" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Help | ESB Games",
+    description,
+    images: ["/hero-discover-platform.png"],
+  },
 };
 
 export default function HelpPage() {

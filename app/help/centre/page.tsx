@@ -4,10 +4,25 @@ import PageShell from "@/components/PageShell";
 import HelpCentreBrowser from "@/components/HelpCentreBrowser";
 import { ArrowIcon, SearchIcon } from "@/components/Icons";
 
+const description = "Self-service ESB Games guidance for accounts, safety, payments, creator tools, families and technical issues.";
+
 export const metadata: Metadata = {
   title: "Help Centre",
-  description: "Self-service ESB Games guidance for accounts, safety, payments, creator tools, families and technical issues.",
+  description,
   alternates: { canonical: "/help/centre" },
+  openGraph: {
+    title: "Help Centre | ESB Games",
+    description,
+    url: "/help/centre",
+    type: "website",
+    images: [{ url: "/hero-discover-platform.png", alt: "ESB Games Help Centre" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Help Centre | ESB Games",
+    description,
+    images: ["/hero-discover-platform.png"],
+  },
 };
 
 export default function HelpCentrePage() {

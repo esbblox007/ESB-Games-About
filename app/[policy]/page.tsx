@@ -41,7 +41,7 @@ export default async function PolicyPage({ params }: { params: Promise<{ policy:
       <div className="policy-page">
         <header className="policy-hero">
           <div className="policy-container">
-            <nav className="policy-breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span>/</span><Link href="/trust">Trust, Safety &amp; Legal</Link><span>/</span><span aria-current="page">{item.title}</span></nav>
+            <nav className="policy-breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span>/</span><Link href="/help/trust-safety">Trust &amp; Safety</Link><span>/</span><span aria-current="page">{item.title}</span></nav>
             <span className="page-eyebrow">{item.category}</span>
             <h1>{item.title}</h1>
           </div>
@@ -58,7 +58,7 @@ export default async function PolicyPage({ params }: { params: Promise<{ policy:
                 <p>Once the document has completed the required review and approval process, the approved version will be published here with its version and effective date.</p>
               </div>
             )}
-            <div className="policy-end-actions"><Link href="/trust" className="button button-secondary">Back to Trust Centre</Link><Link href="/support" className="button button-primary">Contact Support</Link></div>
+            <div className="policy-end-actions"><Link href="/help/trust-safety" className="button button-secondary">Back to Trust &amp; Safety</Link><Link href="/support" className="button button-primary">Contact Support</Link></div>
           </div>
         </section>
       </div>
