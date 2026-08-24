@@ -5,11 +5,25 @@ import { ArrowIcon, BookIcon, CubeIcon, LockIcon, ScaleIcon, ShieldIcon, TicketI
 import { trustSections } from "@/lib/content/trust";
 import { getPolicyPublicationState, isKnownPolicySlug } from "@/lib/content/policy-publication";
 
+const description = "ESB Games safety guidance, platform rules, privacy information, family resources and policy documents.";
+
 export const metadata: Metadata = {
   title: "Trust & Safety",
-  description: "ESB Games safety guidance, platform rules, privacy information, family resources and policy documents.",
+  description,
   alternates: { canonical: "/help/trust-safety" },
-  openGraph: { title: "Trust & Safety | ESB Games", description: "Safety guidance, policies and rights information for the ESB Games ecosystem.", url: "/help/trust-safety", type: "website" },
+  openGraph: {
+    title: "Trust & Safety | ESB Games",
+    description: "Safety guidance, policies and rights information for the ESB Games ecosystem.",
+    url: "/help/trust-safety",
+    type: "website",
+    images: [{ url: "/hero-discover-platform.png", alt: "ESB Games Trust & Safety" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Trust & Safety | ESB Games",
+    description,
+    images: ["/hero-discover-platform.png"],
+  },
 };
 
 const pillars = [
@@ -69,15 +83,8 @@ export default function TrustSafetyPage() {
                   <div className="trust-resource-list">
                     {section.resources.map((item) => {
                       const status = publicationStatus(item.href);
-                      return item.external ? (
-                        <a key={item.slug} href={item.href} target="_blank" rel="noreferrer" className="trust-resource-row trust-resource-row-compact">
-                          <span><strong>{item.title}</strong><small>{item.description}</small>{status && <small className="trust-resource-status">{status}</small>}</span><ArrowIcon size={15} />
-                        </a>
-                      ) : (
-                        <Link key={item.slug} href={item.href} className="trust-resource-row trust-resource-row-compact">
-                          <span><strong>{item.title}</strong><small>{item.description}</small>{status && <small className="trust-resource-status">{status}</small>}</span><ArrowIcon size={15} />
-                        </Link>
-                      );
+                      const content = <><span><strong>{item.title}</strong><small>{item.description}</small>{status && <small className="trust-resource-status">{status}</small>}</span><ArrowIcon size={15} /></>;
+                      return item.external ? <a key={item.slug} href={item.href} target="_blank" rel="noreferrer" className="trust-resource-row trust-resource-row-compact">{content}</a> : <Link key={item.slug} href={item.href} className="trust-resource-row trust-resource-row-compact">{content}</Link>;
                     })}
                   </div>
                 </article>
