@@ -12,8 +12,24 @@ export const metadata: Metadata = {
   title: { default: `ESB Games — ${ESB_BRAND.tagline}`, template: "%s | ESB Games" },
   description: "Discover ESB Games, a connected gaming and creator ecosystem being built for players, creators, families and communities.",
   metadataBase: new URL(ESB_BRAND.siteUrl),
-  alternates: { canonical: ESB_BRAND.siteUrl },
-  icons: { icon: "/esb-blue-logo.png", apple: "/esb-blue-logo.png" },
+  applicationName: "ESB Games",
+  category: "gaming",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  icons: {
+    icon: [{ url: "/esb-blue-logo.png", type: "image/png" }],
+    shortcut: "/esb-blue-logo.png",
+    apple: "/esb-blue-logo.png",
+  },
   openGraph: {
     type: "website",
     siteName: "ESB Games",
@@ -21,6 +37,7 @@ export const metadata: Metadata = {
     description: "A connected gaming and creator ecosystem where people can discover, belong and build.",
     url: ESB_BRAND.siteUrl,
     images: [{ url: "/hero-discover-platform.png", alt: "ESB Games platform interface" }],
+    locale: "en_GB",
   },
   twitter: {
     card: "summary_large_image",
@@ -35,15 +52,37 @@ export const viewport: Viewport = { width: "device-width", initialScale: 1, them
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    name: ESB_BRAND.name,
-    url: ESB_BRAND.siteUrl,
-    slogan: ESB_BRAND.tagline,
-    logo: `${ESB_BRAND.siteUrl}/esb-blue-logo.png`,
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${ESB_BRAND.platformUrl}/#organization`,
+        name: ESB_BRAND.name,
+        url: `${ESB_BRAND.platformUrl}/`,
+        slogan: ESB_BRAND.tagline,
+        logo: {
+          "@type": "ImageObject",
+          url: `${ESB_BRAND.siteUrl}/esb-blue-logo.png`,
+        },
+        sameAs: [
+          `${ESB_BRAND.siteUrl}/`,
+          "https://x.com/PlayESBGames",
+          "https://www.tiktok.com/@esb.games",
+        ],
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${ESB_BRAND.siteUrl}/#website`,
+        url: `${ESB_BRAND.siteUrl}/`,
+        name: "ESB Games",
+        alternateName: ["ESBGames", "ESB"],
+        publisher: { "@id": `${ESB_BRAND.platformUrl}/#organization` },
+        inLanguage: "en-GB",
+      },
+    ],
   };
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en-GB" suppressHydrationWarning>
       <body>
         <script
           type="application/ld+json"
