@@ -4,7 +4,7 @@ import PageShell from "@/components/PageShell";
 import SupportClient from "@/components/SupportClient";
 import SupportFAQ from "@/components/SupportFAQ";
 import SupportPageFreshness from "@/components/SupportPageFreshness";
-import { ArrowIcon, CheckIcon, SearchIcon, ShieldIcon } from "@/components/Icons";
+import { ArrowIcon, CheckIcon, SearchIcon, ShieldIcon, TicketIcon } from "@/components/Icons";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -70,12 +70,12 @@ export default function SupportPage() {
             <div className="support-side-stack">
               <article className="support-status-panel">
                 <div><h2>Service Status</h2><span>Official live status is maintained separately</span></div>
-                <p>To avoid showing stale or duplicated service information here, current availability, maintenance and incident updates are published on the dedicated ESB Games Status site.</p>
+                <p>Current availability, maintenance and active incident updates are published on the dedicated ESB Games Status site so there is one reliable live source.</p>
                 <a className="button button-secondary" href={statusUrl} target="_blank" rel="noopener noreferrer">View current service status <ArrowIcon size={15} /></a>
               </article>
-              <article className="support-community-panel">
-                <span><CheckIcon size={19} /></span>
-                <div><h3>One source of truth</h3><p>The Status site is the official source for service availability, planned maintenance and active incident information.</p><a href={statusUrl} target="_blank" rel="noopener noreferrer">Open the status website <ArrowIcon size={15} /></a></div>
+              <article className="support-community-panel support-direct-help-panel">
+                <span><TicketIcon size={19} /></span>
+                <div><h3>Need direct help?</h3><p>Start a private support conversation and route your issue to the appropriate ESB Games team.</p><a href="#submit-ticket">Open a support ticket <ArrowIcon size={15} /></a></div>
               </article>
             </div>
           </div>
