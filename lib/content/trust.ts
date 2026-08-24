@@ -35,7 +35,7 @@ export const trustSections: TrustSection[] = [
     title: "Safety",
     description: "Practical safety guidance plus the rules, reporting and review processes that support the community.",
     resources: [
-      resource("safety-centre", "Safety Centre", "The canonical home for prevention, detection, reporting, enforcement, appeals and family-safety guidance.", "/trust/safety"),
+      resource("safety-centre", "Safety framework", "Prevention, detection, reporting, enforcement, appeals and family-safety guidance.", "/help/trust-safety#safety-framework"),
       resource("community-standards", "Community Standards", "The rules for behaviour and content across ESB Games.", "/community-standards"),
       resource("child-safety", "Child Safety", "Safeguards and expectations for children, families and creators.", "/child-safety"),
       resource("reporting-enforcement", "Reporting & Enforcement", "How reports are reviewed and platform rules are enforced.", "/reporting-enforcement-policy"),
@@ -87,7 +87,7 @@ export const trustSections: TrustSection[] = [
     title: "Help & support",
     description: "Self-service guidance, private case handling and live service information have separate sources of truth.",
     resources: [
-      resource("help-centre", "Help Centre", "Task-based guides and answers for common ESB Games questions.", "/help"),
+      resource("help-centre", "Help Centre", "Task-based guides and answers for common ESB Games questions.", "/help/centre"),
       resource("contact-support", "Private Support", "Create a private case when an issue needs authorised staff review.", "/support#contact-support"),
       resource("service-status", "Service Status", "The dedicated source of truth for incidents, maintenance and availability.", "https://status.esbgames.com", true),
     ],

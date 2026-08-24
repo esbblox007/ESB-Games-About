@@ -1,16 +1,15 @@
 import Link from "next/link";
 import { ArrowIcon, SearchIcon, ShieldIcon, TicketIcon, UsersIcon } from "@/components/Icons";
 
-// Shared public routing map: self-service, private case handling, trust/safety, and family controls.
 type Area = "help" | "support" | "trust" | "family";
 
 const areas = [
   {
     id: "help" as const,
     title: "Help Centre",
-    eyebrow: "Self-service",
-    description: "Guides and answers for common account, payment, creator, family and technical questions.",
-    href: "/help",
+    eyebrow: "Guides & answers",
+    description: "Browse step-by-step guidance for common account, payment, creator, family and technical questions.",
+    href: "/help/centre",
     icon: <SearchIcon size={19} />,
   },
   {
@@ -18,34 +17,34 @@ const areas = [
     title: "Support",
     eyebrow: "Private case",
     description: "Open a private ticket when an issue needs an authorised ESB Games staff member to investigate or respond.",
-    href: "/support#contact-support",
+    href: "/support",
     icon: <TicketIcon size={19} />,
   },
   {
     id: "trust" as const,
     title: "Trust & Safety",
-    eyebrow: "Rules and safety",
-    description: "Find the Safety Centre, policies, privacy information, reporting principles and enforcement guidance.",
-    href: "/trust",
+    eyebrow: "Rules & safety",
+    description: "Read safety guidance, platform rules, privacy information and policy resources.",
+    href: "/help/trust-safety",
     icon: <ShieldIcon size={19} />,
   },
   {
     id: "family" as const,
     title: "Family Centre",
-    eyebrow: "Parents and guardians",
-    description: "Understand linked-account, parental-control and family safety features being developed for ESB Games.",
+    eyebrow: "Parents & guardians",
+    description: "Learn about linked accounts, parental controls and family features being developed for ESB Games.",
     href: "/parental-controls",
     icon: <UsersIcon size={19} />,
   },
 ];
 
-export default function ServicePathways({ current, title = "Choose the right place" }: { current?: Area; title?: string }) {
+export default function ServicePathways({ current, title = "Choose where you need help" }: { current?: Area; title?: string }) {
   return (
     <section className="service-pathways" aria-labelledby={`service-pathways-${current || "all"}`}>
       <div className="service-pathways-heading">
-        <span className="eyebrow">ESB Games guidance</span>
+        <span className="eyebrow">ESB Games Help</span>
         <h2 id={`service-pathways-${current || "all"}`}>{title}</h2>
-        <p>Each area has one job, so you do not need to guess whether a question belongs in Help, Support, Trust or Family Centre.</p>
+        <p>Pick the area that best matches what you need. Once you open an area, this chooser gets out of the way.</p>
       </div>
       <div className="service-pathways-grid">
         {areas.map((area) => (
