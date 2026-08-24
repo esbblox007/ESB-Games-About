@@ -1,0 +1,152 @@
+.support-page-container,
+.support-cards,
+.support-info-grid,
+.support-side-stack,
+.support-ticket-modal,
+.support-wizard-body,
+.support-step-panel,
+.support-field-group,
+.support-primary-grid,
+.support-detail-grid {
+  min-width: 0;
+}
+
+.support-card,
+.support-quick-panel,
+.support-status-panel,
+.support-community-panel,
+.support-step,
+.support-step > span,
+.support-group-heading,
+.support-upload-copy,
+.support-review-card > div {
+  min-width: 0;
+}
+
+.support-card p,
+.support-card h3,
+.support-step strong,
+.support-step small,
+.support-group-heading span,
+.support-panel-heading p,
+.support-status-panel p,
+.support-community-panel p,
+.support-quick-link span,
+.support-upload-copy p,
+.support-private-link-note {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.support-appeal-banner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 22px;
+  border: 1px solid rgba(139, 92, 246, 0.26);
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(76, 29, 149, 0.18), rgba(8, 20, 42, 0.72));
+}
+
+.support-appeal-banner h2 {
+  margin: 3px 0 7px;
+}
+
+.support-appeal-banner p {
+  margin: 0;
+  max-width: 780px;
+  overflow-wrap: anywhere;
+}
+
+.support-appeal-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: rgba(139, 92, 246, 0.15);
+}
+
+.support-account-identity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid rgba(45, 212, 191, 0.22);
+  border-radius: 14px;
+  background: rgba(15, 118, 110, 0.08);
+}
+
+.support-account-identity div {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.support-account-identity span {
+  opacity: 0.72;
+  overflow-wrap: anywhere;
+}
+
+.support-account-identity a {
+  flex: 0 0 auto;
+}
+
+.support-appeal-form {
+  display: grid;
+  gap: 18px;
+}
+
+.support-appeal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.support-appeal-grid .field.full {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 820px) {
+  .support-appeal-banner {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .support-appeal-banner .button {
+    grid-column: 1 / -1;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .support-appeal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .support-appeal-grid .field.full {
+    grid-column: auto;
+  }
+
+  .support-account-identity {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 560px) {
+  .support-stepper {
+    grid-template-columns: 1fr !important;
+  }
+
+  .support-step {
+    width: 100%;
+  }
+
+  .support-primary-grid,
+  .support-detail-grid,
+  .form-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
