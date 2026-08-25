@@ -5,6 +5,7 @@ import "./careers-empty-state.css";
 import "./mobile-refinement.css";
 import "./support-refinement.css";
 import "./support-balance.css";
+import "./account-header.css";
 import SiteTranslator from "@/components/SiteTranslator";
 import { ESB_BRAND } from "@/lib/site-config";
 
