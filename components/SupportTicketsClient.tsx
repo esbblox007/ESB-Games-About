@@ -44,6 +44,7 @@ const categoryNames: Record<string, string> = {
   "safety-abuse": "Safety & Abuse",
   "technical-issues": "Technical Issues",
   "something-else": "Something Else",
+  "enforcement-appeal": "Enforcement Appeal",
 };
 
 function formatDate(value: string) {
@@ -196,10 +197,10 @@ export default function SupportTicketsClient() {
                   <div><strong>{item.senderName || (item.senderType === "Staff" ? "ESB Games Support" : "You")}</strong><time dateTime={item.createdAt}>{formatDate(item.createdAt)}</time></div>
                   <p>{item.body}</p>
                 </article>
-              )) : <div className="support-account-no-messages">No public messages are available for this ticket yet.</div>}
+              )) : <div className="support-account-no-messages">No messages are available for this ticket yet.</div>}
             </div>
             <footer className="support-account-conversation-foot">
-              <p>This view shows the public conversation linked to your ESB Games account. Internal staff notes are never shown here.</p>
+              <p>This conversation is securely linked to your ESB Games account.</p>
               <a className="button button-secondary" href="/support#submit-ticket">Need another issue? Create a new ticket</a>
             </footer>
           </>
