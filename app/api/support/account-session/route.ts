@@ -31,6 +31,11 @@ export async function GET(request: NextRequest) {
       ?? account.userMetadata.username
       ?? "ESB Games user",
   ).trim();
+  const avatarCandidate = account.userMetadata.avatar_url
+    ?? account.userMetadata.avatarUrl
+    ?? account.userMetadata.picture
+    ?? null;
+  const avatarUrl = typeof avatarCandidate === "string" && /^https?:\/\//i.test(avatarCandidate.trim()) ? avatarCandidate.trim() : null;
 
   return NextResponse.json(
     {
@@ -40,6 +45,7 @@ export async function GET(request: NextRequest) {
         username,
         displayName,
         email: account.email ?? null,
+        avatarUrl,
       },
     },
     { status: 200, headers: { "Cache-Control": "private, no-store" } },
