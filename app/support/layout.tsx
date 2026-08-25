@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./support-fixes.css";
+import "./support-ticket-lanes.css";
 
 export const metadata: Metadata = {
   openGraph: {
