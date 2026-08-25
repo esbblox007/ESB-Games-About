@@ -6,7 +6,9 @@ import "./mobile-refinement.css";
 import "./support-refinement.css";
 import "./support-balance.css";
 import "./account-header.css";
+import "./support-qa-fixes.css";
 import SiteTranslator from "@/components/SiteTranslator";
+import SupportQaEnhancements from "@/components/SupportQaEnhancements";
 import { ESB_BRAND } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -90,6 +92,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }}
         />
         <SiteTranslator />
+        <SupportQaEnhancements />
         {children}
       </body>
     </html>
