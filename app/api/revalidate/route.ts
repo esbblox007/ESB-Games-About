@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const INDEXNOW_KEY = "7411ca539f9f4e65a2e6098580cb425d";
 const INDEXNOW_ENDPOINT = "https://api.indexnow.org/indexnow";
+// Public publishing notifications use host-local key verification.
 
 interface RevalidationPayload {
   type?: "news" | "downloads" | "all";
