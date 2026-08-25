@@ -130,6 +130,39 @@
   grid-column: 1 / -1;
 }
 
+/* Appeal-success actions need enough width for the full labels. */
+.support-created-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.support-created-actions .button {
+  min-height: 52px;
+  min-width: 210px;
+  padding: 0 22px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  line-height: 1.2;
+  text-align: center;
+  overflow: visible;
+}
+
+.support-created-actions .button-primary,
+.support-created-actions .button-primary:visited {
+  color: #fff !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.24);
+}
+
+.support-created-actions .button-secondary {
+  min-width: 170px;
+}
+
 /* Replace the browser-default grey file button with the ESB Games control
    styling while retaining the native accessible file input behaviour. */
 .support-appeal-form input[type="file"].input {
@@ -206,6 +239,17 @@
 
   .support-page-hero .support-page-container > .help-back-link {
     margin-bottom: 14px !important;
+  }
+
+  .support-created-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .support-created-actions .button,
+  .support-created-actions .button-secondary {
+    width: 100%;
+    min-width: 0;
   }
 
   .support-appeal-form input[type="file"].input::file-selector-button {
