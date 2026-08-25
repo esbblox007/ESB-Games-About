@@ -13,7 +13,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       takeSupportRateLimit({ scope: "support-code-verify-network", key: supportNetworkKey(request), windowSeconds: 600, maxRequests: 30, blockSeconds: 1800 }),
     ]);
     const sessionToken = generateGuestSessionToken();
-    const result = await supabaseRpc<Record<string, unknown>>("support_verify_guest_code_v2", {
+
+    // Production exposes support_verify_guest_code. The previous route called a
+    // non-existent support_verify_guest_code_v2 RPC, which meant every valid
+    // six-digit code failed with a generic 503 before it could be checked.
+    const result = await supabaseRpc<Record<string, unknown>>("support_verify_guest_code", {
       p_access_token_hash: sha256(accessToken),
       p_code_hash: sha256(code),
       p_session_token_hash: sha256(sessionToken),
