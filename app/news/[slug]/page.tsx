@@ -6,6 +6,7 @@ import ArticleCard from "@/components/ArticleCard";
 import ArticleRenderer, { ArticleVideoEmbed } from "@/components/ArticleRenderer";
 import ShareActions from "@/components/ShareActions";
 import { getAllPublishedArticleSlugs, getArticleBySlug, getPublishedArticles, getRelatedArticles } from "@/lib/content/news";
+import type { ArticleBlock, RichText } from "@/lib/content/types";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://about.esbgames.com";
 
@@ -24,6 +25,51 @@ function formatDate(value: string) {
   return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" }).format(new Date(value));
 }
 
+function countWords(value: string) {
+  return value.trim() ? value.trim().split(/\s+/).length : 0;
+}
+
+function richTextWordCount(value: RichText) {
+  if (typeof value === "string") return countWords(value);
+  return value.reduce((total, span) => total + countWords(span.text), 0);
+}
+
+function calculateReadingTime(blocks: ArticleBlock[]) {
+  const words = blocks.reduce((total, block) => {
+    switch (block.type) {
+      case "paragraph":
+        return total + richTextWordCount(block.text);
+      case "heading":
+        return total + countWords(block.text);
+      case "list":
+        return total + block.items.reduce((sum, item) => sum + countWords(item), 0);
+      case "quote":
+        return total + countWords(block.text) + countWords(block.attribution || "");
+      case "image":
+        return total + countWords(block.caption || "");
+      case "gallery":
+        return total + block.images.reduce((sum, image) => sum + countWords(image.caption || ""), 0);
+      case "video":
+        return total + countWords(block.title) + countWords(block.caption || "");
+      case "callout":
+        return total + countWords(block.title || "") + countWords(block.text);
+      case "code":
+        return total + countWords(block.caption || "");
+      case "table":
+        return total + block.headers.reduce((sum, cell) => sum + countWords(cell), 0)
+          + block.rows.flat().reduce((sum, cell) => sum + countWords(cell), 0)
+          + countWords(block.caption || "");
+      case "button":
+        return total + countWords(block.label);
+      case "divider":
+      default:
+        return total;
+    }
+  }, 0);
+
+  return Math.max(1, Math.ceil(words / 225));
+}
+
 export async function generateStaticParams() {
   const slugs = await getAllPublishedArticleSlugs();
   return slugs.map((slug) => ({ slug }));
@@ -37,7 +83,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const canonical = article.canonicalUrl || (documentationOnly ? `${siteUrl}/documentation/${article.slug}` : `${siteUrl}/news/${article.slug}`);
   const image = article.socialImage || article.coverImage;
   return {
-    title: article.seoTitle || article.title,
+    title: { absolute: article.seoTitle || article.title },
     description: article.seoDescription || article.excerpt,
     alternates: { canonical },
     robots: { index: article.indexable, follow: true },
@@ -75,6 +121,7 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
   const previous = index >= 0 ? all.articles[index + 1] : undefined;
   const next = index > 0 ? all.articles[index - 1] : undefined;
   const canonical = article.canonicalUrl || `${siteUrl}/news/${article.slug}`;
+  const readingTime = Math.max(article.readingTime, calculateReadingTime(article.body));
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -109,7 +156,7 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
             <span className="article-category">{article.category}</span>
             <h1>{article.title}</h1>
             {article.subtitle && <p className="article-subtitle">{article.subtitle}</p>}
-            <div className="article-meta"><span>{article.author}</span><span>Published {formatDate(article.publishedAt)}</span>{article.updatedAt && article.updatedAt !== article.publishedAt && <span>Updated {formatDate(article.updatedAt)}</span>}<span>{article.readingTime} min read</span></div>
+            <div className="article-meta"><span>{article.author}</span><span>Published {formatDate(article.publishedAt)}</span>{article.updatedAt && article.updatedAt !== article.publishedAt && <span>Updated {formatDate(article.updatedAt)}</span>}<span>{readingTime} min read</span></div>
           </div>
         </header>
 
