@@ -10,6 +10,7 @@ type TicketSummary = {
   categoryId: string;
   team: string;
   status: string;
+  appealStatus?: string | null;
   priority: string;
   createdAt: string;
   updatedAt: string;
@@ -37,6 +38,7 @@ const platformEndpoint = "https://esbgames.com/api/platform/support/tickets";
 const supportReturn = "https://about.esbgames.com/support/tickets";
 const nestedReturn = `/login?returnTo=${encodeURIComponent(supportReturn)}`;
 const signInUrl = `https://esbgames.com/login?next=${encodeURIComponent(nestedReturn)}`;
+const finalAppealStatuses = new Set(["Approved", "Partially Approved", "Denied", "Withdrawn"]);
 
 const categoryNames: Record<string, string> = {
   "account-access": "Account & Access",
@@ -58,6 +60,11 @@ function formatDate(value: string) {
     hour: "2-digit",
     minute: "2-digit",
   }).format(date);
+}
+
+function ticketDisplayStatus(ticket: TicketSummary) {
+  if (ticket.categoryId === "enforcement-appeal" && ticket.appealStatus && finalAppealStatuses.has(ticket.appealStatus)) return ticket.appealStatus;
+  return ticket.status;
 }
 
 function statusClass(status: string) {
@@ -90,11 +97,13 @@ export default function SupportTicketsClient() {
   const appealTickets = useMemo(() => tickets.filter((ticket) => ticket.categoryId === "enforcement-appeal"), [tickets]);
   const visibleTickets = lane === "appeals" ? appealTickets : generalTickets;
 
-  const loadDetail = useCallback(async (ticketId: string) => {
+  const loadDetail = useCallback(async (ticketId: string, silent = false) => {
     setSelectedId(ticketId);
-    setDetailLoading(true);
-    setMessage(null);
-    setReplyError(null);
+    if (!silent) {
+      setDetailLoading(true);
+      setMessage(null);
+      setReplyError(null);
+    }
     try {
       const response = await platformFetch(`${platformEndpoint}?ticketId=${encodeURIComponent(ticketId)}`);
       const body = await response.json().catch(() => ({})) as { ok?: boolean; data?: TicketDetail; message?: string; code?: string };
@@ -106,16 +115,20 @@ export default function SupportTicketsClient() {
       if (!response.ok || body.ok !== true || !body.data) throw new Error(body.message || "This ticket could not be loaded.");
       setDetail(body.data);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "This ticket could not be loaded.");
-      setDetail(null);
+      if (!silent) {
+        setMessage(error instanceof Error ? error.message : "This ticket could not be loaded.");
+        setDetail(null);
+      }
     } finally {
-      setDetailLoading(false);
+      if (!silent) setDetailLoading(false);
     }
   }, []);
 
-  const loadTickets = useCallback(async () => {
-    setState("loading");
-    setMessage(null);
+  const loadTickets = useCallback(async (silent = false) => {
+    if (!silent) {
+      setState("loading");
+      setMessage(null);
+    }
     try {
       const response = await platformFetch(platformEndpoint);
       const body = await response.json().catch(() => ({})) as { ok?: boolean; data?: { tickets?: TicketSummary[] }; message?: string };
@@ -129,18 +142,20 @@ export default function SupportTicketsClient() {
       const nextTickets = Array.isArray(body.data?.tickets) ? body.data?.tickets ?? [] : [];
       const nextGeneral = nextTickets.filter((ticket) => ticket.categoryId !== "enforcement-appeal");
       const nextAppeals = nextTickets.filter((ticket) => ticket.categoryId === "enforcement-appeal");
-      const nextLane: TicketLane = nextGeneral.length ? "general" : "appeals";
       setTickets(nextTickets);
-      setLane(nextLane);
+      setLane((current) => {
+        if (current === "general" && !nextGeneral.length && nextAppeals.length) return "appeals";
+        if (current === "appeals" && !nextAppeals.length && nextGeneral.length) return "general";
+        return current;
+      });
       setState("ready");
-      const first = nextLane === "appeals" ? nextAppeals[0] : nextGeneral[0];
-      if (first) void loadDetail(first.id);
-      else { setSelectedId(null); setDetail(null); }
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Your support tickets could not be loaded.");
-      setState("error");
+      if (!silent) {
+        setMessage(error instanceof Error ? error.message : "Your support tickets could not be loaded.");
+        setState("error");
+      }
     }
-  }, [loadDetail]);
+  }, []);
 
   async function sendReply(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -160,7 +175,7 @@ export default function SupportTicketsClient() {
       const body = await response.json().catch(() => ({})) as { ok?: boolean; message?: string };
       if (!response.ok || body.ok !== true) throw new Error(body.message || "Your reply could not be sent.");
       setReply("");
-      await loadDetail(detail.ticket.id);
+      await Promise.all([loadTickets(true), loadDetail(detail.ticket.id, true)]);
     } catch (error) {
       setReplyError(error instanceof Error ? error.message : "Your reply could not be sent.");
     } finally {
@@ -168,7 +183,7 @@ export default function SupportTicketsClient() {
     }
   }
 
-  useEffect(() => { void loadTickets(); }, [loadTickets]);
+  useEffect(() => { void loadTickets(false); }, [loadTickets]);
 
   useEffect(() => {
     if (state !== "ready") return;
@@ -177,6 +192,21 @@ export default function SupportTicketsClient() {
     if (first) void loadDetail(first.id);
     else { setSelectedId(null); setDetail(null); }
   }, [lane, loadDetail, selectedId, state, visibleTickets]);
+
+  useEffect(() => {
+    if (state !== "ready") return;
+    const sync = () => {
+      if (document.hidden) return;
+      void loadTickets(true);
+      if (selectedId) void loadDetail(selectedId, true);
+    };
+    const timer = window.setInterval(sync, 4000);
+    window.addEventListener("focus", sync);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("focus", sync);
+    };
+  }, [loadDetail, loadTickets, selectedId, state]);
 
   if (state === "loading") {
     return <div className="support-account-state"><span className="support-account-spinner" aria-hidden="true" /><h2>Loading your tickets</h2><p>Checking your ESB Games account and linked support conversations.</p></div>;
@@ -200,7 +230,7 @@ export default function SupportTicketsClient() {
         <span className="support-account-state-icon"><SearchIcon /></span>
         <h2>Tickets are temporarily unavailable.</h2>
         <p>{message || "Please try again shortly."}</p>
-        <button className="button button-secondary" type="button" onClick={() => void loadTickets()}>Try again</button>
+        <button className="button button-secondary" type="button" onClick={() => void loadTickets(false)}>Try again</button>
       </div>
     );
   }
@@ -220,19 +250,20 @@ export default function SupportTicketsClient() {
   return (
     <div className="support-account-workspace">
       <aside className="support-account-list" aria-label="Your support tickets">
-        <div className="support-account-list-heading"><div><span className="eyebrow">Your tickets</span><h2>{tickets.length} {tickets.length === 1 ? "conversation" : "conversations"}</h2></div><button type="button" onClick={() => void loadTickets()}>Refresh</button></div>
+        <div className="support-account-list-heading"><div><span className="eyebrow">Your tickets</span><h2>{tickets.length} {tickets.length === 1 ? "conversation" : "conversations"}</h2></div><button type="button" onClick={() => void loadTickets(false)}>Refresh</button></div>
         <div className="support-account-ticket-tabs" role="tablist" aria-label="Support ticket type">
           <button type="button" role="tab" aria-selected={lane === "general"} className={lane === "general" ? "active" : ""} onClick={() => setLane("general")}>General support <span>{generalTickets.length}</span></button>
           <button type="button" role="tab" aria-selected={lane === "appeals"} className={lane === "appeals" ? "active" : ""} onClick={() => setLane("appeals")}>Appeal support <span>{appealTickets.length}</span></button>
         </div>
         <div className="support-account-ticket-list">
-          {visibleTickets.length ? visibleTickets.map((ticket) => (
-            <button key={ticket.id} type="button" className={`support-account-ticket${selectedId === ticket.id ? " active" : ""}`} onClick={() => void loadDetail(ticket.id)}>
-              <span className="support-account-ticket-top"><strong>{ticket.reference}</strong><span className={statusClass(ticket.status)}>{ticket.status}</span></span>
+          {visibleTickets.length ? visibleTickets.map((ticket) => {
+            const displayStatus = ticketDisplayStatus(ticket);
+            return <button key={ticket.id} type="button" className={`support-account-ticket${selectedId === ticket.id ? " active" : ""}`} onClick={() => void loadDetail(ticket.id)}>
+              <span className="support-account-ticket-top"><strong>{ticket.reference}</strong><span className={statusClass(displayStatus)}>{displayStatus}</span></span>
               <b>{ticket.subject}</b>
               <small>{categoryNames[ticket.categoryId] || ticket.categoryId} · Updated {formatDate(ticket.updatedAt)}</small>
-            </button>
-          )) : <div className="support-account-lane-empty"><strong>{lane === "appeals" ? "No appeal conversations" : "No general support conversations"}</strong><span>{lane === "appeals" ? "Appeal tickets will appear here after you submit an enforcement appeal." : "Your non-appeal support tickets will appear here."}</span></div>}
+            </button>;
+          }) : <div className="support-account-lane-empty"><strong>{lane === "appeals" ? "No appeal conversations" : "No general support conversations"}</strong><span>{lane === "appeals" ? "Appeal tickets will appear here after you submit an enforcement appeal." : "Your non-appeal support tickets will appear here."}</span></div>}
         </div>
       </aside>
 
@@ -243,7 +274,7 @@ export default function SupportTicketsClient() {
           <>
             <header className="support-account-conversation-head">
               <div><span>{detail.ticket.reference}</span><h2>{detail.ticket.subject}</h2><p>{categoryNames[detail.ticket.categoryId] || detail.ticket.categoryId} · {detail.ticket.team}</p></div>
-              <span className={statusClass(detail.ticket.status)}>{detail.ticket.status}</span>
+              <span className={statusClass(ticketDisplayStatus(detail.ticket))}>{ticketDisplayStatus(detail.ticket)}</span>
             </header>
             <div className="support-account-message-list">
               {detail.messages.length > 0 ? detail.messages.map((item) => (
