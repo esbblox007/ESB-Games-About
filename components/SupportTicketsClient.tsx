@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ArrowIcon, SearchIcon, TicketIcon } from "./Icons";
 
 type TicketSummary = {
@@ -31,6 +31,7 @@ type TicketDetail = {
 };
 
 type LoadState = "loading" | "ready" | "signed-out" | "error";
+type TicketLane = "general" | "appeals";
 
 const platformEndpoint = "https://esbgames.com/api/platform/support/tickets";
 const supportReturn = "https://about.esbgames.com/support/tickets";
@@ -44,7 +45,7 @@ const categoryNames: Record<string, string> = {
   "safety-abuse": "Safety & Abuse",
   "technical-issues": "Technical Issues",
   "something-else": "Something Else",
-  "enforcement-appeal": "Enforcement Appeal",
+  "enforcement-appeal": "Appeal Support",
 };
 
 function formatDate(value: string) {
@@ -76,10 +77,15 @@ async function platformFetch(url: string) {
 export default function SupportTicketsClient() {
   const [state, setState] = useState<LoadState>("loading");
   const [tickets, setTickets] = useState<TicketSummary[]>([]);
+  const [lane, setLane] = useState<TicketLane>("general");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [detail, setDetail] = useState<TicketDetail | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+
+  const generalTickets = useMemo(() => tickets.filter((ticket) => ticket.categoryId !== "enforcement-appeal"), [tickets]);
+  const appealTickets = useMemo(() => tickets.filter((ticket) => ticket.categoryId === "enforcement-appeal"), [tickets]);
+  const visibleTickets = lane === "appeals" ? appealTickets : generalTickets;
 
   const loadDetail = useCallback(async (ticketId: string) => {
     setSelectedId(ticketId);
@@ -117,9 +123,15 @@ export default function SupportTicketsClient() {
       }
       if (!response.ok || body.ok !== true) throw new Error(body.message || "Your support tickets could not be loaded.");
       const nextTickets = Array.isArray(body.data?.tickets) ? body.data?.tickets ?? [] : [];
+      const nextGeneral = nextTickets.filter((ticket) => ticket.categoryId !== "enforcement-appeal");
+      const nextAppeals = nextTickets.filter((ticket) => ticket.categoryId === "enforcement-appeal");
+      const nextLane: TicketLane = nextGeneral.length ? "general" : "appeals";
       setTickets(nextTickets);
+      setLane(nextLane);
       setState("ready");
-      if (nextTickets.length > 0) void loadDetail(nextTickets[0].id);
+      const first = nextLane === "appeals" ? nextAppeals[0] : nextGeneral[0];
+      if (first) void loadDetail(first.id);
+      else { setSelectedId(null); setDetail(null); }
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Your support tickets could not be loaded.");
       setState("error");
@@ -127,6 +139,14 @@ export default function SupportTicketsClient() {
   }, [loadDetail]);
 
   useEffect(() => { void loadTickets(); }, [loadTickets]);
+
+  useEffect(() => {
+    if (state !== "ready") return;
+    if (visibleTickets.some((ticket) => ticket.id === selectedId)) return;
+    const first = visibleTickets[0];
+    if (first) void loadDetail(first.id);
+    else { setSelectedId(null); setDetail(null); }
+  }, [lane, loadDetail, selectedId, state, visibleTickets]);
 
   if (state === "loading") {
     return <div className="support-account-state"><span className="support-account-spinner" aria-hidden="true" /><h2>Loading your tickets</h2><p>Checking your ESB Games account and linked support conversations.</p></div>;
@@ -171,14 +191,18 @@ export default function SupportTicketsClient() {
     <div className="support-account-workspace">
       <aside className="support-account-list" aria-label="Your support tickets">
         <div className="support-account-list-heading"><div><span className="eyebrow">Your tickets</span><h2>{tickets.length} {tickets.length === 1 ? "conversation" : "conversations"}</h2></div><button type="button" onClick={() => void loadTickets()}>Refresh</button></div>
+        <div className="support-account-ticket-tabs" role="tablist" aria-label="Support ticket type">
+          <button type="button" role="tab" aria-selected={lane === "general"} className={lane === "general" ? "active" : ""} onClick={() => setLane("general")}>General support <span>{generalTickets.length}</span></button>
+          <button type="button" role="tab" aria-selected={lane === "appeals"} className={lane === "appeals" ? "active" : ""} onClick={() => setLane("appeals")}>Appeal support <span>{appealTickets.length}</span></button>
+        </div>
         <div className="support-account-ticket-list">
-          {tickets.map((ticket) => (
+          {visibleTickets.length ? visibleTickets.map((ticket) => (
             <button key={ticket.id} type="button" className={`support-account-ticket${selectedId === ticket.id ? " active" : ""}`} onClick={() => void loadDetail(ticket.id)}>
               <span className="support-account-ticket-top"><strong>{ticket.reference}</strong><span className={statusClass(ticket.status)}>{ticket.status}</span></span>
               <b>{ticket.subject}</b>
               <small>{categoryNames[ticket.categoryId] || ticket.categoryId} · Updated {formatDate(ticket.updatedAt)}</small>
             </button>
-          ))}
+          )) : <div className="support-account-lane-empty"><strong>{lane === "appeals" ? "No appeal conversations" : "No general support conversations"}</strong><span>{lane === "appeals" ? "Appeal tickets will appear here after you submit an enforcement appeal." : "Your non-appeal support tickets will appear here."}</span></div>}
         </div>
       </aside>
 
@@ -200,12 +224,12 @@ export default function SupportTicketsClient() {
               )) : <div className="support-account-no-messages">No messages are available for this ticket yet.</div>}
             </div>
             <footer className="support-account-conversation-foot">
-              <p>This conversation is securely linked to your ESB Games account.</p>
+              <p>{detail.ticket.categoryId === "enforcement-appeal" ? "Use this conversation only for messages directly related to this appeal. For anything else, please open a new support ticket." : "This conversation is securely linked to your ESB Games account."}</p>
               <a className="button button-secondary" href="/support#submit-ticket">Need another issue? Create a new ticket</a>
             </footer>
           </>
         ) : (
-          <div className="support-account-state compact"><h2>Select a ticket</h2><p>{message || "Choose a support conversation from the list."}</p></div>
+          <div className="support-account-state compact"><h2>{lane === "appeals" ? "No appeal selected" : "Select a ticket"}</h2><p>{message || (lane === "appeals" ? "Choose an appeal conversation from the list." : "Choose a support conversation from the list.")}</p></div>
         )}
       </section>
     </div>
