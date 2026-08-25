@@ -47,7 +47,6 @@ export default function SupportPage() {
       <SupportAccountBridge />
       <section className="support-page-hero">
         <div className="support-page-container">
-          <Link href="/help" className="help-back-link"><ArrowIcon size={15} /> Back to Help</Link>
           <span className="eyebrow">ESB Games Support</span>
           <h1>How can we <span className="gradient-text">help?</span></h1>
           <p>Support for players, parents and creators. Browse help options, open a private ticket conversation or check the official service status website.</p>
