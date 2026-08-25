@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import { ArrowIcon, SearchIcon, TicketIcon } from "./Icons";
 
 type TicketSummary = {
@@ -82,6 +82,9 @@ export default function SupportTicketsClient() {
   const [detail, setDetail] = useState<TicketDetail | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [reply, setReply] = useState("");
+  const [replyBusy, setReplyBusy] = useState(false);
+  const [replyError, setReplyError] = useState<string | null>(null);
 
   const generalTickets = useMemo(() => tickets.filter((ticket) => ticket.categoryId !== "enforcement-appeal"), [tickets]);
   const appealTickets = useMemo(() => tickets.filter((ticket) => ticket.categoryId === "enforcement-appeal"), [tickets]);
@@ -91,6 +94,7 @@ export default function SupportTicketsClient() {
     setSelectedId(ticketId);
     setDetailLoading(true);
     setMessage(null);
+    setReplyError(null);
     try {
       const response = await platformFetch(`${platformEndpoint}?ticketId=${encodeURIComponent(ticketId)}`);
       const body = await response.json().catch(() => ({})) as { ok?: boolean; data?: TicketDetail; message?: string; code?: string };
@@ -137,6 +141,32 @@ export default function SupportTicketsClient() {
       setState("error");
     }
   }, [loadDetail]);
+
+  async function sendReply(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!detail || replyBusy) return;
+    const bodyText = reply.trim();
+    if (!bodyText) return;
+    setReplyBusy(true);
+    setReplyError(null);
+    try {
+      const response = await fetch(platformEndpoint, {
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+        headers: { Accept: "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({ ticketId: detail.ticket.id, body: bodyText }),
+      });
+      const body = await response.json().catch(() => ({})) as { ok?: boolean; message?: string };
+      if (!response.ok || body.ok !== true) throw new Error(body.message || "Your reply could not be sent.");
+      setReply("");
+      await loadDetail(detail.ticket.id);
+    } catch (error) {
+      setReplyError(error instanceof Error ? error.message : "Your reply could not be sent.");
+    } finally {
+      setReplyBusy(false);
+    }
+  }
 
   useEffect(() => { void loadTickets(); }, [loadTickets]);
 
@@ -224,8 +254,12 @@ export default function SupportTicketsClient() {
               )) : <div className="support-account-no-messages">No messages are available for this ticket yet.</div>}
             </div>
             <footer className="support-account-conversation-foot">
-              <p>{detail.ticket.categoryId === "enforcement-appeal" ? "Use this conversation only for messages directly related to this appeal. For anything else, please open a new support ticket." : "This conversation is securely linked to your ESB Games account."}</p>
-              <a className="button button-secondary" href="/support#submit-ticket">Need another issue? Create a new ticket</a>
+              {!['Closed', 'Spam'].includes(detail.ticket.status) ? <form className="support-account-reply-composer" onSubmit={sendReply}>
+                <label htmlFor="support-account-reply">{detail.ticket.categoryId === "enforcement-appeal" ? "Reply about this appeal" : "Reply to this support ticket"}</label>
+                <div><textarea id="support-account-reply" value={reply} onChange={(event) => setReply(event.currentTarget.value)} maxLength={20000} rows={3} placeholder={detail.ticket.categoryId === "enforcement-appeal" ? "Write a message related to this appeal…" : "Write your reply…"} disabled={replyBusy}/><button type="submit" disabled={replyBusy || !reply.trim()}>{replyBusy ? "Sending…" : "Send reply"}</button></div>
+                {replyError ? <p className="support-account-reply-error" role="alert">{replyError}</p> : null}
+              </form> : <div className="support-account-ticket-closed-note">This ticket is closed. Open a new support ticket if you need further help.</div>}
+              <div className="support-account-conversation-foot-row"><p>{detail.ticket.categoryId === "enforcement-appeal" ? "Use this conversation only for messages directly related to this appeal. For anything else, please open a new support ticket." : "This conversation is securely linked to your ESB Games account."}</p><a className="button button-secondary" href="/support#submit-ticket">Need another issue? Create a new ticket</a></div>
             </footer>
           </>
         ) : (
