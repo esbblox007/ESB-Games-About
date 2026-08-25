@@ -1,0 +1,46 @@
+/* QA pass — Support / News visual and secure-ticket refinements (2026-08-26) */
+
+/* Large gradient glyphs can paint outside their inline fragment when the heading
+   uses tight negative letter-spacing. Give every wrapped fragment a tiny paint
+   allowance so punctuation and final letters are never clipped. */
+.support-page-hero h1,
+.news-index-hero h1 {
+  overflow: visible;
+}
+
+.support-page-hero h1 .gradient-text,
+.news-index-hero h1 .gradient-text {
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding-inline-end: .09em;
+}
+
+/* Keep the extra paint allowance from noticeably changing the centred Support
+   headline while preserving the full ? glyph. */
+.support-page-hero h1 .gradient-text {
+  margin-inline-end: -.045em;
+}
+
+/* The secure-access eyebrow and the security panel previously touched visually. */
+.support-verification-aside .support-case-label {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.support-verification-aside .support-verification-security {
+  margin-top: 0;
+}
+
+/* Date inputs constrained by SupportQaEnhancements should retain the normal
+   support-field appearance when the browser marks an out-of-range value. */
+.support-intake-form input[type="date"]:out-of-range {
+  border-color: rgba(255, 91, 110, .72);
+  box-shadow: 0 0 0 3px rgba(255, 91, 110, .09);
+}
+
+@media (max-width: 720px) {
+  .support-page-hero h1 .gradient-text,
+  .news-index-hero h1 .gradient-text {
+    padding-inline-end: .11em;
+  }
+}
