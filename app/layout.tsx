@@ -9,6 +9,7 @@ import "./account-header.css";
 import "./support-qa-fixes.css";
 import "./support-conversation-focus.css";
 import "./support-private-case-v2.css";
+import "./support-private-case-v3.css";
 import SiteTranslator from "@/components/SiteTranslator";
 import SupportQaEnhancements from "@/components/SupportQaEnhancements";
 import SupportStaffProfileEnhancements from "@/components/SupportStaffProfileEnhancements";
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    siteName: "ESB Games",
+    siteName: ESB_BRAND.name,
     title: `ESB Games — ${ESB_BRAND.tagline}`,
     description: "A connected gaming and creator ecosystem where people can discover, belong and build.",
     url: ESB_BRAND.siteUrl,
