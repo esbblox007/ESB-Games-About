@@ -1,0 +1,435 @@
+/* Private Support / Appeals conversation refinements (2026-08-26). */
+
+.support-customer-app,
+.support-customer-app-conversation,
+.support-customer-app-thread,
+.support-customer-message,
+.support-message-content,
+.support-customer-app-composer,
+.support-customer-message-attachments,
+.support-customer-inline-image,
+.support-customer-file-card {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Composer: browsers (especially mobile dark-mode overrides) must not turn the
+   message field into a flat grey native textarea. */
+.support-customer-app-composer textarea {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 96px !important;
+  padding: 14px 15px !important;
+  border: 1px solid rgba(111, 128, 184, .38) !important;
+  border-radius: 12px !important;
+  outline: 0 !important;
+  background: linear-gradient(180deg, #070b18, #050914) !important;
+  background-color: #060a16 !important;
+  color: #f5f6ff !important;
+  -webkit-text-fill-color: #f5f6ff !important;
+  caret-color: #c871ff !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025) !important;
+  font: inherit !important;
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+  resize: vertical !important;
+}
+
+.support-customer-app-composer textarea::placeholder {
+  color: #707a94 !important;
+  -webkit-text-fill-color: #707a94 !important;
+  opacity: 1 !important;
+}
+
+.support-customer-app-composer textarea:focus {
+  border-color: rgba(163, 91, 245, .72) !important;
+  box-shadow: 0 0 0 3px rgba(145, 60, 235, .12), inset 0 1px 0 rgba(255,255,255,.035) !important;
+}
+
+/* Ensure message content and very long unbroken text never widens the page. */
+.support-customer-message .support-message-content,
+.support-customer-message .support-message-content > p {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+.support-customer-message .support-message-content > p {
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  white-space: pre-wrap !important;
+}
+
+/* Typing indicator: keep the animated dots visually separate from the name. */
+.support-customer-typing {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 11px !important;
+  width: fit-content !important;
+  max-width: calc(100% - 20px) !important;
+  padding: 9px 13px !important;
+}
+
+.support-customer-typing .typing-dots {
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  gap: 4px !important;
+  margin-right: 2px !important;
+}
+
+.support-customer-typing .typing-dots i {
+  flex: 0 0 auto !important;
+}
+
+.support-customer-typing > span:last-child {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* Customer attachment cards: keep filenames within the card and make previews
+   useful without allowing a single image to dominate several screens. */
+.support-customer-message-attachments {
+  width: 100% !important;
+  display: grid !important;
+  gap: 10px !important;
+  margin-top: 13px !important;
+  overflow: hidden !important;
+}
+
+.support-customer-inline-image {
+  appearance: none !important;
+  position: relative !important;
+  inset: auto !important;
+  transform: none !important;
+  width: min(520px, 100%) !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(112, 128, 177, .34) !important;
+  border-radius: 13px !important;
+  background: #070b17 !important;
+  color: #e9ecf7 !important;
+  text-align: left !important;
+  cursor: zoom-in !important;
+}
+
+.support-customer-inline-image img {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  max-height: 300px !important;
+  margin: 0 !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  background: #02040b !important;
+}
+
+.support-customer-inline-image > span {
+  width: 100% !important;
+  min-width: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin: 0 !important;
+  padding: 9px 11px !important;
+  overflow: hidden !important;
+  background: #101729 !important;
+}
+
+.support-customer-inline-image > span strong {
+  display: block !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-size: 11px !important;
+}
+
+.support-customer-inline-image > span small {
+  display: block !important;
+  min-width: max-content !important;
+  color: #8390aa !important;
+  font-size: 9px !important;
+  white-space: nowrap !important;
+}
+
+.support-customer-file-card {
+  position: relative !important;
+  inset: auto !important;
+  transform: none !important;
+  width: min(520px, 100%) !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+.support-customer-file-card > div {
+  min-width: 0 !important;
+}
+
+.support-customer-file-card strong {
+  display: block !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* Staff profile trigger. A dedicated outreach image is supplied when one exists. */
+.support-message-avatar.support-profile-trigger {
+  appearance: none !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  cursor: pointer !important;
+  transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease !important;
+}
+
+.support-message-avatar.support-profile-trigger:hover,
+.support-message-avatar.support-profile-trigger:focus-visible {
+  border-color: rgba(176, 103, 255, .8) !important;
+  box-shadow: 0 0 0 3px rgba(151, 70, 235, .13), 0 8px 24px rgba(0,0,0,.28) !important;
+  transform: translateY(-1px) !important;
+  outline: 0 !important;
+}
+
+.support-message-avatar.support-profile-trigger.has-support-photo {
+  color: transparent !important;
+  text-shadow: none !important;
+}
+
+/* Public-facing staff card. This intentionally contains no Backend-only data. */
+.support-public-profile-backdrop {
+  position: fixed;
+  z-index: 250;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(1, 3, 10, .78);
+  backdrop-filter: blur(14px);
+}
+
+.support-public-profile-card {
+  position: relative;
+  width: min(440px, 100%);
+  padding: 30px 30px 24px;
+  border: 1px solid rgba(135, 104, 219, .44);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 80% 0, rgba(126, 55, 209, .18), transparent 18rem),
+    radial-gradient(circle at 5% 80%, rgba(14, 166, 196, .12), transparent 18rem),
+    #080c1a;
+  color: #f6f6ff;
+  text-align: center;
+  box-shadow: 0 40px 110px rgba(0,0,0,.62);
+}
+
+.support-public-profile-close {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(135,148,192,.17);
+  border-radius: 9px;
+  background: rgba(13,18,37,.75);
+  color: #9fa9c1;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.support-public-profile-close:hover { color: #fff; border-color: rgba(169,111,245,.45); }
+
+.support-public-profile-avatar {
+  width: 106px;
+  height: 106px;
+  display: grid;
+  place-items: center;
+  margin: 4px auto 16px;
+  border: 2px solid rgba(157, 82, 240, .75);
+  border-radius: 28px;
+  background: linear-gradient(135deg,#743be0,#128ba8);
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  font-size: 27px;
+  font-weight: 900;
+  box-shadow: 0 15px 42px rgba(0,0,0,.35), 0 0 0 6px rgba(137,75,221,.08);
+}
+
+.support-public-profile-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 26px;
+  padding: 0 9px;
+  border: 1px solid rgba(47, 195, 164, .25);
+  border-radius: 999px;
+  background: rgba(21, 103, 87, .12);
+  color: #88dfc5;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.support-public-profile-badge i {
+  width: 15px;
+  height: 15px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(33, 210, 165, .18);
+  font-style: normal;
+  font-size: 9px;
+}
+
+.support-public-profile-card h2 {
+  margin: 15px 0 4px;
+  font-size: 25px;
+  line-height: 1.1;
+  letter-spacing: -.035em;
+}
+
+.support-public-profile-card > strong {
+  color: #c59bff;
+  font-size: 12px;
+}
+
+.support-public-profile-card > p {
+  margin: 15px auto 20px;
+  color: #9ca8bf;
+  font-size: 13px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+
+.support-public-profile-footer {
+  display: grid;
+  gap: 5px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(135,148,192,.13);
+}
+
+.support-public-profile-footer span {
+  color: #d9dff0;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.support-public-profile-footer small {
+  color: #6f7c96;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+@media (max-width: 700px) {
+  .support-customer-app-thread {
+    padding-inline: 16px !important;
+    overflow-x: hidden !important;
+  }
+
+  .support-customer-message {
+    width: auto !important;
+    max-width: calc(100% - 8px) !important;
+  }
+
+  .support-customer-message .support-message-content {
+    width: 100% !important;
+  }
+
+  .support-customer-reply-heading {
+    align-items: flex-start !important;
+    flex-wrap: wrap !important;
+    gap: 7px 14px !important;
+  }
+
+  .support-customer-reply-heading > div {
+    min-width: min(100%, 260px) !important;
+    flex: 1 1 auto !important;
+  }
+
+  .support-customer-reply-heading > small {
+    margin-left: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  .support-customer-app-composer {
+    padding-inline: 16px !important;
+  }
+
+  .support-customer-app-composer textarea {
+    min-height: 112px !important;
+    font-size: 16px !important;
+  }
+
+  .support-customer-reply-actions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .support-customer-reply-actions-left,
+  .support-customer-reply-actions-right {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .support-evidence-button {
+    width: 100% !important;
+  }
+
+  .support-customer-enter-hint {
+    display: none !important;
+  }
+
+  .support-customer-inline-image,
+  .support-customer-file-card {
+    width: 100% !important;
+  }
+
+  .support-customer-inline-image img {
+    max-height: 225px !important;
+  }
+
+  .support-customer-inline-image > span {
+    grid-template-columns: minmax(0,1fr) !important;
+    gap: 3px !important;
+    padding: 8px 9px !important;
+  }
+
+  .support-customer-inline-image > span strong,
+  .support-customer-inline-image > span small {
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .support-customer-inline-image > span small {
+    white-space: normal !important;
+  }
+
+  .support-public-profile-backdrop {
+    align-items: end;
+    padding: 12px;
+  }
+
+  .support-public-profile-card {
+    width: 100%;
+    padding: 27px 21px 21px;
+    border-radius: 22px 22px 15px 15px;
+  }
+
+  .support-public-profile-avatar {
+    width: 92px;
+    height: 92px;
+    border-radius: 24px;
+  }
+}
