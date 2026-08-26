@@ -1,0 +1,121 @@
+/* Unified account / verified-email ticket inbox additions.
+   These sit on top of the original full-size Support ticket layout. */
+
+.support-account-composer-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.support-account-composer-tools > input[type="file"] {
+  display: none !important;
+}
+
+.support-account-composer-tools > label.button {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 14px;
+  cursor: pointer;
+}
+
+.support-account-composer-tools > small {
+  color: #7787a5;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.support-account-selected-files {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.support-account-selected-files > span {
+  min-width: 0;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid rgba(126, 87, 211, .28);
+  border-radius: 9px;
+  background: rgba(42, 25, 82, .3);
+  color: #e9efff;
+}
+
+.support-account-selected-files strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+}
+
+.support-account-selected-files small {
+  color: #8795b0;
+  font-size: 10px;
+}
+
+.support-account-selected-files button {
+  width: 24px !important;
+  min-width: 24px !important;
+  height: 24px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 6px !important;
+  background: rgba(255,255,255,.05) !important;
+  color: #c5cee0 !important;
+  font-size: 16px !important;
+  cursor: pointer;
+}
+
+.support-account-message-files {
+  display: grid;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.support-account-message-files > a,
+.support-account-message-files > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-width: 0;
+  padding: 9px 11px;
+  border: 1px solid rgba(104, 126, 176, .24);
+  border-radius: 9px;
+  background: rgba(5, 12, 27, .48);
+  color: #dfe8fb;
+  text-decoration: none;
+}
+
+.support-account-message-files strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+}
+
+.support-account-message-files span {
+  color: #8290aa;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .support-account-composer-tools {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .support-account-composer-tools > label.button {
+    width: 100%;
+  }
+}
