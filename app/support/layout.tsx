@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./support-fixes.css";
 import "./support-ticket-lanes.css";
 import "./support-account-live.css";
+import "./support-account-app.css";
+import SupportFlowEnhancements from "@/components/SupportFlowEnhancements";
 
 export const metadata: Metadata = {
   openGraph: {
@@ -20,5 +22,5 @@ export const metadata: Metadata = {
 };
 
 export default function SupportLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return children;
+  return <><SupportFlowEnhancements />{children}</>;
 }
