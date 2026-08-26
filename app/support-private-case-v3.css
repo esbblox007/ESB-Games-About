@@ -1,0 +1,243 @@
+/* Private support case V3 — remove public-site chrome and maximise the case conversation. */
+
+body:has(.support-ticket-app-page) .site-header {
+  display: none !important;
+}
+
+body:has(.support-ticket-app-page) {
+  overflow: hidden !important;
+}
+
+.support-case-page.support-ticket-app-page {
+  height: 100dvh !important;
+  min-height: 0 !important;
+  padding: 8px 0 !important;
+  overflow: hidden !important;
+}
+
+.support-case-page.support-ticket-app-page > .container.support-customer-app {
+  width: min(1720px, calc(100% - 16px)) !important;
+  max-width: 1720px !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  margin: 0 auto !important;
+  display: grid !important;
+  grid-template-rows: 42px auto minmax(0,1fr) !important;
+  overflow: hidden !important;
+  border-radius: 13px !important;
+}
+
+.support-ticket-app-page .support-customer-commandbar {
+  min-height: 42px !important;
+  height: 42px !important;
+  padding: 0 12px !important;
+  justify-content: flex-start !important;
+}
+
+.support-ticket-app-page .support-case-brand,
+.support-ticket-app-page .support-secure-state {
+  display: none !important;
+}
+
+.support-ticket-app-page .support-case-command-actions {
+  width: 100% !important;
+  justify-content: flex-start !important;
+  gap: 0 !important;
+}
+
+.support-ticket-app-page .support-case-command-actions > a {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 30px !important;
+  padding: 0 10px !important;
+  border: 1px solid rgba(83,105,149,.55) !important;
+  border-radius: 8px !important;
+  background: #0a1224 !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  font-weight: 800 !important;
+  text-decoration: none !important;
+}
+
+.support-ticket-app-page .support-case-command-actions > a::before {
+  content: "←  Back";
+  color: #e5ebf8 !important;
+  font-size: 11px !important;
+}
+
+.support-ticket-app-page .support-customer-compact-header {
+  min-height: 70px !important;
+  padding: 10px 16px !important;
+  align-items: center !important;
+}
+
+.support-ticket-app-page .support-customer-compact-header .eyebrow {
+  font-size: 8px !important;
+  letter-spacing: .11em !important;
+}
+
+.support-ticket-app-page .support-customer-compact-header h1 {
+  max-width: 1200px !important;
+  margin: 3px 0 !important;
+  font-size: clamp(18px, 1.75vw, 25px) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -.025em !important;
+}
+
+.support-ticket-app-page .support-customer-compact-header p {
+  font-size: 10px !important;
+}
+
+.support-ticket-app-page .support-customer-badges span {
+  padding: 5px 8px !important;
+  font-size: 8px !important;
+}
+
+.support-ticket-app-page .support-customer-compact-security {
+  display: none !important;
+}
+
+.support-ticket-app-page .support-customer-app-conversation {
+  min-height: 0 !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+.support-ticket-app-page .support-customer-app-thread {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 16px 22px 20px !important;
+  gap: 13px !important;
+}
+
+.support-ticket-app-page .support-customer-message {
+  max-width: min(76%, 980px) !important;
+}
+
+.support-ticket-app-page .support-message-content {
+  padding: 11px 13px !important;
+}
+
+.support-ticket-app-page .support-message-content header {
+  margin-bottom: 7px !important;
+}
+
+.support-ticket-app-page .support-message-content p {
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+}
+
+.support-ticket-app-page .support-customer-app-composer {
+  flex: 0 0 auto !important;
+  padding: 9px 14px 11px !important;
+  border-top: 1px solid rgba(92,111,156,.24) !important;
+  background: #050a16 !important;
+}
+
+.support-ticket-app-page .support-customer-reply-heading {
+  margin-bottom: 6px !important;
+}
+
+.support-ticket-app-page .support-customer-reply-heading strong {
+  font-size: 11px !important;
+}
+
+.support-ticket-app-page .support-customer-reply-heading span,
+.support-ticket-app-page .support-customer-reply-heading small {
+  font-size: 8px !important;
+}
+
+.support-ticket-app-page .support-customer-app-composer textarea {
+  min-height: 62px !important;
+  height: 62px !important;
+  max-height: 110px !important;
+  padding: 9px 11px !important;
+  font-size: 13px !important;
+  resize: none !important;
+}
+
+.support-ticket-app-page .support-customer-reply-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-top: 7px !important;
+}
+
+.support-ticket-app-page .support-evidence-button {
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-height: 34px !important;
+  padding: 0 11px !important;
+}
+
+.support-ticket-app-page .support-customer-reply-actions .button {
+  min-height: 34px !important;
+}
+
+@media (max-width: 800px) {
+  .support-case-page.support-ticket-app-page {
+    padding: 0 !important;
+  }
+
+  .support-case-page.support-ticket-app-page > .container.support-customer-app {
+    width: 100% !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .support-ticket-app-page .support-customer-commandbar {
+    height: 40px !important;
+    min-height: 40px !important;
+    padding-inline: 10px !important;
+  }
+
+  .support-ticket-app-page .support-customer-compact-header {
+    min-height: 62px !important;
+    padding: 9px 12px !important;
+  }
+
+  .support-ticket-app-page .support-customer-compact-header h1 {
+    font-size: 18px !important;
+  }
+
+  .support-ticket-app-page .support-customer-compact-header p {
+    font-size: 9px !important;
+  }
+
+  .support-ticket-app-page .support-customer-app-thread {
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 13px 11px 16px !important;
+    gap: 12px !important;
+  }
+
+  .support-ticket-app-page .support-customer-message {
+    max-width: 92% !important;
+  }
+
+  .support-ticket-app-page .support-customer-app-composer {
+    padding: 9px 11px 12px !important;
+  }
+
+  .support-ticket-app-page .support-customer-app-composer textarea {
+    min-height: 70px !important;
+    height: 70px !important;
+    font-size: 16px !important;
+  }
+
+  .support-ticket-app-page .support-customer-reply-actions {
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+  }
+
+  .support-ticket-app-page .support-evidence-button {
+    width: auto !important;
+  }
+}
