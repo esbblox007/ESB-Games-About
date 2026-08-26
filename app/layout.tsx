@@ -7,8 +7,10 @@ import "./support-refinement.css";
 import "./support-balance.css";
 import "./account-header.css";
 import "./support-qa-fixes.css";
+import "./support-conversation-focus.css";
 import SiteTranslator from "@/components/SiteTranslator";
 import SupportQaEnhancements from "@/components/SupportQaEnhancements";
+import SupportStaffProfileEnhancements from "@/components/SupportStaffProfileEnhancements";
 import { ESB_BRAND } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -93,6 +95,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
         <SiteTranslator />
         <SupportQaEnhancements />
+        <SupportStaffProfileEnhancements />
         {children}
       </body>
     </html>
