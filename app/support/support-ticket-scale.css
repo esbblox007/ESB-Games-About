@@ -108,6 +108,9 @@
 
   .support-account-page .support-account-reply-composer {
     width: 100% !important;
+    max-width: none !important;
+    justify-self: stretch !important;
+    grid-column: 1 / -1 !important;
     gap: 8px !important;
   }
 
@@ -115,14 +118,18 @@
     font-size: 13px !important;
   }
 
-  .support-account-page .support-account-reply-composer > div {
+  .support-account-page .support-account-reply-composer > div:not(.support-account-selected-files):not(.support-account-composer-tools) {
     width: 100% !important;
+    max-width: none !important;
+    display: grid !important;
     grid-template-columns: minmax(0, 1fr) 145px !important;
     gap: 12px !important;
+    align-items: end !important;
   }
 
   .support-account-page .support-account-reply-composer textarea {
     width: 100% !important;
+    max-width: none !important;
     min-height: 82px !important;
     height: 82px !important;
     max-height: 170px !important;
@@ -131,7 +138,7 @@
     line-height: 1.5 !important;
   }
 
-  .support-account-page .support-account-reply-composer button {
+  .support-account-page .support-account-reply-composer button[type="submit"] {
     width: 145px !important;
     min-width: 145px !important;
     height: 46px !important;
@@ -141,19 +148,53 @@
 
   .support-account-page .support-account-composer-tools {
     width: 100% !important;
+    max-width: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
     gap: 12px !important;
   }
 
   .support-account-page .support-account-composer-tools > label.button {
+    width: auto !important;
+    min-width: 160px !important;
     min-height: 42px !important;
     padding-inline: 18px !important;
     font-size: 12px !important;
+  }
+
+  .support-account-page .support-account-selected-files {
+    width: 100% !important;
+    max-width: none !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
   }
 
   .support-account-page .support-account-composer-tools > small,
   .support-account-page .support-account-conversation-foot-row > p {
     font-size: 11px !important;
   }
+
+  .support-account-page .support-account-conversation-foot-row {
+    width: 100% !important;
+    max-width: none !important;
+    grid-column: 1 / -1 !important;
+  }
+}
+
+/* The footer is a single full-width conversation column. Older support CSS had
+   two-column grid assumptions that could constrain the reply form to the left. */
+.support-account-page .support-account-conversation-foot {
+  width: 100% !important;
+  max-width: none !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.support-account-page .support-account-reply-composer,
+.support-account-page .support-account-conversation-foot-row {
+  width: 100% !important;
+  max-width: none !important;
+  justify-self: stretch !important;
 }
 
 @media (min-width: 760px) and (max-width: 999px) {
@@ -165,7 +206,33 @@
     grid-template-columns: minmax(300px, 36%) minmax(0, 1fr) !important;
   }
 
-  .support-account-page .support-account-reply-composer > div {
+  .support-account-page .support-account-reply-composer > div:not(.support-account-selected-files):not(.support-account-composer-tools) {
+    width: 100% !important;
+    max-width: none !important;
     grid-template-columns: minmax(0, 1fr) 125px !important;
+  }
+
+  .support-account-page .support-account-composer-tools {
+    width: 100% !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+  }
+}
+
+@media (max-width: 759px) {
+  .support-account-page .support-account-reply-composer > div:not(.support-account-selected-files):not(.support-account-composer-tools) {
+    width: 100% !important;
+    max-width: none !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .support-account-page .support-account-reply-composer button[type="submit"] {
+    width: 100% !important;
+  }
+
+  .support-account-page .support-account-composer-tools {
+    width: 100% !important;
+    max-width: none !important;
   }
 }
