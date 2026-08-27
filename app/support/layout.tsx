@@ -3,6 +3,7 @@ import "./support-fixes.css";
 import "./support-ticket-lanes.css";
 import "./support-account-live.css";
 import "./support-unified-inbox.css";
+import "./support-ticket-scale.css";
 import SupportFlowEnhancements from "@/components/SupportFlowEnhancements";
 
 export const metadata: Metadata = {
