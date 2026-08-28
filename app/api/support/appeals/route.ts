@@ -23,6 +23,31 @@ const validActions = new Set([
   "Other disciplinary action",
 ]);
 
+type EnforcementRecord = {
+  id: string;
+  enforcement_reference: string;
+  subject_account_id: string | null;
+  original_action_type: string | null;
+  original_scope: string | null;
+  issued_at: string;
+  expires_at: string | null;
+  issued_by_staff_id: string;
+  enforcement_state: string;
+  effective_action_type: string | null;
+  effective_scope: string | null;
+  effective_expires_at: string | null;
+};
+
+async function authoritativeEnforcement(reference: string) {
+  const clean = reference.trim().toUpperCase();
+  if (!clean) return null;
+  const rows = await supabaseSelect<EnforcementRecord>(
+    "trust_safety_enforcements",
+    `select=id,enforcement_reference,subject_account_id,original_action_type,original_scope,issued_at,expires_at,issued_by_staff_id,enforcement_state,effective_action_type,effective_scope,effective_expires_at&enforcement_reference=eq.${encodeURIComponent(clean)}&limit=1`,
+  );
+  return rows[0] ?? null;
+}
+
 export async function POST(request: NextRequest) {
   const incidentReference = `ESB-APL-${randomUUID().slice(0, 8).toUpperCase()}`;
   try {
@@ -38,11 +63,11 @@ export async function POST(request: NextRequest) {
 
     const name = String(form.get("name") ?? "").trim();
     const email = String(form.get("email") ?? "").trim();
-    const actionType = String(form.get("actionType") ?? "").trim();
-    const enforcementReference = String(form.get("enforcementReference") ?? "").trim();
-    const actionScope = String(form.get("actionScope") ?? "").trim();
-    const actionIssuedAt = String(form.get("actionIssuedAt") ?? "").trim();
-    const actionExpiresAt = String(form.get("actionExpiresAt") ?? "").trim();
+    const submittedActionType = String(form.get("actionType") ?? "").trim();
+    const submittedEnforcementReference = String(form.get("enforcementReference") ?? "").trim();
+    const submittedActionScope = String(form.get("actionScope") ?? "").trim();
+    const submittedActionIssuedAt = String(form.get("actionIssuedAt") ?? "").trim();
+    const submittedActionExpiresAt = String(form.get("actionExpiresAt") ?? "").trim();
     const appealReason = String(form.get("appealReason") ?? "").trim();
     const requestedOutcome = String(form.get("requestedOutcome") ?? "").trim();
     const files = form.getAll("files").filter((value): value is File => value instanceof File && value.size > 0).slice(0, 8);
@@ -50,7 +75,7 @@ export async function POST(request: NextRequest) {
     if (!account && (!name || !email || !/^\S+@\S+\.\S+$/.test(email))) {
       return NextResponse.json({ error: "Sign in to ESB Games or enter a valid name and email address." }, { status: 400 });
     }
-    if (!validActions.has(actionType)) return NextResponse.json({ error: "Choose the enforcement action you want to appeal." }, { status: 400 });
+    if (!validActions.has(submittedActionType)) return NextResponse.json({ error: "Choose the enforcement action you want to appeal." }, { status: 400 });
     if (appealReason.length < 20 || appealReason.length > 10000) return NextResponse.json({ error: "Explain why the action should be reviewed (20–10,000 characters)." }, { status: 400 });
     if (requestedOutcome.length < 5 || requestedOutcome.length > 3000) return NextResponse.json({ error: "Tell us what outcome you are requesting." }, { status: 400 });
     if (files.some((file) => file.size > 100 * 1024 * 1024)) return NextResponse.json({ error: "Each attachment must be 100 MB or smaller." }, { status: 400 });
@@ -70,15 +95,34 @@ export async function POST(request: NextRequest) {
       blockSeconds: 1800,
     });
 
+    let linkedEnforcement: EnforcementRecord | null = null;
+    if (submittedEnforcementReference) {
+      linkedEnforcement = await authoritativeEnforcement(submittedEnforcementReference);
+      if (/^ESB-ENF-/i.test(submittedEnforcementReference) && !linkedEnforcement) {
+        return NextResponse.json({ error: "That enforcement reference could not be found. Check the reference shown on the moderation notice and try again." }, { status: 400 });
+      }
+      if (linkedEnforcement && account?.id && linkedEnforcement.subject_account_id && linkedEnforcement.subject_account_id !== account.id) {
+        return NextResponse.json({ error: "That enforcement reference does not belong to the signed-in ESB Games account." }, { status: 403 });
+      }
+    }
+
+    const actionType = linkedEnforcement?.original_action_type || submittedActionType;
+    const enforcementReference = linkedEnforcement?.enforcement_reference || submittedEnforcementReference;
+    const actionScope = linkedEnforcement?.original_scope || submittedActionScope;
+    const actionIssuedAt = linkedEnforcement?.issued_at || normaliseDate(submittedActionIssuedAt);
+    const actionExpiresAt = linkedEnforcement?.expires_at || normaliseDate(submittedActionExpiresAt);
+
     const subject = `Appeal: ${actionType}${enforcementReference ? ` — ${enforcementReference}` : ""}`.slice(0, 160);
     const description = [
       "ENFORCEMENT APPEAL",
       "",
       `Action type: ${actionType}`,
       enforcementReference ? `Enforcement reference: ${enforcementReference}` : null,
+      linkedEnforcement ? `Authoritative enforcement linked: Yes (${linkedEnforcement.id})` : "Authoritative enforcement linked: No — legacy/manual action details require staff verification",
       actionScope ? `Affected account/content: ${actionScope}` : null,
       actionIssuedAt ? `Action issued: ${actionIssuedAt}` : null,
       actionExpiresAt ? `Action expires: ${actionExpiresAt}` : null,
+      linkedEnforcement ? `Current enforcement state: ${linkedEnforcement.enforcement_state}` : null,
       "",
       "Reason for appeal:",
       appealReason,
@@ -105,11 +149,13 @@ export async function POST(request: NextRequest) {
       await supabaseInsert("enforcement_appeals", {
         ticket_id: ticket.ticketId,
         requester_account_id: ticket.requesterAccountId,
+        enforcement_id: linkedEnforcement?.id ?? null,
         enforcement_reference: enforcementReference || null,
+        enforcement_issued_by_staff_id: linkedEnforcement?.issued_by_staff_id ?? null,
         action_type: actionType,
         action_scope: actionScope || null,
-        action_issued_at: normaliseDate(actionIssuedAt),
-        action_expires_at: normaliseDate(actionExpiresAt),
+        action_issued_at: actionIssuedAt,
+        action_expires_at: actionExpiresAt,
         appeal_reason: appealReason,
         requested_outcome: requestedOutcome,
         review_status: "Submitted",
@@ -155,6 +201,8 @@ export async function POST(request: NextRequest) {
       privatePath: `/support/ticket/${ticket.accessToken}`,
       requiresEmailVerification: ticket.requiresEmailVerification,
       reviewStatus: "Submitted",
+      enforcementLinked: Boolean(linkedEnforcement),
+      enforcementReference: linkedEnforcement?.enforcement_reference ?? enforcementReference || null,
       structuredRecordPending,
       attachmentUploadFailed,
     }, { status: 201, headers: { "Cache-Control": "private, no-store" } });
