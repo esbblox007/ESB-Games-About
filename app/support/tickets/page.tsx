@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PageShell from "@/components/PageShell";
 import SupportTicketsClient from "@/components/SupportTicketsClient";
+import SupportTicketLaneDeepLink from "@/components/SupportTicketLaneDeepLink";
 import { ArrowIcon, ShieldIcon } from "@/components/Icons";
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default function SupportTicketsPage() {
             <p>View and reply to support conversations available to your signed-in ESB Games account or verified email support session.</p>
             <div className="support-account-security-note"><ShieldIcon size={16} /><span>Only support tickets authorised for your current secure session are returned.</span></div>
           </div>
+          <SupportTicketLaneDeepLink />
           <SupportTicketsClient />
         </div>
       </section>
