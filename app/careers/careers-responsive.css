@@ -1,0 +1,42 @@
+/* Careers responsive filter hardening.
+   Keep short filter groups from stretching to match taller sibling panels. */
+.career-job-filters {
+  align-items: start !important;
+}
+
+.career-filter-panel {
+  align-self: start !important;
+  height: auto !important;
+  min-height: 0 !important;
+  align-content: start !important;
+  grid-auto-rows: max-content !important;
+}
+
+.career-filter-panel button {
+  height: auto !important;
+  min-height: 46px !important;
+  flex: 0 0 auto !important;
+}
+
+/* Split-screen/tablet widths: keep both filter groups compact and balanced. */
+@media (max-width: 900px) {
+  .career-job-filters {
+    gap: 12px !important;
+  }
+
+  .career-filter-panel {
+    padding: 16px !important;
+  }
+
+  .career-filter-panel button {
+    min-height: 44px !important;
+    padding: 0 14px !important;
+  }
+}
+
+/* On smaller screens stack the filters so neither column is squeezed. */
+@media (max-width: 620px) {
+  .career-job-filters {
+    grid-template-columns: 1fr !important;
+  }
+}
