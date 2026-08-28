@@ -202,7 +202,7 @@ export async function POST(request: NextRequest) {
       requiresEmailVerification: ticket.requiresEmailVerification,
       reviewStatus: "Submitted",
       enforcementLinked: Boolean(linkedEnforcement),
-      enforcementReference: linkedEnforcement?.enforcement_reference ?? enforcementReference || null,
+      enforcementReference: (linkedEnforcement?.enforcement_reference ?? enforcementReference) || null,
       structuredRecordPending,
       attachmentUploadFailed,
     }, { status: 201, headers: { "Cache-Control": "private, no-store" } });
