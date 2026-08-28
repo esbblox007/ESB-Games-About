@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import PageShell from "@/components/PageShell";
 import SupportTicketClient from "@/components/SupportTicketClient";
+import SupportPrivateTicketNavigation from "@/components/SupportPrivateTicketNavigation";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -12,5 +13,5 @@ export const metadata: Metadata = {
 
 export default async function SupportTicketPage({ params }: { params: Promise<{ accessToken: string }> }) {
   const { accessToken } = await params;
-  return <PageShell><SupportTicketClient accessToken={accessToken} /></PageShell>;
+  return <PageShell><SupportPrivateTicketNavigation /><SupportTicketClient accessToken={accessToken} /></PageShell>;
 }
