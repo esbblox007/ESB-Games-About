@@ -17,14 +17,20 @@ export default function SupportPrivateTicketNavigation() {
       const lane = categoryText.includes("appeal") || title.startsWith("appeal:") ? "appeals" : "general";
       const href = `/support/tickets?lane=${lane}&reference=${encodeURIComponent(reference)}`;
 
-      let link = actions.querySelector<HTMLAnchorElement>(".support-private-back-to-tickets");
-      if (!link) {
-        link = document.createElement("a");
-        link.className = "support-private-back-to-tickets";
-        link.textContent = "← Back to tickets";
-        actions.prepend(link);
-      }
+      // Reuse the command bar's existing navigation link instead of injecting a
+      // second one. This keeps the private case header to a single Back control.
+      const links = Array.from(actions.querySelectorAll<HTMLAnchorElement>("a"));
+      const link = links.find((candidate) => candidate.classList.contains("support-private-back-to-tickets")) ?? links[0];
+      if (!link) return;
+
+      link.classList.add("support-private-back-to-tickets");
       link.href = href;
+      link.textContent = "← Back to tickets";
+
+      // Remove any duplicate links left behind by an older client render.
+      for (const candidate of links) {
+        if (candidate !== link) candidate.remove();
+      }
     };
 
     const schedule = () => {
