@@ -69,18 +69,20 @@ export default function EnforcementAppealClient() {
   }
 
   if (result) {
+    const appealInboxPath = `/support/tickets?lane=appeals&reference=${encodeURIComponent(result.ticketReference)}`;
+    const primaryPath = result.requiresEmailVerification ? result.privatePath : appealInboxPath;
     return (
       <div className="support-ticket-created support-created-enterprise" role="status">
         <span className="support-success-mark">✓</span>
         <span className="support-created-label">Appeal submitted</span>
         <h2>{result.ticketReference}</h2>
-        <p>Your appeal has been securely recorded and routed to the Trust & Safety review queue. Its current review status is <strong>{result.reviewStatus}</strong>.</p>
-        {result.requiresEmailVerification && <p className="form-alert info">Because you submitted while signed out, verify your email when you open the private ticket before continuing the conversation.</p>}
-        {result.structuredRecordPending && <p className="form-alert info">Your appeal is safely in the Trust & Safety ticket queue. Its structured Appeals index is still catching up, but you do not need to submit it again.</p>}
+        <p>Your appeal has been securely recorded and routed to the ESB Games Appeals review queue. Its current review status is <strong>{result.reviewStatus}</strong>.</p>
+        {result.requiresEmailVerification && <p className="form-alert info">Because you submitted while signed out, verify your email when you open the private appeal ticket. After verification, the conversation remains available under Appeal Support.</p>}
+        {result.structuredRecordPending && <p className="form-alert info">Your appeal is safely in the Appeals ticket queue. Its structured Appeals index is still catching up, but you do not need to submit it again.</p>}
         {result.attachmentUploadFailed && <p className="form-alert info">Your appeal was submitted, but one or more evidence files did not finish uploading. Open the private appeal ticket to add the files without creating another appeal.</p>}
         <div className="support-created-actions">
-          <Link className="button button-primary" href={result.privatePath}>Open private appeal ticket</Link>
-          <Link className="button button-secondary" href="/support">Return to Support</Link>
+          <Link className="button button-primary" href={primaryPath}>{result.requiresEmailVerification ? "Verify and open appeal ticket" : "Open appeal conversation"}</Link>
+          <Link className="button button-secondary" href={appealInboxPath}>Appeal Support</Link>
         </div>
       </div>
     );
