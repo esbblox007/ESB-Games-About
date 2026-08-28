@@ -1,0 +1,124 @@
+/* Mobile QA fix: keep the private support case focused on the conversation.
+   This file is imported last in the Support layout so it can safely override
+   older support sizing passes without changing desktop or account inbox UI. */
+
+@media (max-width: 800px) {
+  body:has(.support-ticket-app-page) #main-content {
+    height: 100dvh !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  body:has(.support-ticket-app-page) .site-footer {
+    display: none !important;
+  }
+
+  .support-case-page.support-ticket-app-page {
+    height: 100dvh !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .support-case-page.support-ticket-app-page > .container.support-customer-app {
+    width: 100% !important;
+    max-width: none !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    display: grid !important;
+    grid-template-rows: 36px auto minmax(0, 1fr) !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .support-ticket-app-page .support-customer-commandbar {
+    min-height: 36px !important;
+    height: 36px !important;
+    padding: 0 9px !important;
+  }
+
+  .support-ticket-app-page .support-case-command-actions {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .support-ticket-app-page .support-case-command-actions > a {
+    min-height: 28px !important;
+    padding: 0 9px !important;
+    border-radius: 7px !important;
+  }
+
+  .support-ticket-app-page .support-case-command-actions > a::before {
+    content: "←  Back" !important;
+    font-size: 10px !important;
+  }
+
+  .support-ticket-app-page .support-customer-compact-header {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: start !important;
+    gap: 8px 10px !important;
+    min-height: 0 !important;
+    padding: 9px 12px 10px !important;
+  }
+
+  .support-ticket-app-page .support-customer-compact-header > div:first-child {
+    min-width: 0 !important;
+  }
+
+  .support-ticket-app-page .support-customer-compact-header .eyebrow {
+    display: block !important;
+    margin: 0 !important;
+    font-size: 8px !important;
+    line-height: 1.2 !important;
+    letter-spacing: .11em !important;
+  }
+
+  .support-ticket-app-page .support-customer-compact-header h1 {
+    max-width: 100% !important;
+    margin: 3px 0 3px !important;
+    font-size: 18px !important;
+    line-height: 1.1 !important;
+    letter-spacing: -.025em !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .support-ticket-app-page .support-customer-compact-header p {
+    margin: 0 !important;
+    font-size: 9px !important;
+    line-height: 1.3 !important;
+  }
+
+  .support-ticket-app-page .support-customer-badges {
+    align-self: center !important;
+    justify-content: flex-end !important;
+    margin: 0 !important;
+  }
+
+  .support-ticket-app-page .support-customer-badges span {
+    padding: 4px 7px !important;
+    font-size: 8px !important;
+    line-height: 1.15 !important;
+  }
+
+  .support-ticket-app-page .support-customer-compact-security {
+    display: none !important;
+  }
+
+  .support-ticket-app-page .support-customer-app-conversation {
+    min-height: 0 !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .support-ticket-app-page .support-customer-app-thread {
+    min-height: 0 !important;
+    max-height: none !important;
+    padding-top: 11px !important;
+  }
+}
