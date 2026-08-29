@@ -5,6 +5,7 @@ import "./support-account-live.css";
 import "./support-unified-inbox.css";
 import "./support-ticket-scale.css";
 import "./support-private-mobile-compact.css";
+import "./support-appeals-qa-fixes.css";
 import SupportFlowEnhancements from "@/components/SupportFlowEnhancements";
 
 export const metadata: Metadata = {
