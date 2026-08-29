@@ -1,0 +1,131 @@
+/* Appeals QA fixes — 2026-08-29
+   Keep the appeal identity action clear of the form fields and guarantee that
+   private appeal/support conversations always reserve visible composer space. */
+
+.support-appeal-form .support-appeal-signin-button {
+  position: relative !important;
+  inset: auto !important;
+  z-index: 0 !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  min-height: 36px !important;
+  height: auto !important;
+  margin: 16px 0 0 !important;
+  padding: 8px 13px !important;
+  align-self: flex-start !important;
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+  white-space: normal !important;
+  transform: none !important;
+}
+
+.support-appeal-form .support-appeal-signin-button:hover {
+  transform: none !important;
+}
+
+.support-appeal-form input[type="date"]:out-of-range {
+  border-color: rgba(255, 91, 110, .72) !important;
+  box-shadow: 0 0 0 3px rgba(255, 91, 110, .09) !important;
+}
+
+/* The previous private-case layout allowed the thread's flex sizing to consume
+   the composer's space on short desktop viewports. Use a two-row grid instead:
+   the thread scrolls in row one and the reply composer always owns row two. */
+body:has(.support-ticket-app-page) #main-content {
+  height: 100dvh !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+body:has(.support-ticket-app-page) .site-footer {
+  display: none !important;
+}
+
+.support-case-page.support-ticket-app-page {
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.support-ticket-app-page .support-customer-app-conversation {
+  min-height: 0 !important;
+  height: 100% !important;
+  display: grid !important;
+  grid-template-rows: minmax(0, 1fr) auto !important;
+  overflow: hidden !important;
+}
+
+.support-ticket-app-page .support-customer-app-thread {
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+.support-ticket-app-page .support-customer-app-composer {
+  position: relative !important;
+  inset: auto !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex: none !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: min(250px, 46dvh) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  z-index: 2 !important;
+}
+
+.support-ticket-app-page .support-customer-app-composer textarea {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+@media (max-height: 650px) and (min-width: 801px) {
+  .support-ticket-app-page .support-customer-compact-header {
+    min-height: 58px !important;
+    padding-block: 7px !important;
+  }
+
+  .support-ticket-app-page .support-customer-compact-header h1 {
+    font-size: 20px !important;
+  }
+
+  .support-ticket-app-page .support-customer-app-thread {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+
+  .support-ticket-app-page .support-customer-app-composer {
+    padding-top: 7px !important;
+    padding-bottom: 8px !important;
+  }
+
+  .support-ticket-app-page .support-customer-reply-heading {
+    margin-bottom: 4px !important;
+  }
+
+  .support-ticket-app-page .support-customer-app-composer textarea {
+    min-height: 54px !important;
+    height: 54px !important;
+    max-height: 86px !important;
+  }
+
+  .support-ticket-app-page .support-customer-reply-actions {
+    margin-top: 5px !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .support-appeal-form .support-appeal-signin-button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .support-ticket-app-page .support-customer-app-composer {
+    max-height: min(330px, 54dvh) !important;
+  }
+}
