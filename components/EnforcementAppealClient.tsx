@@ -24,14 +24,27 @@ const actionTypes = [
   "Other disciplinary action",
 ] as const;
 
+function localDateValue(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 export default function EnforcementAppealClient() {
   const [account, setAccount] = useState<Account | null>(null);
   const [sessionChecked, setSessionChecked] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AppealResult | null>(null);
+  const [dateBounds, setDateBounds] = useState({ today: "", tomorrow: "" });
 
   useEffect(() => {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    setDateBounds({ today: localDateValue(today), tomorrow: localDateValue(tomorrow) });
+
     let active = true;
     fetch("/api/support/account-session", { credentials: "include", cache: "no-store" })
       .then((response) => response.json())
@@ -111,7 +124,7 @@ export default function EnforcementAppealClient() {
               <div className="field"><label htmlFor="appeal-name">Full name</label><input id="appeal-name" className="input" name="name" required maxLength={120} autoComplete="name" /></div>
               <div className="field"><label htmlFor="appeal-email">Email address</label><input id="appeal-email" className="input" name="email" type="email" required autoComplete="email" /></div>
             </div>
-            <a className="button button-secondary" href={`https://esbgames.com/login?returnTo=${encodeURIComponent("https://about.esbgames.com/support/appeal")}`}>Sign in to ESB Games</a>
+            <a className="button button-secondary support-appeal-signin-button" href={`https://esbgames.com/login?returnTo=${encodeURIComponent("https://about.esbgames.com/support/appeal")}`}>Sign in to ESB Games</a>
           </>
         )}
       </section>
@@ -122,8 +135,8 @@ export default function EnforcementAppealClient() {
           <div className="field"><label htmlFor="appeal-action">Action being appealed</label><select id="appeal-action" className="input" name="actionType" required defaultValue=""><option value="" disabled>Select an action</option>{actionTypes.map((item) => <option key={item} value={item}>{item}</option>)}</select></div>
           <div className="field"><label htmlFor="appeal-reference">Enforcement/action reference <span>Optional</span></label><input id="appeal-reference" className="input" name="enforcementReference" maxLength={200} placeholder="For example: moderation reference or case ID" /></div>
           <div className="field full"><label htmlFor="appeal-scope">Affected account, experience, asset or content <span>Optional</span></label><input id="appeal-scope" className="input" name="actionScope" maxLength={500} placeholder="Username, account ID, experience ID, asset ID or other relevant reference" /></div>
-          <div className="field"><label htmlFor="appeal-issued">Date action was issued <span>Optional</span></label><input id="appeal-issued" className="input" name="actionIssuedAt" type="date" /></div>
-          <div className="field"><label htmlFor="appeal-expires">Restriction/ban end date <span>Optional</span></label><input id="appeal-expires" className="input" name="actionExpiresAt" type="date" /></div>
+          <div className="field"><label htmlFor="appeal-issued">Date action was issued <span>Optional</span></label><input id="appeal-issued" className="input" name="actionIssuedAt" type="date" max={dateBounds.today || undefined} title="Choose today or an earlier date." /></div>
+          <div className="field"><label htmlFor="appeal-expires">Restriction/ban end date <span>Optional</span></label><input id="appeal-expires" className="input" name="actionExpiresAt" type="date" min={dateBounds.tomorrow || undefined} title="Choose a future date." /></div>
         </div>
       </section>
 
