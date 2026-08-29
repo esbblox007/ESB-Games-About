@@ -80,6 +80,16 @@ export async function POST(request: NextRequest) {
     if (requestedOutcome.length < 5 || requestedOutcome.length > 3000) return NextResponse.json({ error: "Tell us what outcome you are requesting." }, { status: 400 });
     if (files.some((file) => file.size > 100 * 1024 * 1024)) return NextResponse.json({ error: "Each attachment must be 100 MB or smaller." }, { status: 400 });
 
+    const today = new Date().toISOString().slice(0, 10);
+    if (submittedActionIssuedAt) {
+      if (!isDateOnly(submittedActionIssuedAt)) return NextResponse.json({ error: "Enter a valid date for when the action was issued." }, { status: 400 });
+      if (submittedActionIssuedAt > today) return NextResponse.json({ error: "The date the action was issued cannot be in the future." }, { status: 400 });
+    }
+    if (submittedActionExpiresAt) {
+      if (!isDateOnly(submittedActionExpiresAt)) return NextResponse.json({ error: "Enter a valid restriction or ban end date." }, { status: 400 });
+      if (submittedActionExpiresAt <= today) return NextResponse.json({ error: "The restriction or ban end date must be a future date." }, { status: 400 });
+    }
+
     await takeSupportRateLimit({
       scope: "support-appeal-create-network",
       key: supportNetworkKey(request),
@@ -219,6 +229,12 @@ export async function POST(request: NextRequest) {
       incidentReference,
     }, { status: 503, headers: { "Cache-Control": "private, no-store" } });
   }
+}
+
+function isDateOnly(value: string) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const date = new Date(`${value}T00:00:00.000Z`);
+  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
 }
 
 function normaliseDate(value: string) {
