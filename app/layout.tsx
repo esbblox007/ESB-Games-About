@@ -10,6 +10,7 @@ import "./support-qa-fixes.css";
 import "./support-conversation-focus.css";
 import "./support-private-case-v2.css";
 import "./support-private-case-v3.css";
+import "./appeal-closure-readonly.css";
 import SiteTranslator from "@/components/SiteTranslator";
 import SupportQaEnhancements from "@/components/SupportQaEnhancements";
 import SupportStaffProfileEnhancements from "@/components/SupportStaffProfileEnhancements";
