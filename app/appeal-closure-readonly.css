@@ -1,0 +1,29 @@
+.support-account-system-message{
+  display:grid;
+  gap:5px;
+  width:min(720px,88%);
+  margin:18px auto;
+  padding:4px 0;
+  border:0;
+  background:transparent;
+  color:#8294aa;
+  text-align:center;
+  font-size:12px;
+  line-height:1.55;
+}
+.support-account-system-message time{
+  color:#5f7186;
+  font-size:10px;
+}
+.support-account-ticket-closed-note.appeal-readonly-note{
+  border:0!important;
+  background:transparent!important;
+  color:#77899e!important;
+  text-align:center;
+  padding:8px 10px!important;
+}
+.support-account-status-closed{
+  border-color:rgba(148,163,184,.25)!important;
+  background:rgba(71,85,105,.18)!important;
+  color:#a9b5c4!important;
+}
