@@ -87,6 +87,7 @@ function formatBytes(value: number) {
 }
 
 function ticketDisplayStatus(ticket: TicketSummary) {
+  if (ticket.status === "Closed") return "Closed";
   if (ticket.categoryId === "enforcement-appeal" && ticket.appealStatus && finalAppealStatuses.has(ticket.appealStatus)) return ticket.appealStatus;
   return ticket.status;
 }
@@ -322,7 +323,7 @@ export default function SupportTicketsClient() {
       {detailLoading ? <div className="support-account-conversation-loading"><span className="support-account-spinner" aria-hidden="true" /> Loading conversation…</div> : detail ? <>
         <header className="support-account-conversation-head"><div><span>{detail.ticket.reference}</span><h2>{detail.ticket.subject}</h2><p>{categoryNames[detail.ticket.categoryId] || detail.ticket.categoryId} · {detail.ticket.team}</p></div><span className={statusClass(ticketDisplayStatus(detail.ticket))}>{ticketDisplayStatus(detail.ticket)}</span></header>
         <div className="support-account-message-list">
-          {detail.messages.length > 0 ? detail.messages.map((item) => <article key={item.id} className={`support-account-message support-account-message-${item.senderType.toLowerCase()}`}>
+          {detail.messages.length > 0 ? detail.messages.map((item) => item.senderType === "System" ? <div key={item.id} className="support-account-system-message" role="status"><span>{item.body}</span><time dateTime={item.createdAt}>{formatDate(item.createdAt)}</time></div> : <article key={item.id} className={`support-account-message support-account-message-${item.senderType.toLowerCase()}`}>
             <div><strong>{item.senderName || (item.senderType === "Staff" ? "ESB Games Support" : "You")}</strong><time dateTime={item.createdAt}>{formatDate(item.createdAt)}</time></div>
             <p>{item.body}</p>
             {item.attachments?.length ? <div className="support-account-message-files">{item.attachments.map((attachment) => attachment.href ? <a key={attachment.id} href={attachment.href} target="_blank" rel="noopener noreferrer"><strong>{attachment.name}</strong><span>{formatBytes(attachment.size)}</span></a> : <span key={attachment.id}><strong>{attachment.name}</strong><span>Processing</span></span>)}</div> : null}
@@ -335,7 +336,7 @@ export default function SupportTicketsClient() {
             <div><textarea id="support-account-reply" value={reply} onChange={(event) => setReply(event.currentTarget.value)} maxLength={20000} rows={3} placeholder={detail.ticket.categoryId === "enforcement-appeal" ? "Write a message related to this appeal…" : "Write your reply…"} disabled={replyBusy}/><button type="submit" disabled={replyBusy || (!reply.trim() && !replyFiles.length)}>{replyBusy ? (replyFiles.length ? "Uploading…" : "Sending…") : "Send reply"}</button></div>
             <div className="support-account-composer-tools"><label className="button button-secondary" htmlFor="support-account-files">＋ Attach files</label><input ref={fileInputRef} id="support-account-files" type="file" multiple accept="image/*,video/mp4,video/webm,video/quicktime,audio/*,.pdf,.txt,.csv,.json,.zip" onChange={(event: ChangeEvent<HTMLInputElement>) => selectFiles(Array.from(event.currentTarget.files ?? []))}/><small>Up to 8 files · 100 MB each · 400 MB combined</small></div>
             {replyError ? <p className="support-account-reply-error" role="alert">{replyError}</p> : null}
-          </form> : <div className="support-account-ticket-closed-note">This ticket is closed. Open a new support ticket if you need further help.</div>}
+          </form> : <div className={`support-account-ticket-closed-note${detail.ticket.categoryId === "enforcement-appeal" ? " appeal-readonly-note" : ""}`}>{detail.ticket.categoryId === "enforcement-appeal" ? "This appeal conversation is closed and read-only." : "This ticket is closed. Open a new support ticket if you need further help."}</div>}
           <div className="support-account-conversation-foot-row"><p>{detail.ticket.categoryId === "enforcement-appeal" ? "Use this conversation only for messages directly related to this appeal." : accessMode === "guest" ? "Access is secured by your verified email session." : "This conversation is securely linked to your ESB Games account."}</p><a className="button button-secondary" href="/support#submit-ticket">Create another ticket</a></div>
         </footer>
       </> : <div className="support-account-state compact"><h2>{lane === "appeals" ? "No appeal selected" : "Select a ticket"}</h2><p>{message || "Choose a support conversation from the list."}</p></div>}
