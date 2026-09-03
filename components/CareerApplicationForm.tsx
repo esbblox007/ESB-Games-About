@@ -115,7 +115,15 @@ export default function CareerApplicationForm({ job }: { job: LiveJob }) {
       </div>
 
       <form className="career-role-form" onSubmit={submit}>
-        <input className="career-honeypot" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+        <input
+          className="career-honeypot"
+          type="text"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          style={{ position: "absolute", left: "-10000px", top: "auto", width: 1, height: 1, opacity: 0, pointerEvents: "none" }}
+        />
         <input type="hidden" name="roleId" value={job.slug} />
         <div className="career-role-form-grid">
           <label><span>Full name *</span><input required type="text" name="fullName" autoComplete="name" maxLength={120} placeholder="Your full name" /></label>
