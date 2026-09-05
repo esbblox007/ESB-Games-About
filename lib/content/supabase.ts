@@ -21,6 +21,26 @@ function errorMessage(error: unknown) {
   return error instanceof Error ? error.message : String(error);
 }
 
+async function retryContentSelect<T>(url: string, headers: Record<string, string>, table: string, reason: unknown): Promise<T[]> {
+  console.warn(`[content] ${table} cached request failed; retrying uncached: ${errorMessage(reason)}`);
+
+  try {
+    const response = await fetch(url, {
+      headers,
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Content service retry failed with ${response.status}`);
+    }
+
+    return await response.json() as T[];
+  } catch (retryError) {
+    console.error(`[content] ${table} uncached retry failed: ${errorMessage(retryError)}`);
+    throw retryError;
+  }
+}
+
 export async function contentSelect<T>(
   table: string,
   query: string,
@@ -34,8 +54,9 @@ export async function contentSelect<T>(
     Accept: "application/json",
   };
 
+  let response: Response;
   try {
-    const response = await fetch(url, {
+    response = await fetch(url, {
       headers,
       cache: options?.cache,
       next: options?.cache === "no-store" ? undefined : {
@@ -43,35 +64,24 @@ export async function contentSelect<T>(
         tags: options?.tags,
       },
     });
+  } catch (error) {
+    if (options?.cache === "no-store") throw error;
+    return retryContentSelect<T>(url, headers, table, error);
+  }
 
-    if (!response.ok) {
-      throw new Error(`Content service request failed with ${response.status}`);
-    }
+  if (!response.ok) {
+    throw new Error(`Content service request failed with ${response.status}`);
+  }
 
+  try {
     return await response.json() as T[];
   } catch (error) {
     if (options?.cache === "no-store") throw error;
 
-    // A transient Next.js data-cache/read failure must not turn one published
-    // article into a cached "temporarily unavailable" page. Retry once against
-    // the live content service without the data cache before giving up.
-    console.warn(`[content] ${table} cached request failed; retrying uncached: ${errorMessage(error)}`);
-
-    try {
-      const response = await fetch(url, {
-        headers,
-        cache: "no-store",
-      });
-
-      if (!response.ok) {
-        throw new Error(`Content service retry failed with ${response.status}`);
-      }
-
-      return await response.json() as T[];
-    } catch (retryError) {
-      console.error(`[content] ${table} uncached retry failed: ${errorMessage(retryError)}`);
-      throw retryError;
-    }
+    // Supabase can have returned 200 while the framework's cached response read
+    // still fails. Retry the live response once so one article does not become
+    // a cached "temporarily unavailable" page because of a transient cache read.
+    return retryContentSelect<T>(url, headers, table, error);
   }
 }
 
