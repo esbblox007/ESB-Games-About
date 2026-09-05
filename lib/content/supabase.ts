@@ -17,6 +17,10 @@ function apiKeyHeaders(key: string): Record<string, string> {
     : { apikey: key, Authorization: `Bearer ${key}` };
 }
 
+function errorMessage(error: unknown) {
+  return error instanceof Error ? error.message : String(error);
+}
+
 export async function contentSelect<T>(
   table: string,
   query: string,
@@ -24,23 +28,51 @@ export async function contentSelect<T>(
 ): Promise<T[]> {
   if (!contentBackendConfigured) return [];
   const key = serviceKey || anonKey!;
-  const response = await fetch(`${supabaseUrl}/rest/v1/${table}?${query}`, {
-    headers: {
-      ...apiKeyHeaders(key),
-      Accept: "application/json",
-    },
-    cache: options?.cache,
-    next: options?.cache === "no-store" ? undefined : {
-      revalidate: options?.revalidate ?? 300,
-      tags: options?.tags,
-    },
-  });
+  const url = `${supabaseUrl}/rest/v1/${table}?${query}`;
+  const headers = {
+    ...apiKeyHeaders(key),
+    Accept: "application/json",
+  };
 
-  if (!response.ok) {
-    throw new Error(`Content service request failed with ${response.status}`);
+  try {
+    const response = await fetch(url, {
+      headers,
+      cache: options?.cache,
+      next: options?.cache === "no-store" ? undefined : {
+        revalidate: options?.revalidate ?? 300,
+        tags: options?.tags,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Content service request failed with ${response.status}`);
+    }
+
+    return await response.json() as T[];
+  } catch (error) {
+    if (options?.cache === "no-store") throw error;
+
+    // A transient Next.js data-cache/read failure must not turn one published
+    // article into a cached "temporarily unavailable" page. Retry once against
+    // the live content service without the data cache before giving up.
+    console.warn(`[content] ${table} cached request failed; retrying uncached: ${errorMessage(error)}`);
+
+    try {
+      const response = await fetch(url, {
+        headers,
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Content service retry failed with ${response.status}`);
+      }
+
+      return await response.json() as T[];
+    } catch (retryError) {
+      console.error(`[content] ${table} uncached retry failed: ${errorMessage(retryError)}`);
+      throw retryError;
+    }
   }
-
-  return response.json() as Promise<T[]>;
 }
 
 export async function contentSelectPage<T>(
