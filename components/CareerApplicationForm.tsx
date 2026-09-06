@@ -6,6 +6,9 @@ import type { ApplicationField, LiveJob } from "@/lib/content/careers-live";
 
 type SubmissionState = { tone: "success" | "error" | "info"; message: string; reference?: string } | null;
 
+const MAX_APPLICATION_FILES = 10;
+const MAX_FILE_SIZE = 15 * 1024 * 1024;
+
 function makeIdempotencyKey() {
   return typeof crypto !== "undefined" && "randomUUID" in crypto
     ? crypto.randomUUID()
@@ -25,9 +28,17 @@ function isStandardField(field: ApplicationField) {
   return ["full name", "email", "country", "location", "timezone", "portfolio", "linkedin", "availability", "experience", "motivation", "additional information", "cv", "résumé", "resume"].some((needle) => value.includes(needle));
 }
 
+function attachmentLabel(files: File[]) {
+  if (!files.length) return "Choose PDF, DOC, DOCX, TXT or image files";
+  if (files.length === 1) return files[0].name;
+  return `${files.length} files selected · ${files.map((file) => file.name).join(", ")}`;
+}
+
+const privacyLinkStyle = { textDecoration: "underline", textUnderlineOffset: 3 } as const;
+
 export default function CareerApplicationForm({ job }: { job: LiveJob }) {
   const idempotencyRef = useRef(makeIdempotencyKey());
-  const [cv, setCv] = useState<File | null>(null);
+  const [attachments, setAttachments] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
   const [state, setState] = useState<SubmissionState>(null);
   const [acceptedConsents, setAcceptedConsents] = useState<string[]>([]);
@@ -39,6 +50,19 @@ export default function CareerApplicationForm({ job }: { job: LiveJob }) {
     if (!liveReady || busy) return;
     const form = event.currentTarget;
     if (!form.reportValidity()) return;
+    if (!attachments.length) {
+      setState({ tone: "error", message: "Attach at least one CV, résumé or supporting file before submitting." });
+      return;
+    }
+    if (attachments.length > MAX_APPLICATION_FILES) {
+      setState({ tone: "error", message: `You can attach up to ${MAX_APPLICATION_FILES} files to an application.` });
+      return;
+    }
+    const oversizedFile = attachments.find((file) => file.size <= 0 || file.size > MAX_FILE_SIZE);
+    if (oversizedFile) {
+      setState({ tone: "error", message: `${oversizedFile.name} must be smaller than 15 MB.` });
+      return;
+    }
     const requiredConsentIds = job.consents.filter((consent) => consent.required).map((consent) => consent.id);
     if (requiredConsentIds.some((id) => !acceptedConsents.includes(id))) {
       setState({ tone: "error", message: "Accept the required application privacy statements before submitting." });
@@ -50,15 +74,15 @@ export default function CareerApplicationForm({ job }: { job: LiveJob }) {
     try {
       const data = new FormData(form);
       const fileReferences: string[] = [];
-      if (cv) {
+      for (const file of attachments) {
         const upload = new FormData();
-        upload.set("file", cv);
+        upload.set("file", file);
         upload.set("publicSlug", job.slug);
-        upload.set("category", "CV or résumé");
+        upload.set("category", "Application attachment");
         upload.set("idempotencyKey", idempotencyRef.current);
         const response = await fetch("/api/careers/uploads", { method: "POST", body: upload });
         const body = await response.json().catch(() => ({}));
-        if (!response.ok) throw new Error(body.error ?? "Your CV could not be uploaded.");
+        if (!response.ok) throw new Error(body.error ?? `${file.name} could not be uploaded.`);
         fileReferences.push(String(body.fileReference));
       }
 
@@ -96,7 +120,7 @@ export default function CareerApplicationForm({ job }: { job: LiveJob }) {
       if (!response.ok) throw new Error(body.error ?? "Your application could not be submitted.");
       setState({ tone: "success", message: body.emailSent ? "Your application has been submitted. A confirmation email is on its way." : "Your application has been submitted successfully.", reference: body.applicationId });
       form.reset();
-      setCv(null);
+      setAttachments([]);
       setAcceptedConsents([]);
       idempotencyRef.current = makeIdempotencyKey();
     } catch (error) {
@@ -111,7 +135,7 @@ export default function CareerApplicationForm({ job }: { job: LiveJob }) {
       <div className="career-role-application-heading">
         <span className="eyebrow">Application</span>
         <h2 id="application-heading">Apply for {job.title}</h2>
-        <p>{liveReady ? <>Complete the form below. Your application and files are sent securely to the ESB Games recruitment workspace. Read the <Link href="/careers/privacy">Careers Application Privacy Notice</Link> before submitting.</> : "Online applications for this role are not currently available."}</p>
+        <p>{liveReady ? <>Complete the form below. Your application and files are sent securely to the ESB Games recruitment workspace. Read the <Link href="/careers/privacy" target="_blank" rel="noopener noreferrer" style={privacyLinkStyle}>Careers Application Privacy Notice</Link> before submitting.</> : "Online applications for this role are not currently available."}</p>
       </div>
 
       <form className="career-role-form" onSubmit={submit}>
@@ -147,14 +171,24 @@ export default function CareerApplicationForm({ job }: { job: LiveJob }) {
             return <label key={key}><span>{title}{field.required ? " *" : ""}</span><input name={`extra:${key}`} required={field.required} type={type.includes("url") ? "url" : type.includes("number") ? "number" : "text"} maxLength={1000} placeholder={field.placeholder} />{field.helpText && <small>{field.helpText}</small>}</label>;
           })}
 
-          <label className="career-upload-field full"><span>CV or résumé *</span><input required type="file" name="cv" accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.webp" onChange={(event) => setCv(event.target.files?.[0] ?? null)} /><b>{cv?.name || "Choose a PDF, DOC, DOCX, TXT or image file"}</b><small>Maximum 15 MB. Files are stored privately and are only available to authorised recruitment staff.</small></label>
+          <label className="career-upload-field full"><span>CV, résumé or supporting files *</span><input required multiple type="file" name="attachments" accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.webp" onChange={(event) => {
+            const selected = Array.from(event.target.files ?? []);
+            if (selected.length > MAX_APPLICATION_FILES) {
+              event.target.value = "";
+              setAttachments([]);
+              setState({ tone: "error", message: `You can attach up to ${MAX_APPLICATION_FILES} files to an application.` });
+              return;
+            }
+            setAttachments(selected);
+            setState(null);
+          }} /><b>{attachmentLabel(attachments)}</b><small>Upload up to {MAX_APPLICATION_FILES} files, including multiple PNG, JPEG or WebP images. Maximum 15 MB per file. Files are stored privately and are only available to authorised recruitment staff.</small></label>
 
           {job.consents.map((consent) => (
-            <label className="career-consent full" key={consent.id}><input type="checkbox" required={consent.required} checked={acceptedConsents.includes(consent.id)} onChange={(event) => setAcceptedConsents((current) => event.target.checked ? [...current, consent.id] : current.filter((id) => id !== consent.id))} /><span><strong>{consent.title}{consent.required ? " *" : ""}</strong> I have read the <Link href="/careers/privacy" target="_blank">Careers Application Privacy Notice</Link> and agree to the required recruitment processing described for this application.</span></label>
+            <label className="career-consent full" key={consent.id}><input type="checkbox" required={consent.required} checked={acceptedConsents.includes(consent.id)} onChange={(event) => setAcceptedConsents((current) => event.target.checked ? [...current, consent.id] : current.filter((id) => id !== consent.id))} /><span><strong>{consent.title}{consent.required ? " *" : ""}</strong> I have read the <Link href="/careers/privacy" target="_blank" rel="noopener noreferrer" style={privacyLinkStyle}>Careers Application Privacy Notice</Link> and agree to the required recruitment processing described for this application.</span></label>
           ))}
         </div>
 
-        {state && <div className={`career-submission-state ${state.tone}`} role="status"><strong>{state.message}</strong>{state.reference && <span>Application reference: {state.reference}</span>}</div>}
+        {state && <div className={`career-submission-state ${state.tone}`} role="status"><strong>{state.message}</strong>{state.reference && <>{" "}<span>Application reference: {state.reference}</span></>}</div>}
         <div className="career-role-form-actions"><button className="button button-primary" type="submit" disabled={!liveReady || busy}>{busy ? "Submitting…" : liveReady ? "Submit application" : "Online applications unavailable"}</button><p>Need help with your application? <a href={`mailto:careers@esbgames.com?subject=${encodeURIComponent(`Question about ${job.title}`)}`}>Contact careers@esbgames.com</a>.</p></div>
       </form>
     </section>
