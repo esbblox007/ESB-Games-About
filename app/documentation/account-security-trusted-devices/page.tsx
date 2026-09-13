@@ -4,7 +4,7 @@ import PageShell from "@/components/PageShell";
 
 export const metadata: Metadata = {
   title: "Account Security & Trusted Devices",
-  description: "How ESB Games protects sign-ins, recognises trusted devices and uses essential account security cookies across connected ESB Games services.",
+  description: "How ESB Games protects sign-ins, recognises trusted browsers and devices, and uses essential account security cookies across connected ESB Games services.",
   alternates: { canonical: "https://about.esbgames.com/documentation/account-security-trusted-devices" },
 };
 
@@ -27,19 +27,21 @@ export default function AccountSecurityTrustedDevicesPage() {
         <p>ESB Games may ask you to complete an additional security check when you open a product on a browser or device that has not previously been recognised for that account. Depending on the situation, this can include confirming your email address, entering a one-time verification code, completing two-factor authentication, or signing in again.</p>
         <p>Never share a verification code, password, recovery code or two-factor authentication code with another person. ESB Games staff should not ask you to send them one of these codes.</p>
 
-        <h2>Trusted devices</h2>
-        <p>After a successful security check, ESB Games can remember a browser or device as trusted for that account. This helps avoid unnecessary verification prompts while keeping unfamiliar sign-ins subject to additional checks.</p>
-        <p>A trusted device is not permanent proof of identity. ESB Games can require verification again when a session expires, security-sensitive information changes, unusual activity is detected, or another security check is appropriate.</p>
+        <h2>Trusted browsers and devices</h2>
+        <p>After a successful security check, ESB Games can remember the specific browser or device used for that account. Recognition is based on secure account-session and trusted-browser data stored for that browser or device, not on the household or network IP address.</p>
+        <p>This means another device connected to the same home, school, workplace or public network is not automatically treated as trusted simply because it uses the same internet connection.</p>
+        <p>A trusted browser or device is not permanent proof of identity. ESB Games can require verification again when a session expires, security-sensitive information changes, unusual activity is detected, browser data is cleared, or another security check is appropriate.</p>
 
         <h2>Essential account cookies</h2>
-        <p>Official ESB Games websites use essential cookies to keep you signed in, maintain a secure session, protect requests against misuse, and recognise trusted browsers or devices. Because ESB Games products are connected, some account-security cookies may be available across trusted <strong>esbgames.com</strong> subdomains so the same account can be recognised between official ESB Games products.</p>
+        <p>Official ESB Games websites use essential cookies and browser storage to keep you signed in, maintain a secure session, protect requests against misuse, and recognise a previously verified browser or device. Because ESB Games products are connected, some account-security cookies may be available across trusted <strong>esbgames.com</strong> subdomains so the same account can be recognised between official ESB Games products.</p>
         <p>These essential security cookies are used to operate and protect your account. They are separate from optional analytics, personalisation or advertising technologies where those are offered.</p>
 
-        <h2>IP address and security signals</h2>
-        <p>Network information such as an IP address can be used as one of several signals for account security, abuse prevention and sign-in records. An IP address by itself is not treated as a password and is not sufficient on its own to prove who you are.</p>
+        <h2>Network information</h2>
+        <p>Like other online services, ESB Games servers can receive network information such as the public IP address used to make a request. This may be retained where necessary for security, abuse prevention, rate limiting or operational logs, but an IP address is not used as the trusted-device credential and does not make another device trusted.</p>
+        <div className="article-callout article-callout-info"><strong>No “device IP” is used for trust</strong><p>There is no special device IP that reliably identifies one physical device on the web. ESB Games instead relies on browser- and device-specific session or trusted-device information, together with account verification when required.</p></div>
 
         <h2>When you may be asked to verify again</h2>
-        <ul><li>You use a new browser or device.</li><li>Your existing session is no longer valid.</li><li>An ESB Games product requires an additional first-use security check.</li><li>Your account or security settings have changed.</li><li>ESB Games detects activity that requires additional verification.</li></ul>
+        <ul><li>You use a new browser or device.</li><li>Your existing session is no longer valid.</li><li>You clear the browser data used to remember a trusted sign-in.</li><li>An ESB Games product requires an additional first-use security check.</li><li>Your account or security settings have changed.</li><li>ESB Games detects activity that requires additional verification.</li></ul>
 
         <div className="article-callout article-callout-info"><strong>Only sign in on official ESB Games domains</strong><p>Before entering account details or a verification code, check that you are on an official ESB Games website using an <strong>esbgames.com</strong> domain or another domain clearly identified by ESB Games as official.</p></div>
 
