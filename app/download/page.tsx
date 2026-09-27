@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: "Downloads",
   description: "ESB Games Player and ESB Studio are currently in development. Public downloads are not available yet.",
   alternates: { canonical: "/download" },
-  openGraph: { title: "Downloads | ESB Games", description: "Follow availability for ESB Games Player and ESB Studio as development progresses.", url: "/download" },
+  openGraph: { title: "Downloads | ESB Games", description: "Follow availability for ESB Games Player and ESB Studio as development progresses.", url: "/download", images: [{ url: "/og-preview", width: 1200, height: 630, alt: "ESB Games homepage" }] },
 };
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://about.esbgames.com";

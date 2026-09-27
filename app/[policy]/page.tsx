@@ -25,8 +25,8 @@ export async function generateMetadata({ params }: { params: Promise<{ policy: s
     description,
     alternates: { canonical: `/${item.slug}` },
     robots: published ? { index: true, follow: true } : { index: false, follow: true },
-    openGraph: { title: `${item.title} | ESB Games`, description, url: `/${item.slug}`, type: "article" },
-    twitter: { card: "summary_large_image", title: `${item.title} | ESB Games`, description },
+    openGraph: { title: `${item.title} | ESB Games`, description, url: `/${item.slug}`, type: "article", images: [{ url: "/og-preview", width: 1200, height: 630, alt: "ESB Games homepage" }] },
+    twitter: { card: "summary_large_image", title: `${item.title} | ESB Games`, description, images: ["/og-preview"] },
   };
 }
 

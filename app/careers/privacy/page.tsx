@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "How ESB Games handles information submitted through the Careers application process.",
   alternates: { canonical: "/careers/privacy" },
   robots: { index: true, follow: true },
-  openGraph: { title: "Careers Application Privacy Notice | ESB Games", description: "How ESB Games handles information submitted through Careers.", url: "/careers/privacy", type: "article" },
+  openGraph: { title: "Careers Application Privacy Notice | ESB Games", description: "How ESB Games handles information submitted through Careers.", url: "/careers/privacy", type: "article", images: [{ url: "/og-preview", width: 1200, height: 630, alt: "ESB Games homepage" }] },
 };
 
 export default function CareersPrivacyPage() {
