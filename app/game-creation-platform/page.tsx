@@ -13,13 +13,13 @@ export const metadata: Metadata = {
     description: "A connected creator ecosystem for building, testing, publishing and discovering games and interactive experiences.",
     url: "/game-creation-platform",
     type: "website",
-    images: [{ url: "/hero-studio-platform.png", alt: "ESB Studio game creation platform" }],
+    images: [{ url: "/og-preview", alt: "ESB Studio game creation platform" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Game Creation Platform for Creators | ESB Games",
     description: "A connected creator ecosystem for building, testing, publishing and discovering games and interactive experiences.",
-    images: ["/hero-studio-platform.png"],
+    images: ["/og-preview"],
   },
 };
 

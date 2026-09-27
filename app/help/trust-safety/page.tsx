@@ -16,13 +16,13 @@ export const metadata: Metadata = {
     description: "Safety guidance, policies and rights information for the ESB Games ecosystem.",
     url: "/help/trust-safety",
     type: "website",
-    images: [{ url: "/hero-discover-platform.png", alt: "ESB Games Trust & Safety" }],
+    images: [{ url: "/og-preview", alt: "ESB Games Trust & Safety" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Trust & Safety | ESB Games",
     description,
-    images: ["/hero-discover-platform.png"],
+    images: ["/og-preview"],
   },
 };
 

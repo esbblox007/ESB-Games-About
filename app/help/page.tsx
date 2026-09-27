@@ -13,13 +13,13 @@ export const metadata: Metadata = {
     description,
     url: "/help",
     type: "website",
-    images: [{ url: "/hero-discover-platform.png", alt: "ESB Games Help" }],
+    images: [{ url: "/og-preview", alt: "ESB Games Help" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Help | ESB Games",
     description,
-    images: ["/hero-discover-platform.png"],
+    images: ["/og-preview"],
   },
 };
 
