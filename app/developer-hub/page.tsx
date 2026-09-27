@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   description: "Explore ESB Studio, the game creation tools and creator ecosystem being developed for ESB Games, including scripting, publishing, discovery, analytics and collaboration.",
   keywords: ["ESB Studio", "game creation platform", "game development platform", "game creator tools", "create games", "creator platform", "ESB Games creators"],
   alternates: { canonical: "/developer-hub" },
-  openGraph: { title: "ESB Studio & Game Creation Platform | ESB Games", description: "Build games and experiences with ESB Studio and the connected ESB Games creator ecosystem.", url: "/developer-hub", type: "website", images: [{ url: "/hero-studio-platform.png", alt: "ESB Studio game creation tools" }] },
-  twitter: { card: "summary_large_image", title: "ESB Studio & Game Creation Platform | ESB Games", description: "Build games and experiences with ESB Studio and the connected ESB Games creator ecosystem.", images: ["/hero-studio-platform.png"] },
+  openGraph: { title: "ESB Studio & Game Creation Platform | ESB Games", description: "Build games and experiences with ESB Studio and the connected ESB Games creator ecosystem.", url: "/developer-hub", type: "website", images: [{ url: "/og-preview", alt: "ESB Studio game creation tools" }] },
+  twitter: { card: "summary_large_image", title: "ESB Studio & Game Creation Platform | ESB Games", description: "Build games and experiences with ESB Studio and the connected ESB Games creator ecosystem.", images: ["/og-preview"] },
 };
 
 const creatorFeatures = [

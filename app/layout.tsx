@@ -44,14 +44,14 @@ export const metadata: Metadata = {
     title: `ESB Games — ${ESB_BRAND.tagline}`,
     description: "A connected gaming and creator ecosystem where people can discover, belong and build.",
     url: ESB_BRAND.siteUrl,
-    images: [{ url: "/hero-discover-platform.png", alt: "ESB Games platform interface" }],
+    images: [{ url: "/og-preview", alt: "ESB Games platform interface" }],
     locale: "en_GB",
   },
   twitter: {
     card: "summary_large_image",
     title: `ESB Games — ${ESB_BRAND.tagline}`,
     description: "A connected gaming and creator ecosystem where people can discover, belong and build.",
-    images: ["/hero-discover-platform.png"],
+    images: ["/og-preview"],
   },
 };
 

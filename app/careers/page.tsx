@@ -9,8 +9,8 @@ export const metadata: Metadata = {
   title: "Careers",
   description: "Explore current ESB Games opportunities and the official website application process. Role-specific terms are shown on each published vacancy.",
   alternates: { canonical: "/careers" },
-  openGraph: { title: "Careers | ESB Games", description: "Explore current ESB Games opportunities and the official website application process.", url: "/careers", type: "website", images: [{ url: "/career-culture-collaborate.jpg", alt: "Careers at ESB Games" }] },
-  twitter: { card: "summary_large_image", title: "Careers | ESB Games", description: "Explore current ESB Games opportunities and the official website application process.", images: ["/career-culture-collaborate.jpg"] },
+  openGraph: { title: "Careers | ESB Games", description: "Explore current ESB Games opportunities and the official website application process.", url: "/careers", type: "website", images: [{ url: "/og-preview", alt: "Careers at ESB Games" }] },
+  twitter: { card: "summary_large_image", title: "Careers | ESB Games", description: "Explore current ESB Games opportunities and the official website application process.", images: ["/og-preview"] },
 };
 
 const impactCards = [

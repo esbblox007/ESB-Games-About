@@ -9,8 +9,8 @@ export const metadata: Metadata = {
   title: "Documentation",
   description: "Official ESB Games product, creator, ESB Studio, scripting and publishing documentation.",
   alternates: { canonical: "/documentation" },
-  openGraph: { title: "Documentation | ESB Games", description: "Official ESB Games product, creator, ESB Studio, scripting and publishing documentation.", url: "/documentation", type: "website", images: [{ url: "/hero-studio-platform.png", alt: "ESB Games Documentation" }] },
-  twitter: { card: "summary_large_image", title: "Documentation | ESB Games", description: "Official ESB Games product, creator, ESB Studio, scripting and publishing documentation.", images: ["/hero-studio-platform.png"] },
+  openGraph: { title: "Documentation | ESB Games", description: "Official ESB Games product, creator, ESB Studio, scripting and publishing documentation.", url: "/documentation", type: "website", images: [{ url: "/og-preview", alt: "ESB Games Documentation" }] },
+  twitter: { card: "summary_large_image", title: "Documentation | ESB Games", description: "Official ESB Games product, creator, ESB Studio, scripting and publishing documentation.", images: ["/og-preview"] },
 };
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
