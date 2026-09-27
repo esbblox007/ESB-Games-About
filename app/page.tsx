@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   title: { absolute: "ESB Games — Discover. Belong. Build." },
   description: "Discover ESB Games, a connected gaming and creator ecosystem being built for players, creators, families and communities.",
   alternates: { canonical: "/" },
-  openGraph: { title: "ESB Games — Discover. Belong. Build.", description: "A connected gaming and creator ecosystem where people can discover, belong and build.", url: "/" },
+  openGraph: { title: "ESB Games — Discover. Belong. Build.", description: "A connected gaming and creator ecosystem where people can discover, belong and build.", url: "/", images: [{ url: "/og-preview", width: 1200, height: 630, alt: "ESB Games homepage" }] },
 };
 
 function SparklesIcon({ size = 22 }: { size?: number }) {
