@@ -7,8 +7,8 @@ export const metadata: Metadata = {
   title: "Family Centre",
   description: "Explore linked-account and parental-control features being developed for ESB Games. Trust & Safety explains the wider safety framework and private cases belong in Support.",
   alternates: { canonical: "/parental-controls" },
-  openGraph: { title: "Family Centre | ESB Games", description: "Explore the family safety and parental-control systems being developed for ESB Games.", url: "/parental-controls", type: "website", images: [{ url: "/hero-discover-platform.png", alt: "ESB Games Family Centre" }] },
-  twitter: { card: "summary_large_image", title: "Family Centre | ESB Games", description: "Explore the family safety and parental-control systems being developed for ESB Games.", images: ["/hero-discover-platform.png"] },
+  openGraph: { title: "Family Centre | ESB Games", description: "Explore the family safety and parental-control systems being developed for ESB Games.", url: "/parental-controls", type: "website", images: [{ url: "/og-preview", alt: "ESB Games Family Centre" }] },
+  twitter: { card: "summary_large_image", title: "Family Centre | ESB Games", description: "Explore the family safety and parental-control systems being developed for ESB Games.", images: ["/og-preview"] },
 };
 
 const features = [

@@ -18,8 +18,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title,
     description: job.summary,
     alternates: { canonical: url },
-    openGraph: { title, description: job.summary, url, type: "website" },
-    twitter: { card: "summary_large_image", title, description: job.summary },
+    openGraph: { title, description: job.summary, url, type: "website", images: [{ url: "/og-preview", width: 1200, height: 630, alt: "ESB Games homepage" }] },
+    twitter: { card: "summary_large_image", title, description: job.summary, images: ["/og-preview"] },
   };
 }
 

@@ -16,7 +16,7 @@ function formatDate(value: string) { return new Intl.DateTimeFormat("en-GB", { d
 function metadataForDocumentation(article: NewsArticle): Metadata {
   const canonical = article.canonicalUrl || `${siteUrl}/documentation/${article.slug}`;
   const image = article.socialImage || article.coverImage;
-  return { title: article.seoTitle || article.title, description: article.seoDescription || article.excerpt, alternates: { canonical }, openGraph: { type: "article", title: article.title, description: article.excerpt, url: canonical, images: image ? [{ url: image, alt: article.coverImageAlt || article.title }] : undefined }, twitter: { card: "summary_large_image", title: article.title, description: article.excerpt, images: image ? [image] : undefined } };
+  return { title: article.seoTitle || article.title, description: article.seoDescription || article.excerpt, alternates: { canonical }, openGraph: { type: "article", title: article.title, description: article.excerpt, url: canonical, images: [{ url: "/og-preview", width: 1200, height: 630, alt: "ESB Games homepage" }] }, twitter: { card: "summary_large_image", title: article.title, description: article.excerpt, images: ["/og-preview"] } };
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
