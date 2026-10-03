@@ -54,6 +54,7 @@ type PreparedUpload = {
 };
 
 const platformEndpoint = "https://esbgames.com/api/platform/support/tickets";
+const accountSessionEndpoint = "/api/support/account-session";
 const guestEndpoint = "/api/support/guest-tickets";
 const supportReturn = "https://about.esbgames.com/support/tickets";
 const nestedReturn = `/login?returnTo=${encodeURIComponent(supportReturn)}`;
@@ -161,13 +162,27 @@ export default function SupportTicketsClient() {
   const loadTickets = useCallback(async (silent = false) => {
     if (!silent) { setState("loading"); setMessage(null); }
     try {
-      const accountResponse = await accountGet(platformEndpoint);
-      const accountBody = await accountResponse.json().catch(() => ({})) as { ok?: boolean; data?: { tickets?: TicketSummary[] }; message?: string };
-      if (accountResponse.ok && accountBody.ok === true) {
-        applyTickets(Array.isArray(accountBody.data?.tickets) ? accountBody.data?.tickets ?? [] : [], "account");
-        return;
+      // Resolve the shared ESB account locally first. This endpoint refreshes a
+      // stale shared access token when the refresh token is still valid, and it
+      // clears dead shared cookies when the account session has expired. Avoid
+      // calling the protected Platform ticket endpoint at all for signed-out
+      // visitors; otherwise the five-second inbox poll creates repeated 401s.
+      const sessionResponse = await accountGet(accountSessionEndpoint);
+      const sessionBody = await sessionResponse.json().catch(() => ({})) as { authenticated?: boolean };
+      if (!sessionResponse.ok) throw new Error("Your ESB Games session could not be checked.");
+
+      if (sessionBody.authenticated === true) {
+        const accountResponse = await accountGet(platformEndpoint);
+        const accountBody = await accountResponse.json().catch(() => ({})) as { ok?: boolean; data?: { tickets?: TicketSummary[] }; message?: string };
+        if (accountResponse.ok && accountBody.ok === true) {
+          applyTickets(Array.isArray(accountBody.data?.tickets) ? accountBody.data?.tickets ?? [] : [], "account");
+          return;
+        }
+        if (accountResponse.status !== 401) throw new Error(accountBody.message || "Your support tickets could not be loaded.");
+        // The local session check succeeded but Platform rejected the shared
+        // session. Fall through once to guest access; do not keep polling the
+        // protected endpoint after state changes away from ready.
       }
-      if (accountResponse.status !== 401) throw new Error(accountBody.message || "Your support tickets could not be loaded.");
 
       const guestResponse = await guestGet(guestEndpoint);
       const guestBody = await guestResponse.json().catch(() => ({})) as { ok?: boolean; data?: { tickets?: TicketSummary[] }; message?: string };
