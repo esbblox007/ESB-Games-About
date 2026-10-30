@@ -7,7 +7,7 @@ const STUDIO_ORIGINS = new Set([
 ]);
 const TAGS = ["studio", "development", "creator"];
 
-function cors(origin: string | null) {
+function cors(origin: string | null): Record<string,string> {
   return origin && STUDIO_ORIGINS.has(origin)
     ? { "Access-Control-Allow-Origin": origin, Vary: "Origin" }
     : {};
