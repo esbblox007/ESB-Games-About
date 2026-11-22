@@ -48,8 +48,8 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="about-development-status" aria-label="Current development status">
-              <span className="eyebrow">Current stage</span>
-              <strong>Pre-launch development</strong>
+              <span className="eyebrow">Launch status</span>
+              <strong>Pre-launch · Final development and QA</strong>
               <p>ESB Games is in final development and Quality Assurance testing ahead of launch.</p>
             </div>
           </div>
