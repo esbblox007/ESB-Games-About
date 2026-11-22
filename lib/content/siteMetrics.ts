@@ -1,7 +1,7 @@
 export const homeProofItems = [
-  "Pre-launch development",
-  "One connected ecosystem",
-  "Creator-first tools",
+  "Pre-launch · final development and QA",
+  "Browser play without downloads",
+  "One app for supported games",
   "Discover. Belong. Build.",
-  "Family controls in development",
+  "ESB Studio, Groups and Family Centre",
 ] as const;
