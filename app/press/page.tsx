@@ -4,11 +4,11 @@ import PageShell from "@/components/PageShell";
 
 export const metadata: Metadata = {
   title: "Press & Media | ESB Games",
-  description: "Official ESB Games press and media information, company descriptions, product facts, official links and media contact details.",
+  description: "Official ESB Games facts: browser games without downloads, one player app, ESB Studio, ESB Groups, Family Centre and the creator economy.",
   alternates: { canonical: "/press" },
   openGraph: {
     title: "ESB Games Press & Media",
-    description: "Official company information and media resources for ESB Games and ESB Studio.",
+    description: "Official ESB Games product details for journalists: browser play, one gaming app, Studio creation tools, communities and family features.",
     url: "/press",
     type: "website",
     images: [{ url: "/og-preview", alt: "ESB Games platform" }],
@@ -23,11 +23,11 @@ export const metadata: Metadata = {
 
 const facts = [
   ["Company", "ESB Games"],
-  ["Category", "Gaming and creation platform"],
-  ["Platform", "ESB Games Play Platform"],
+  ["Category", "User-generated gaming ecosystem"],
+  ["Play access", "Browser or ESB Games app"],
   ["Creator software", "ESB Studio"],
-  ["Development stage", "Pre-launch development"],
-  ["Official domain", "esbgames.com"],
+  ["Launch status", "Pre-launch · final development and QA"],
+  ["Family & communities", "Family Centre and ESB Groups"],
 ] as const;
 
 export default function PressPage() {
@@ -40,7 +40,7 @@ export default function PressPage() {
       "@type": "Organization",
       name: "ESB Games",
       url: "https://esbgames.com/",
-      description: "ESB Games is a connected gaming and creation platform being developed for players, creators, families and communities.",
+      description: "ESB Games is a user-generated gaming ecosystem combining download-free browser play, one ESB Games app, ESB Studio game creation tools, ESB Groups, Family Centre and ESB Bucks.",
     },
   };
 
@@ -56,8 +56,8 @@ export default function PressPage() {
 
         <section style={{ marginTop: 64 }}>
           <h2>About ESB Games</h2>
-          <p><strong>Short description:</strong> ESB Games is a connected gaming and creation platform being developed for players, creators, families and communities.</p>
-          <p><strong>Extended description:</strong> ESB Games is building an ecosystem that connects game discovery, social communities, creator tools, publishing, safety and family features through one platform. ESB Studio is the creation environment being developed for building, scripting, testing and publishing experiences to ESB Games.</p>
+          <p><strong>Short description:</strong> ESB Games is a user-generated gaming ecosystem offering games in a web browser without downloads or through the single ESB Games app.</p>
+          <p><strong>Extended description:</strong> ESB Play connects players to supported user-generated games directly in a browser, without downloading anything, or through one ESB Games app rather than separate game installations. ESB Studio brings together game creation, scripting, assets, collaboration and publishing. ESB Groups, Family Centre, ESB Bucks and Trust & Safety connect the wider ecosystem. ESB Games is in pre-launch, undergoing final development and Quality Assurance testing.</p>
           <p><strong>Important:</strong> ESB Games is its own gaming and creation platform. Historical descriptions of ESB Games as a Roblox development company refer to an earlier direction and do not describe the current platform.</p>
         </section>
 
@@ -81,7 +81,7 @@ export default function PressPage() {
 
         <section style={{ marginTop: 56 }}>
           <h2>Latest official updates</h2>
-          <p>Product announcements, development updates and company news are published through the <Link href="/news">ESB Games news system</Link>. These posts are the preferred source for current product statements and launch information.</p>
+          <p>Official product explanations, company news and launch announcements are available through the <Link href="/news">ESB Games news system</Link>. These posts are the preferred source for current product statements and launch information.</p>
         </section>
       </main>
     </PageShell>
