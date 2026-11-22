@@ -17,9 +17,9 @@ import { homeProofItems } from "@/lib/content/siteMetrics";
 
 export const metadata: Metadata = {
   title: { absolute: "ESB Games — Discover. Belong. Build." },
-  description: "Discover ESB Games, a connected gaming and creator ecosystem being built for players, creators, families and communities.",
+  description: "Discover ESB Games: games accessible without downloads in your browser or through one ESB Games app, plus Studio creation tools, groups and family features.",
   alternates: { canonical: "/" },
-  openGraph: { title: "ESB Games — Discover. Belong. Build.", description: "A connected gaming and creator ecosystem where people can discover, belong and build.", url: "/", images: [{ url: "/og-preview", width: 1200, height: 630, alt: "ESB Games homepage" }] },
+  openGraph: { title: "ESB Games — Discover. Belong. Build.", description: "Play browser-based games without individual downloads or through one ESB Games app. Create with ESB Studio and join communities.", url: "/", images: [{ url: "/og-preview", width: 1200, height: 630, alt: "ESB Games homepage" }] },
 };
 
 function SparklesIcon({ size = 22 }: { size?: number }) {
@@ -90,7 +90,7 @@ export default function HomePage() {
               </h1>
 
               <p className="home-hero-lead">
-                ESB Games is building a connected gaming and creator ecosystem: many worlds, one community and room for ambitious ideas. Whether you come to discover new experiences, find your people or build your own, you belong here.
+                ESB Games connects user-generated games, creators and communities. Play supported experiences directly in your web browser without downloads, or access them through one ESB Games app instead of installing every game separately.
               </p>
 
               <div className="home-hero-action-row">
@@ -112,7 +112,7 @@ export default function HomePage() {
               </div>
 
               <div className="home-hero-stats home-proof-points" aria-label="ESB Games product principles">
-                <div><strong>ONE ECOSYSTEM</strong><span>Games, creation, communities and discovery.</span></div>
+                <div><strong>ONE ECOSYSTEM</strong><span>Browser play, one app, creators and groups.</span></div>
                 <div><strong>CREATOR-FIRST</strong><span>Tools built for games, experiences and UGC.</span></div>
                 <div><strong>GLOBAL BY DESIGN</strong><span>Built for communities around the world.</span></div>
               </div>
@@ -158,35 +158,35 @@ export default function HomePage() {
           <div className="home-section-inner">
             <header className="home-center-heading">
               <h2>A platform that puts <span className="home-gradient">you</span> first.</h2>
-              <p>We are building ESB Games for players who want freedom, creators who want fairness,<br className="home-desktop-break"/> and communities that deserve safety.</p>
+              <p>ESB Games connects browser-based games with creative tools,<br className="home-desktop-break"/> and communities with family-focused safety.</p>
             </header>
 
             <div className="home-feature-grid">
               <article className="home-feature-card home-feature-main">
                 <span className="home-feature-icon home-feature-icon-magenta"><SparklesIcon/></span>
                 <h3>Build ambitious worlds,<br/>step by step.</h3>
-                <p>ESB Studio is being designed around approachable building tools, reusable workflows, scripting, animation, VFX and connected publishing. Features will be introduced in stages as the creator tool moves through testing.</p>
+                <p>ESB Studio brings world building, scripting, assets, animation, VFX and publishing into a connected environment for creators developing user-generated experiences.</p>
                 <Link href="/developer-hub">Explore ESB Studio <span>→</span></Link>
               </article>
               <article className="home-feature-card home-feature-small">
                 <span className="home-feature-icon home-feature-icon-blue"><ShieldIcon size={21}/></span>
                 <h3>Safe by Design</h3>
-                <p>Moderation workflows, parental controls, account protection and age-appropriate settings are being designed alongside the platform. Safety requirements will continue to be tested and improved before public launch.</p>
+                <p>ESB Family Centre focuses on linked family accounts and parental controls, while Trust & Safety supports moderation, reporting, privacy and safer community experiences.</p>
               </article>
               <article className="home-feature-card home-feature-small home-feature-performance">
                 <span className="home-feature-icon home-feature-icon-pink"><BoltIcon/></span>
                 <h3>Smooth Performance Everywhere</h3>
-                <p>The platform and Studio are being developed with responsive controls, scalable graphics settings and support for a wide range of devices. Final performance targets will be confirmed through testing.</p>
+                <p>Play supported games directly in a web browser without downloading them, or use one ESB Games app to access supported experiences in a single place.</p>
               </article>
               <article className="home-feature-card home-feature-half">
                 <span className="home-feature-icon home-feature-icon-purple"><CodeIcon/></span>
                 <h3>Built for Creators</h3>
-                <p>Creator tools, analytics, collaboration and publishing workflows are being developed as one connected experience. Monetisation and publishing requirements will be published before those systems launch.</p>
+                <p>ESB Studio connects project creation, collaboration, publishing, analytics and creator economy tools with ESB Games discovery and community features.</p>
               </article>
               <article className="home-feature-card home-feature-half">
                 <span className="home-feature-icon home-feature-icon-orange"><InfinityIcon/></span>
                 <h3>Endless Universes</h3>
-                <p>Discover experiences, join communities and build projects through one connected ecosystem. The public experience library will grow as creators begin publishing to ESB Games.</p>
+                <p>Explore user-generated experiences, follow creators, join ESB Groups and discover new games through one connected gaming ecosystem.</p>
               </article>
             </div>
 
@@ -194,11 +194,11 @@ export default function HomePage() {
               <article className="home-audience-card home-creators-card">
                 <span className="home-overline">FOR CREATORS</span>
                 <h3>Build it. Prepare it.<br/>Grow with it.</h3>
-                <p>ESB Games is building creator publishing, analytics, monetisation and marketplace systems designed to help successful creators grow. Final commercial terms will be published before those systems launch.</p>
+                <p>ESB Studio and the ESB Games creator economy connect game publishing, analytics, marketplace tools and ESB Bucks across the ecosystem.</p>
                 <div className="home-mini-metrics home-mini-proof">
                   <div><strong>CONNECTED</strong><span>Studio and platform workflows</span></div>
-                  <div><strong>CREATOR-FIRST</strong><span>Growth tools in development</span></div>
-                  <div><strong>PRE-LAUNCH</strong><span>Terms not yet final</span></div>
+                  <div><strong>CREATOR-FIRST</strong><span>Creation and analytics tools</span></div>
+                  <div><strong>PRE-LAUNCH</strong><span>Final development and QA</span></div>
                 </div>
                 <Link href="/developer-hub" className="button button-primary"><CodeIcon size={17}/> Explore creator tools</Link>
               </article>
@@ -206,7 +206,7 @@ export default function HomePage() {
               <article className="home-audience-card home-players-card">
                 <span className="home-overline home-overline-cyan">FOR PLAYERS</span>
                 <h3>Find your people.<br/>Make your legend.</h3>
-                <p>Friends, groups, events, messaging and discovery are being brought together with family controls and platform safety systems.</p>
+                <p>Discover and play games in your browser or the ESB Games app, connect through ESB Groups, and explore player features with family and safety systems.</p>
                 <div className="home-community-avatars" aria-label="One connected ESB Games community"><i/><i/><i/><i/><i/><b>ESB</b></div>
                 <a href="https://esbgames.com" className="button button-secondary" data-analytics="explore-platform"><UserPlusIcon/> Explore the platform</a>
               </article>
@@ -232,15 +232,15 @@ export default function HomePage() {
           <div className="home-section-inner">
             <div className="home-early-banner">
               <h2>The next era of play is<br/><span className="home-gradient">being built</span>.</h2>
-              <p>Create your ESB Games account and follow the platform as testing, creator tools and public availability expand.</p>
+              <p>ESB Games is in pre-launch, undergoing final development and Quality Assurance testing. Discover its browser-based games, creator tools and connected products.</p>
               <div className="home-banner-actions">
                 <a href="https://esbgames.com" className="button button-primary" data-analytics="explore-platform"><RocketIcon/> Explore ESB Games</a>
                 <Link href="/about" className="button button-secondary">Learn more</Link>
               </div>
               <div className="home-banner-trust">
-                <span><ShieldIcon size={14}/> Safety systems in development</span>
-                <span><BoltIcon size={14}/> Staff-first testing planned</span>
-                <span><GlobeIcon size={14}/> International expansion planned</span>
+                <span><ShieldIcon size={14}/> Trust & Safety framework</span>
+                <span><BoltIcon size={14}/> Quality Assurance testing</span>
+                <span><GlobeIcon size={14}/> One app for supported games</span>
                 <span>● One connected account</span>
               </div>
             </div>
@@ -253,7 +253,7 @@ export default function HomePage() {
               <div>
                 <span className="home-newsletter-overline"><i/> STAY IN THE LOOP</span>
                 <h2>Get drops, updates &amp; insider<br/>news.</h2>
-                <p>Product updates, development notes and launch announcements will be available here as ESB Games moves toward public launch.</p>
+                <p>Find official ESB Games product information, news and launch announcements here.</p>
               </div>
               <NewsletterForm />
             </div>

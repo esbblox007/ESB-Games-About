@@ -6,11 +6,11 @@ import { CubeIcon, GamepadIcon, GlobeIcon, HeartIcon, RocketIcon, ShieldIcon, Us
 
 export const metadata: Metadata = {
   title: "About ESB Games",
-  description: "Learn how ESB Games is being built around discovery, belonging and creation for players, creators, families and communities.",
+  description: "Discover ESB Games: browser-based user-generated games, one gaming app, ESB Studio creator tools, ESB Groups and Family Centre.",
   alternates: { canonical: "/about" },
   openGraph: {
     title: "About ESB Games",
-    description: "Discover. Belong. Build. Learn about the mission and development direction behind ESB Games.",
+    description: "Discover ESB Games: download-free browser play, one gaming app, ESB Studio and connected communities.",
     url: "/about",
     type: "website",
     images: [{ url: "/og-preview", alt: "ESB Games platform interface" }],
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "About ESB Games",
-    description: "Discover. Belong. Build. Learn about the mission and development direction behind ESB Games.",
+    description: "Discover ESB Games: download-free browser play, one gaming app, ESB Studio and connected communities.",
     images: ["/og-preview"],
   },
 };
@@ -41,16 +41,16 @@ export default function AboutPage() {
             <div className="about-hero-copy">
               <span className="about-kicker">About ESB Games</span>
               <h1>Discover.<br />Belong.<br /><span>Build.</span></h1>
-              <p>ESB Games is a connected gaming and creation ecosystem being developed for players, creators, families and communities.</p>
+              <p>ESB Games is a connected user-generated gaming ecosystem bringing download-free browser play, one gaming app, ESB Studio creation tools and communities together.</p>
               <div className="about-hero-actions">
                 <a href="https://esbgames.com" className="button button-primary" data-analytics="explore-platform"><RocketIcon size={17} /> Explore ESB Games</a>
                 <Link href="/careers" className="button button-secondary">Join the team</Link>
               </div>
             </div>
             <div className="about-development-status" aria-label="Current development status">
-              <span className="eyebrow">Current stage</span>
-              <strong>Pre-launch development</strong>
-              <p>Core account, platform, creator, family and internal systems are being prepared for staff-first testing.</p>
+              <span className="eyebrow">Launch status</span>
+              <strong>Pre-launch · Final development and QA</strong>
+              <p>ESB Games is in final development and Quality Assurance testing ahead of launch.</p>
             </div>
           </div>
         </section>
@@ -60,8 +60,8 @@ export default function AboutPage() {
             <Reveal><article className="about-mission-card"><span className="about-quote-mark">“</span><blockquote>Our mission is to build a safer, fairer and more <em>creative gaming ecosystem</em>, and to share its success with the players and creators who help build it.</blockquote><p>The ESB Games founding team</p></article></Reveal>
             <div className="about-stat-grid about-proof-grid" aria-label="ESB Games direction">
               <Reveal><article><GamepadIcon size={20} /><strong>DISCOVER</strong><span>Find experiences, creators and communities through a connected platform.</span></article></Reveal>
-              <Reveal><article><UsersIcon size={20} /><strong>BELONG</strong><span>Communities, social systems and safety are being designed to help people feel at home.</span></article></Reveal>
-              <Reveal><article><CubeIcon size={20} /><strong>BUILD</strong><span>Studio, scripting, publishing and creator growth tools are being developed together.</span></article></Reveal>
+              <Reveal><article><UsersIcon size={20} /><strong>BELONG</strong><span>ESB Groups and social features connect players, creators and communities.</span></article></Reveal>
+              <Reveal><article><CubeIcon size={20} /><strong>BUILD</strong><span>ESB Studio connects world building, scripting, publishing and creator growth tools.</span></article></Reveal>
               <Reveal><article><RocketIcon size={20} /><strong>ONE ECOSYSTEM</strong><span>Player, creator, family and support experiences are designed to connect through shared services.</span></article></Reveal>
             </div>
           </div>
@@ -76,17 +76,17 @@ export default function AboutPage() {
 
         <section className="about-platform-section">
           <div className="about-section-inner about-platform-layout">
-            <Reveal className="about-platform-copy"><span className="about-kicker">Why ESB Games</span><h2>One ecosystem for discovery, community and <span>creation.</span></h2><p>ESB Games is bringing play, creation, publishing, communities, family controls and internal operations together through shared accounts and connected services.</p><Link href="/developer-hub" className="button button-secondary">Explore the Creator Hub</Link></Reveal>
+            <Reveal className="about-platform-copy"><span className="about-kicker">Why ESB Games</span><h2>One ecosystem for discovery, community and <span>creation.</span></h2><p>ESB Games brings browser play, one ESB Games app, ESB Studio, ESB Groups, Family Centre and ESB Bucks together through shared accounts and cloud-connected services.</p><Link href="/developer-hub" className="button button-secondary">Explore the Creator Hub</Link></Reveal>
             <div className="about-platform-grid">
               <Reveal><article><span className="about-card-icon about-card-icon-purple"><RocketIcon size={21} /></span><h3>Connected platform</h3><p>Core products are designed around one ESB Games account instead of disconnected identities.</p></article></Reveal>
-              <Reveal><article><span className="about-card-icon about-card-icon-pink"><CubeIcon size={21} /></span><h3>Creator tools in development</h3><p>ESB Studio, creator resources, publishing and analytics are being developed in stages.</p></article></Reveal>
-              <Reveal><article><span className="about-card-icon about-card-icon-blue"><ShieldIcon size={21} /></span><h3>Safety considered early</h3><p>Moderation, parental controls, account protection and age-aware settings are being designed before public launch.</p></article></Reveal>
-              <Reveal><article><span className="about-card-icon about-card-icon-green"><GlobeIcon size={21} /></span><h3>International direction</h3><p>The ecosystem is being designed for future communities and creators across multiple regions and languages.</p></article></Reveal>
+              <Reveal><article><span className="about-card-icon about-card-icon-pink"><CubeIcon size={21} /></span><h3>ESB Studio creator tools</h3><p>Game creation, assets, collaboration, publishing and analytics connect creators with players.</p></article></Reveal>
+              <Reveal><article><span className="about-card-icon about-card-icon-blue"><ShieldIcon size={21} /></span><h3>Safety considered early</h3><p>Trust & Safety, account protection and Family Centre support age-aware and family-focused experiences.</p></article></Reveal>
+              <Reveal><article><span className="about-card-icon about-card-icon-green"><GlobeIcon size={21} /></span><h3>International direction</h3><p>Creators and players connect through an online ecosystem for international communities.</p></article></Reveal>
             </div>
           </div>
         </section>
 
-        <section className="about-cta-section"><Reveal><div className="about-cta-card"><div><span className="about-kicker">The next stage</span><h2>Follow ESB Games as the ecosystem develops.</h2><p>Explore the platform and follow development updates as testing expands.</p></div><a href="https://esbgames.com" className="button button-primary" data-analytics="explore-platform"><RocketIcon size={17} /> Explore the platform</a></div></Reveal></section>
+        <section className="about-cta-section"><Reveal><div className="about-cta-card"><div><span className="about-kicker">Explore the ecosystem</span><h2>Explore ESB Games, Studio and the connected ecosystem.</h2><p>Discover how browser play, one app, creation tools, ESB Groups and Family Centre fit together.</p></div><a href="https://esbgames.com" className="button button-primary" data-analytics="explore-platform"><RocketIcon size={17} /> Explore the platform</a></div></Reveal></section>
       </div>
     </PageShell>
   );
