@@ -18,7 +18,7 @@ import { ESB_BRAND } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: { default: `ESB Games — ${ESB_BRAND.tagline}`, template: "%s | ESB Games" },
-  description: "Discover ESB Games, a connected gaming and creator ecosystem being built for players, creators, families and communities.",
+  description: "ESB Games connects download-free browser gaming, one-app play, ESB Studio creation tools, ESB Groups and Family Centre in a user-generated gaming ecosystem.",
   metadataBase: new URL(ESB_BRAND.siteUrl),
   applicationName: "ESB Games",
   category: "gaming",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     type: "website",
     siteName: ESB_BRAND.name,
     title: `ESB Games — ${ESB_BRAND.tagline}`,
-    description: "A connected gaming and creator ecosystem where people can discover, belong and build.",
+    description: "Download-free browser play, one app for supported games, ESB Studio creator tools, communities and family-focused features.",
     url: ESB_BRAND.siteUrl,
     images: [{ url: "/og-preview", alt: "ESB Games platform interface" }],
     locale: "en_GB",
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: `ESB Games — ${ESB_BRAND.tagline}`,
-    description: "A connected gaming and creator ecosystem where people can discover, belong and build.",
+    description: "Download-free browser play, one app for supported games, ESB Studio creator tools, communities and family-focused features.",
     images: ["/og-preview"],
   },
 };
@@ -67,6 +67,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         name: ESB_BRAND.name,
         url: `${ESB_BRAND.platformUrl}/`,
         slogan: ESB_BRAND.tagline,
+        description: "ESB Games is a pre-launch user-generated gaming ecosystem with browser-based games, a single player app, ESB Studio creation tools, ESB Groups and Family Centre.",
         logo: {
           "@type": "ImageObject",
           url: `${ESB_BRAND.siteUrl}/esb-blue-logo.png`,
